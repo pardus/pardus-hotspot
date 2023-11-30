@@ -1,20 +1,21 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 import sys
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
-from MainWindow import HotspotApp
+from gi.repository import GLib, Gio, Gtk
 
-class HotspotApplication(Gtk.Application):
-    
-    def __init__(self):
-        super().__init__(application_id="tr.org.pardus.hotspot")
+from MainWindow import MainWindow
+
+class Application(Gtk.Application):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, application_id="tr.org.pardus.pardus-hotspot", **kwargs)
+        self.window = None
     
     def do_activate(self):
-        window = HotspotApp(self)
-        window.show_all()
+        self.window = MainWindow(self)
+
 
 if __name__ == "__main__":
-    app = HotspotApplication()
+    app = Application()
     app.run(sys.argv)
