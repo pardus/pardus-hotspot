@@ -22,12 +22,15 @@ This application is designed for Linux systems, providing a straightforward way 
 ### Interface
 
 When the hotspot is not active:
+
 <img src="img/disable.png" alt="Hotspot Disabled" width="500" height="auto"/>
 
 When the hotspot is active:
+
 <img src="img/enable.png" alt="Hotspot Enabled" width="500" height="auto"/>
 
 Settings configuration:
+
 <img src="img/settings.png" alt="Hotspot Settings" width="500" height="auto"/>
 
 ### Hotspot Configuration
