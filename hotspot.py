@@ -39,14 +39,14 @@ def create_hotspot(ssid="Hotspot",passwd=None):
 
     s_wifi = dbus.Dictionary(
         {
-            "ssid": dbus.ByteArray(ssid.encode("utf-8")),
-            "mode": "ap",
-            "band": "bg",
+            "ssid": dbus.ByteArray(ssid.encode("utf-8")), # Connection Name
+            "mode": "ap", # Network Mode
+            "band": "bg", # Band Selection
             "channel": dbus.UInt32(1),
         }
     )
     if passwd:
-        s_wsec = dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd})
+        s_wsec = dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd}) # Encryption Method
     else:
         s_wsec = dbus.Dictionary({"key-mgmt": "none"})
     s_ip4 = dbus.Dictionary({"method": "shared"})

@@ -3,6 +3,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 
+from hotspot import create_hotspot, remove_hotspot, set_iface
+
 class MainWindow:
     def __init__(self, application):
 
@@ -35,11 +37,18 @@ class MainWindow:
         self.settings_box = self.builder.get_object("settings_box")
         self.connection_box = self.builder.get_object("connection_box")
 
-        # Comboboxes
+        # Comboboxes (Gtk.ComboBoxText)
+        self.ifname_combo = self.builder.get_object("ifname_combo")
         self.network_combo = self.builder.get_object("network_combo")
         self.band_combo = self.builder.get_object("band_combo")
-        self.routing_combo = self.builder.get_object("routing_combo")
         self.encrypt_combo = self.builder.get_object("encrypt_combo")
+
+        # Entries
+        self.password_entry = self.builder.get_object("password_entry")
+        self.connection_entry = self.builder.get_object("connection_entry")
+
+        # Labels
+        # self.status_lbl = self.builder.get_object("status_lbl")
 
         # Switch
         self.auto_switch = self.builder.get_object("auto_switch")
@@ -55,13 +64,10 @@ class MainWindow:
         self.band_combo.append_text("bg")
         self.band_combo.append_text("a")
 
-        self.routing_combo.append_text("shared")
-        self.routing_combo.append_text("manuel")
-        self.routing_combo.append_text("automatic")
-
         self.encrypt_combo.append_text("WPA-PSK")
         self.encrypt_combo.append_text("SAE")
 
+        self.ifname_combo.append_text("fill_ifname-s_here")
 
         self.window.show_all()
 
@@ -80,20 +86,29 @@ class MainWindow:
 
 
     def on_create_button_clicked(self, button):
-
+        # If hotspot is disabled
         if self.create_button.get_label() == "Disable Connection":
-            print("Write disable button functionality here ..")
             enable_icon_name = "network-wireless-disabled-symbolic"
+            remove_hotspot()
             self.create_button.set_label("Create Hotspot")
 
+            # self.status_lbl.set_markup("<span
+            # color='red'>{}</span>".format("Disable"))
+
+        # If hotspot is enabled
         else:
-            # ---------- IF HOTSPOT IS ENABLED --------------------------------
-
-            # If hotspot is enabled, change the icon of the gtk image widget
+            # Change the icon of the gtk image widget
             enable_icon_name = "network-wireless-signal-good-symbolic"
-            # Change button name to disable connection
+            ssid = self.connection_entry.get_text()
+            password = self.password_entry.get_text()
+            ifname= self.ifname_combo.get_active_text()
+
+            set_iface(ifname)
+
+            # Here, pass the SSID and password to the create_hotspot function
+            create_hotspot(ssid, password)
             self.create_button.set_label("Disable Connection")
-            # -----------------------------------------------------------------
+            # self.status_lbl.set_markup("<span color='green'>{}</span>".format("Active"))
 
-        self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
-
+        self.connection_img.set_from_icon_name(enable_icon_name,
+                                               Gtk.IconSize.BUTTON)
