@@ -4,6 +4,8 @@ from gi.repository import Gtk
 import os
 
 from hotspot import create_hotspot, remove_hotspot, set_iface
+from network_utils import get_interface_names
+
 
 class MainWindow:
     def __init__(self, application):
@@ -67,7 +69,7 @@ class MainWindow:
         self.encrypt_combo.append_text("WPA-PSK")
         self.encrypt_combo.append_text("SAE")
 
-        self.ifname_combo.append_text("fill_ifname-s_here")
+        get_interface_names(self.ifname_combo, self.window)
 
         self.window.show_all()
 
