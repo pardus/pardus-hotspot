@@ -64,6 +64,7 @@
                       <object class="GtkComboBoxText" id="ifname_combo">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="tooltip-text" translatable="yes">Choose an interface name</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -149,6 +150,7 @@
                         <property name="can-focus">True</property>
                         <property name="visibility">False</property>
                         <property name="invisible-char">*</property>
+                        <property name="secondary-icon-name">view-conceal-symbolic</property>
                         <property name="input-purpose">password</property>
                       </object>
                       <packing>
@@ -199,7 +201,7 @@
           <object class="GtkBox" id="settings_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-top">40</property>
+            <property name="margin-top">35</property>
             <property name="orientation">vertical</property>
             <property name="spacing">15</property>
             <child>
@@ -376,6 +378,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">10</property>
                 <property name="position">5</property>
               </packing>
             </child>
@@ -384,6 +387,89 @@
             <property name="name">page_settings</property>
             <property name="title" translatable="yes">Settings</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="errors_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkImage" id="warning_img">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-left">50</property>
+                <property name="margin-right">50</property>
+                <property name="margin-start">50</property>
+                <property name="margin-end">50</property>
+                <property name="margin-top">30</property>
+                <property name="pixel-size">128</property>
+                <property name="icon-name">dialog-warning-symbolic</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">10</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="msgs_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">50</property>
+                <property name="margin-end">50</property>
+                <property name="margin-top">30</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="warning_msgs_lbl">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">warning_message</property>
+                    <property name="wrap">True</property>
+                    <property name="wrap-mode">word-char</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="ok_button">
+                    <property name="label" translatable="yes">OK</property>
+                    <property name="width-request">100</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-left">50</property>
+                    <property name="margin-right">50</property>
+                    <property name="margin-start">50</property>
+                    <property name="margin-end">50</property>
+                    <property name="margin-top">20</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">20</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="padding">10</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">page_errors</property>
+            <property name="title" translatable="yes">Error</property>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>
