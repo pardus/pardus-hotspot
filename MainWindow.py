@@ -6,6 +6,9 @@ import os
 from hotspot import create_hotspot, remove_hotspot, set_iface
 from network_utils import get_interface_names
 
+import locale
+from locale import gettext as _
+
 
 class MainWindow:
     def __init__(self, application):
@@ -26,10 +29,12 @@ class MainWindow:
         # Img to change due to connection success
         self.connection_img = self.builder.get_object("connection_img")
         self.switch_img = self.builder.get_object("switch_img")
+        self.warning_img = self.builder.get_object("warning_img")
 
         # Buttons
         self.switch_button = self.builder.get_object("switch_button")
         self.create_button = self.builder.get_object("create_button")
+        self.ok_button = self.builder.get_object("ok_button")
 
         # Stack for switching between settings and main boxes
         self.hotspot_stack = self.builder.get_object("hotspot_stack")
@@ -38,6 +43,7 @@ class MainWindow:
         self.main_box = self.builder.get_object("main_box")
         self.settings_box = self.builder.get_object("settings_box")
         self.connection_box = self.builder.get_object("connection_box")
+        self.errors_box = self.builder.get_object("errors_box")
 
         # Comboboxes (Gtk.ComboBoxText)
         self.ifname_combo = self.builder.get_object("ifname_combo")
@@ -51,6 +57,7 @@ class MainWindow:
 
         # Labels
         # self.status_lbl = self.builder.get_object("status_lbl")
+        self.warning_msgs_lbl = self.builder.get_object("warning_msgs_lbl")
 
         # Switch
         self.auto_switch = self.builder.get_object("auto_switch")
@@ -58,6 +65,9 @@ class MainWindow:
         # Signals
         self.switch_button.connect("clicked", self.on_switch_button_clicked)
         self.create_button.connect("clicked", self.on_create_button_clicked)
+        self.ok_button.connect("clicked", self.on_ok_button_clicked)
+        self.password_entry.connect("icon-press", self.password_entry_icon_press)
+        self.password_entry.connect("icon-release", self.password_entry_icon_release)
 
         # Fill comboboxes
         self.network_combo.append_text("access point")
@@ -76,6 +86,16 @@ class MainWindow:
 
     def on_main_window_destroy(self, widget):
         self.window.get_application().quit()
+
+
+    def password_entry_icon_press(self, entry, icon_pos, event):
+        entry.set_visibility(True)
+        entry.set_icon_from_icon_name(1, "view-reveal-symbolic")
+
+
+    def password_entry_icon_release(self, entry, icon_pos, event):
+        entry.set_visibility(False)
+        entry.set_icon_from_icon_name(1, "view-conceal-symbolic")
 
 
     def on_switch_button_clicked(self, button):
@@ -101,16 +121,45 @@ class MainWindow:
         else:
             # Change the icon of the gtk image widget
             enable_icon_name = "network-wireless-signal-good-symbolic"
-            ssid = self.connection_entry.get_text()
+
+            ssid = self.connection_entry.get_text()  # Connection Name
             password = self.password_entry.get_text()
-            ifname= self.ifname_combo.get_active_text()
+            ifname = self.ifname_combo.get_active_text()
+
+            # Check if an interface is selected
+            if self.ifname_combo.get_active() == -1:
+                message = _("Please select a network interface for the hotspot")
+                self.hotspot_stack.set_visible_child_name("page_errors")
+                self.warning_msgs_lbl.set_text(message)
+                self.switch_button.set_visible(False)
+                return
+
+            # Check if connection name is empty
+            if len(ssid) == 0:
+                message = _("Please enter a name for your hotspot connection")
+                self.hotspot_stack.set_visible_child_name("page_errors")
+                self.warning_msgs_lbl.set_text(message)
+                self.switch_button.set_visible(False)
+                return
+
+            # Check if password is either 0 or at least 8 characters
+            if len(password) != 0 and len(password) < 8:
+                message = _("Password must be empty or at least 8 characters long")
+                self.hotspot_stack.set_visible_child_name("page_errors")
+                self.warning_msgs_lbl.set_text(message)
+                self.switch_button.set_visible(False)
+                return
 
             set_iface(ifname)
 
-            # Here, pass the SSID and password to the create_hotspot function
             create_hotspot(ssid, password)
             self.create_button.set_label("Disable Connection")
             # self.status_lbl.set_markup("<span color='green'>{}</span>".format("Active"))
 
         self.connection_img.set_from_icon_name(enable_icon_name,
                                                Gtk.IconSize.BUTTON)
+
+
+    def on_ok_button_clicked(self, button):
+        # Send a speacial flag if you want to exit !
+        self.hotspot_stack.set_visible_child_name("page_main")
