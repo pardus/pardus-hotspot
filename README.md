@@ -1,7 +1,9 @@
 # Pardus Hotspot Application
 
 ## Introduction
-This application is designed for Linux systems, providing a straightforward way for users to effortlessly create and manage a Wi-Fi hotspot. Featuring a graphical interface, it facilitates the configuration and management of network settings with ease.
+This application is designed for Linux systems, providing a straightforward way
+for users to effortlessly create and manage a Wi-Fi hotspot.
+Featuring a graphical interface, it facilitates the configuration and management of network settings with ease.
 
 ## Installation
 
@@ -37,10 +39,19 @@ Settings configuration:
 - The interface allows for setting the SSID, connection name, password, and other network-related configurations.
 
 ## Developer Notes
-`MainWindow.py` acts as the entry point of the application. It utilizes `hotspot.py` for the underlying logic to interact with the system's network management.
+`MainWindow.py` acts as the entry point of the application. It utilizes
+`hotspot.py` for the underlying logic to interact with the system's network
+management.
+`network_utils.py` is used for operations such as listing the available Wi-Fi
+cards in the computer and getting the Wi-Fi's status.
 
 ## To-Dos
-- [ ] Implement dynamic retrieval of network interfaces.
+- [x] Implement dynamic retrieval of network interfaces.
+- [x] Stack page for important errors
 - [ ] Add support for different encryption methods.
 - [ ] Introduce a feature to save and load preset configurations.
 - [ ] Improve error handling and user feedback.
+- [ ] Check if app is working on a virtual machine
+- [ ] Add a connection status label
+- [ ] Check if the Wi-Fi is on or off
+- [ ] Check how many devices are connected to the hotspot
