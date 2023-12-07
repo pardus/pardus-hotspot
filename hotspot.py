@@ -82,7 +82,7 @@ def get_state():
     return state
 
 def prop_connection():
-    return state == get_state()  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
+    return get_state() == 2 # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
 def find_remove_connection():
     # Find existing hotspot connection and remove
