@@ -75,13 +75,14 @@ def create_hotspot(ssid="Hotspot",passwd=None):
     proxy_prop = bus.get_object("org.freedesktop.NetworkManager", acpath)
     active_props = dbus.Interface(proxy_prop, "org.freedesktop.DBus.Properties")
 
-def prop_connection():
+def get_state():
     if active_props == None:
-        return False
-    state = active_props.Get(
-        "org.freedesktop.NetworkManager.Connection.Active", "State"
-    )
-    return state == 2  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
+        return 0
+    state = active_props.Get("org.freedesktop.NetworkManager.Connection.Active", "State")
+    return state
+
+def prop_connection():
+    return get_state() == 2 # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
 def find_remove_connection():
     # Find existing hotspot connection and remove
@@ -107,3 +108,4 @@ def remove_hotspot():
     proxy_prop = None
     active_props = None
     return True
+
