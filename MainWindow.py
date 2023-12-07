@@ -3,7 +3,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import os
 
-from hotspot import create_hotspot, remove_hotspot, set_iface
+from hotspot import create_hotspot, remove_hotspot, set_network_interface, is_wifi_enabled
 from network_utils import get_interface_names
 
 import locale
@@ -126,6 +126,16 @@ class MainWindow:
             password = self.password_entry.get_text()
             ifname = self.ifname_combo.get_active_text()
 
+            print("connection state: ", is_wifi_enabled())
+
+            # Check if Wi-Fi is enabled
+            if not is_wifi_enabled():
+                message = _("Please enable Wi-Fi to continue.")
+                self.hotspot_stack.set_visible_child_name("page_errors")
+                self.warning_msgs_lbl.set_text(message)
+                self.switch_button.set_visible(False)
+                return
+
             # Check if an interface is selected
             if self.ifname_combo.get_active() == -1:
                 message = _("Please select a network interface for the hotspot")
@@ -150,7 +160,7 @@ class MainWindow:
                 self.switch_button.set_visible(False)
                 return
 
-            set_iface(ifname)
+            set_network_interface(ifname)
 
             create_hotspot(ssid, password)
             self.create_button.set_label("Disable Connection")

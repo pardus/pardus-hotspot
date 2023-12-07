@@ -89,6 +89,18 @@ def is_connection_activated():
     """
     return get_connection_state() == 2  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
+def is_wifi_enabled():
+    """
+    Check if the Wi-Fi hardware is physically enabled.
+    """
+    print("Checking if the Wi-Fi hardware is enabled...")
+
+    nm_props = dbus.Interface(nm_proxy, "org.freedesktop.DBus.Properties")
+
+    # Check the WirelessEnabled property
+    wifi_enabled = nm_props.Get("org.freedesktop.NetworkManager", "WirelessEnabled")
+    return wifi_enabled
+
 def find_and_remove_connection():
     """
     Find an existing hotspot connection and remove it.
