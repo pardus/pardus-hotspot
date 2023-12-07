@@ -1,111 +1,117 @@
-import dbus, sys, time
+import dbus
 
-our_uuid = "2b0d0f1d-b79d-43af-bde1-71744625642e"
+# Define a UUID for the Wi-Fi hotspot
+HOTSPOT_UUID = "2b0d0f1d-b79d-43af-bde1-71744625642e"
 
-
+# Initialize D-Bus system bus
 bus = dbus.SystemBus()
 
-proxy_settings = bus.get_object(
-    "org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager/Settings"
-)
-settings = dbus.Interface(proxy_settings, "org.freedesktop.NetworkManager.Settings")
+# Get NetworkManager settings and interface objects
+settings_proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager/Settings")
+settings_iface = dbus.Interface(settings_proxy, "org.freedesktop.NetworkManager.Settings")
 
-proxy_nm = bus.get_object(
-    "org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager"
-)
-nm = dbus.Interface(proxy_nm, "org.freedesktop.NetworkManager")
+nm_proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager")
+nm_iface = dbus.Interface(nm_proxy, "org.freedesktop.NetworkManager")
 
+# Initialize variables
+device_path = None
+device_proxy = None
+device_iface = None
+active_connection_path = None
+active_connection_proxy = None
+active_connection_props = None
 
-devpath = None
-proxy_device = None
-device = None
-acpath = None
-proxy_prop = None
-active_props = None
+def set_network_interface(iface):
+    """
+    Set the network interface for the script to operate on.
+    """
+    global device_path, device_proxy, device_iface
+    device_path = nm_iface.GetDeviceByIpIface(iface)
+    device_proxy = bus.get_object("org.freedesktop.NetworkManager", device_path)
+    device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
 
-def set_iface(iface):
-    global devpath
-    global proxy_device
-    global device
-    devpath = nm.GetDeviceByIpIface(iface)
-    proxy_device = bus.get_object("org.freedesktop.NetworkManager", devpath)
-    device = dbus.Interface(proxy_device, "org.freedesktop.NetworkManager.Device")
-
-
-def create_hotspot(ssid="Hotspot",passwd=None):
-    s_con = dbus.Dictionary(
-        {"type": "802-11-wireless", "uuid": our_uuid, "id": "hotspot"}
+def create_hotspot(ssid="Hotspot", passwd=None):
+    """
+    Create a Wi-Fi hotspot with the specified SSID and optional password.
+    """
+    connection_settings = dbus.Dictionary(
+        {"type": "802-11-wireless", "uuid": HOTSPOT_UUID, "id": "hotspot"}
     )
 
-    s_wifi = dbus.Dictionary(
+    wifi_settings = dbus.Dictionary(
         {
-            "ssid": dbus.ByteArray(ssid.encode("utf-8")), # Connection Name
-            "mode": "ap", # Network Mode
-            "band": "bg", # Band Selection
+            "ssid": dbus.ByteArray(ssid.encode("utf-8")),
+            "mode": "ap",
+            "band": "bg",
             "channel": dbus.UInt32(1),
         }
     )
-    if passwd:
-        s_wsec = dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd}) # Encryption Method
-    else:
-        s_wsec = dbus.Dictionary({"key-mgmt": "none"})
-    s_ip4 = dbus.Dictionary({"method": "shared"})
-    s_ip6 = dbus.Dictionary({"method": "ignore"})
 
-    con = dbus.Dictionary(
+    security_settings = dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd}) if passwd else dbus.Dictionary({"key-mgmt": "none"})
+
+    ip4_settings = dbus.Dictionary({"method": "shared"})
+    ip6_settings = dbus.Dictionary({"method": "ignore"})
+
+    connection = dbus.Dictionary(
         {
-            "connection": s_con,
-            "802-11-wireless": s_wifi,
-            "802-11-wireless-security": s_wsec,
-            "ipv4": s_ip4,
-            "ipv6": s_ip6,
+            "connection": connection_settings,
+            "802-11-wireless": wifi_settings,
+            "802-11-wireless-security": security_settings,
+            "ipv4": ip4_settings,
+            "ipv6": ip6_settings,
         }
     )
 
-    find_remove_connection()
+    # Remove existing hotspot connection
+    find_and_remove_connection()
 
-    # Add new connection
-    connection_path = settings.AddConnection(con)
+    # Add a new connection
+    connection_path = settings_iface.AddConnection(connection)
 
-    # define props
-    global acpath
-    global proxy_prop
-    global active_props
-    acpath = nm.ActivateConnection(connection_path, devpath, "/")
-    proxy_prop = bus.get_object("org.freedesktop.NetworkManager", acpath)
-    active_props = dbus.Interface(proxy_prop, "org.freedesktop.DBus.Properties")
+    # Activate the connection
+    global active_connection_path, active_connection_proxy, active_connection_props
+    active_connection_path = nm_iface.ActivateConnection(connection_path, device_path, "/")
+    active_connection_proxy = bus.get_object("org.freedesktop.NetworkManager", active_connection_path)
+    active_connection_props = dbus.Interface(active_connection_proxy, "org.freedesktop.DBus.Properties")
 
-def get_state():
-    if active_props == None:
+def get_connection_state():
+    """
+    Get the state of the active network connection.
+    """
+    if active_connection_props is None:
         return 0
-    state = active_props.Get("org.freedesktop.NetworkManager.Connection.Active", "State")
+    state = active_connection_props.Get("org.freedesktop.NetworkManager.Connection.Active", "State")
     return state
 
-def prop_connection():
-    return get_state() == 2 # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
+def is_connection_activated():
+    """
+    Check if the network connection is in the "activated" state.
+    """
+    return get_connection_state() == 2  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
-def find_remove_connection():
-    # Find existing hotspot connection and remove
-    for path in settings.ListConnections():
-        proxy_con = bus.get_object("org.freedesktop.NetworkManager", path)
-        settings_connection = dbus.Interface(
-            proxy_con, "org.freedesktop.NetworkManager.Settings.Connection"
-        )
-        config = settings_connection.GetSettings()
-        if config["connection"]["uuid"] == our_uuid:
-            config = settings_connection.GetSettings()
-            settings_connection.Delete()
+def find_and_remove_connection():
+    """
+    Find an existing hotspot connection and remove it.
+    """
+    for path in settings_iface.ListConnections():
+        connection_proxy = bus.get_object("org.freedesktop.NetworkManager", path)
+        connection_settings = dbus.Interface(
+            connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
+        ).GetSettings()
+        if connection_settings["connection"]["uuid"] == HOTSPOT_UUID:
+            dbus.Interface(connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection").Delete()
             break
 
 def remove_hotspot():
-    global acpath
-    global proxy_prop
-    global active_props
-    device.Disconnect()
-    find_remove_connection()
+    """
+    Disconnect from the hotspot and remove the connection.
+    """
+    global active_connection_path, active_connection_proxy, active_connection_props
+    device_iface.Disconnect()
+    find_and_remove_connection()
 
-    acpath = None
-    proxy_prop = None
-    active_props = None
+    # Reset variables
+    active_connection_path = None
+    active_connection_proxy = None
+    active_connection_props = None
     return True
-
