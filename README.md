@@ -50,8 +50,8 @@ cards in the computer and getting the Wi-Fi's status.
 - [x] Stack page for important errors
 - [ ] Add support for different encryption methods.
 - [ ] Introduce a feature to save and load preset configurations.
-- [ ] Improve error handling and user feedback.
+- [x] Improve error handling and user feedback.
 - [ ] Check if app is working on a virtual machine
 - [ ] Add a connection status label
-- [ ] Check if the Wi-Fi is on or off
+- [x] Check if the Wi-Fi is on or off
 - [ ] Check how many devices are connected to the hotspot
