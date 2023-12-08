@@ -7,10 +7,16 @@ HOTSPOT_UUID = "2b0d0f1d-b79d-43af-bde1-71744625642e"
 bus = dbus.SystemBus()
 
 # Get NetworkManager settings and interface objects
-settings_proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager/Settings")
-settings_iface = dbus.Interface(settings_proxy, "org.freedesktop.NetworkManager.Settings")
+settings_proxy = bus.get_object(
+    "org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager/Settings"
+)
+settings_iface = dbus.Interface(
+    settings_proxy, "org.freedesktop.NetworkManager.Settings"
+)
 
-nm_proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager")
+nm_proxy = bus.get_object(
+    "org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager"
+)
 nm_iface = dbus.Interface(nm_proxy, "org.freedesktop.NetworkManager")
 
 # Initialize variables
@@ -21,6 +27,7 @@ active_connection_path = None
 active_connection_proxy = None
 active_connection_props = None
 
+
 def set_network_interface(iface):
     """
     Set the network interface for the script to operate on.
@@ -29,6 +36,7 @@ def set_network_interface(iface):
     device_path = nm_iface.GetDeviceByIpIface(iface)
     device_proxy = bus.get_object("org.freedesktop.NetworkManager", device_path)
     device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
+
 
 def create_hotspot(ssid="Hotspot", passwd=None):
     """
@@ -47,7 +55,11 @@ def create_hotspot(ssid="Hotspot", passwd=None):
         }
     )
 
-    security_settings = dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd}) if passwd else dbus.Dictionary({"key-mgmt": "none"})
+    security_settings = (
+        dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd})
+        if passwd
+        else dbus.Dictionary({"key-mgmt": "none"})
+    )
 
     ip4_settings = dbus.Dictionary({"method": "shared"})
     ip6_settings = dbus.Dictionary({"method": "ignore"})
@@ -70,9 +82,16 @@ def create_hotspot(ssid="Hotspot", passwd=None):
 
     # Activate the connection
     global active_connection_path, active_connection_proxy, active_connection_props
-    active_connection_path = nm_iface.ActivateConnection(connection_path, device_path, "/")
-    active_connection_proxy = bus.get_object("org.freedesktop.NetworkManager", active_connection_path)
-    active_connection_props = dbus.Interface(active_connection_proxy, "org.freedesktop.DBus.Properties")
+    active_connection_path = nm_iface.ActivateConnection(
+        connection_path, device_path, "/"
+    )
+    active_connection_proxy = bus.get_object(
+        "org.freedesktop.NetworkManager", active_connection_path
+    )
+    active_connection_props = dbus.Interface(
+        active_connection_proxy, "org.freedesktop.DBus.Properties"
+    )
+
 
 def get_connection_state():
     """
@@ -80,8 +99,11 @@ def get_connection_state():
     """
     if active_connection_props is None:
         return 0
-    state = active_connection_props.Get("org.freedesktop.NetworkManager.Connection.Active", "State")
+    state = active_connection_props.Get(
+        "org.freedesktop.NetworkManager.Connection.Active", "State"
+    )
     return state
+
 
 def is_connection_activated():
     """
@@ -89,17 +111,17 @@ def is_connection_activated():
     """
     return get_connection_state() == 2  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
+
 def is_wifi_enabled():
     """
     Check if the Wi-Fi hardware is physically enabled.
     """
-    print("Checking if the Wi-Fi hardware is enabled...")
-
     nm_props = dbus.Interface(nm_proxy, "org.freedesktop.DBus.Properties")
 
     # Check the WirelessEnabled property
     wifi_enabled = nm_props.Get("org.freedesktop.NetworkManager", "WirelessEnabled")
     return wifi_enabled
+
 
 def find_and_remove_connection():
     """
@@ -111,8 +133,11 @@ def find_and_remove_connection():
             connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
         ).GetSettings()
         if connection_settings["connection"]["uuid"] == HOTSPOT_UUID:
-            dbus.Interface(connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection").Delete()
+            dbus.Interface(
+                connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
+            ).Delete()
             break
+
 
 def remove_hotspot():
     """

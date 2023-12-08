@@ -1,9 +1,10 @@
 import gi
-gi.require_version('Gtk', '3.0')
+
+gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk
 import os
 
-from hotspot import create_hotspot, remove_hotspot, set_network_interface, is_wifi_enabled
+import hotspot
 from network_utils import get_interface_names
 
 import locale
@@ -12,12 +13,12 @@ from locale import gettext as _
 
 class MainWindow:
     def __init__(self, application):
-
         self.builder = Gtk.Builder()
 
         # Import UI file:
-        glade_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                  "MainWindow.glade")
+        glade_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "MainWindow.glade"
+        )
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
 
@@ -83,20 +84,16 @@ class MainWindow:
 
         self.window.show_all()
 
-
     def on_main_window_destroy(self, widget):
         self.window.get_application().quit()
-
 
     def password_entry_icon_press(self, entry, icon_pos, event):
         entry.set_visibility(True)
         entry.set_icon_from_icon_name(1, "view-reveal-symbolic")
 
-
     def password_entry_icon_release(self, entry, icon_pos, event):
         entry.set_visibility(False)
         entry.set_icon_from_icon_name(1, "view-conceal-symbolic")
-
 
     def on_switch_button_clicked(self, button):
         current_page = self.hotspot_stack.get_visible_child_name()
@@ -106,12 +103,11 @@ class MainWindow:
         else:
             self.hotspot_stack.set_visible_child_name("page_settings")
 
-
     def on_create_button_clicked(self, button):
         # If hotspot is disabled
         if self.create_button.get_label() == "Disable Connection":
             enable_icon_name = "network-wireless-disabled-symbolic"
-            remove_hotspot()
+            hotspot.remove_hotspot()
             self.create_button.set_label("Create Hotspot")
 
             # self.status_lbl.set_markup("<span
@@ -126,11 +122,9 @@ class MainWindow:
             password = self.password_entry.get_text()
             ifname = self.ifname_combo.get_active_text()
 
-            print("connection state: ", is_wifi_enabled())
-
             # Check if Wi-Fi is enabled
-            if not is_wifi_enabled():
-                message = _("Please enable Wi-Fi to continue.")
+            if not hotspot.is_wifi_enabled():
+                message = _("Please enable Wi-Fi to continue")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
                 self.switch_button.set_visible(False)
@@ -160,15 +154,13 @@ class MainWindow:
                 self.switch_button.set_visible(False)
                 return
 
-            set_network_interface(ifname)
+            hotspot.set_network_interface(ifname)
 
-            create_hotspot(ssid, password)
+            hotspot.create_hotspot(ssid, password)
             self.create_button.set_label("Disable Connection")
             # self.status_lbl.set_markup("<span color='green'>{}</span>".format("Active"))
 
-        self.connection_img.set_from_icon_name(enable_icon_name,
-                                               Gtk.IconSize.BUTTON)
-
+        self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
 
     def on_ok_button_clicked(self, button):
         # Send a speacial flag if you want to exit !
