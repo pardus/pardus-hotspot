@@ -29,13 +29,15 @@ class MainWindow:
 
         # Img to change due to connection success
         self.connection_img = self.builder.get_object("connection_img")
-        self.switch_img = self.builder.get_object("switch_img")
+        self.menu_img = self.builder.get_object("menu_img")
         self.warning_img = self.builder.get_object("warning_img")
 
         # Buttons
-        self.switch_button = self.builder.get_object("switch_button")
+        self.menu_button = self.builder.get_object("menu_button")
         self.create_button = self.builder.get_object("create_button")
         self.ok_button = self.builder.get_object("ok_button")
+        self.menu_about = self.builder.get_object("menu_about")
+        self.menu_settings = self.builder.get_object("menu_settings")
 
         # Stack for switching between settings and main boxes
         self.hotspot_stack = self.builder.get_object("hotspot_stack")
@@ -63,8 +65,15 @@ class MainWindow:
         # Switch
         self.auto_switch = self.builder.get_object("auto_switch")
 
+        # Dialog
+        self.hotspot_dialog = self.builder.get_object("hotspot_dialog")
+
+        # Popover
+        self.menu_popover = self.builder.get_object("menu_popover")
+
         # Signals
-        self.switch_button.connect("clicked", self.on_switch_button_clicked)
+        self.menu_about.connect("clicked", self.on_menu_about_clicked)
+        self.menu_settings.connect("clicked", self.on_menu_settings_clicked)
         self.create_button.connect("clicked", self.on_create_button_clicked)
         self.ok_button.connect("clicked", self.on_ok_button_clicked)
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
@@ -84,24 +93,36 @@ class MainWindow:
 
         self.window.show_all()
 
+
     def on_main_window_destroy(self, widget):
         self.window.get_application().quit()
+
 
     def password_entry_icon_press(self, entry, icon_pos, event):
         entry.set_visibility(True)
         entry.set_icon_from_icon_name(1, "view-reveal-symbolic")
 
+
     def password_entry_icon_release(self, entry, icon_pos, event):
         entry.set_visibility(False)
         entry.set_icon_from_icon_name(1, "view-conceal-symbolic")
 
-    def on_switch_button_clicked(self, button):
+
+    def on_menu_about_clicked(self, button):
+        self.menu_popover.popdown()
+        self.hotspot_dialog.run()
+        self.hotspot_dialog.hide()
+
+
+    def on_menu_settings_clicked(self, button):
+        # only else block will be stay here, add a return button for page_main
         current_page = self.hotspot_stack.get_visible_child_name()
 
         if current_page == "page_settings":
             self.hotspot_stack.set_visible_child_name("page_main")
         else:
             self.hotspot_stack.set_visible_child_name("page_settings")
+
 
     def on_create_button_clicked(self, button):
         # If hotspot is disabled
@@ -127,7 +148,7 @@ class MainWindow:
                 message = _("Please enable Wi-Fi to continue")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
-                self.switch_button.set_visible(False)
+                self.menu_button.set_visible(False)
                 return
 
             # Check if an interface is selected
@@ -135,7 +156,7 @@ class MainWindow:
                 message = _("Please select a network interface for the hotspot")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
-                self.switch_button.set_visible(False)
+                self.menu_button.set_visible(False)
                 return
 
             # Check if connection name is empty
@@ -143,7 +164,7 @@ class MainWindow:
                 message = _("Please enter a name for your hotspot connection")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
-                self.switch_button.set_visible(False)
+                self.menu_button.set_visible(False)
                 return
 
             # Check if password is either 0 or at least 8 characters
@@ -151,7 +172,7 @@ class MainWindow:
                 message = _("Password must be empty or at least 8 characters long")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
-                self.switch_button.set_visible(False)
+                self.menu_button.set_visible(False)
                 return
 
             hotspot.set_network_interface(ifname)
@@ -161,6 +182,7 @@ class MainWindow:
             # self.status_lbl.set_markup("<span color='green'>{}</span>".format("Active"))
 
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
+
 
     def on_ok_button_clicked(self, button):
         # Send a speacial flag if you want to exit !

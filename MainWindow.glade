@@ -5,9 +5,9 @@
   <object class="GtkAboutDialog" id="hotspot_dialog">
     <property name="can-focus">False</property>
     <property name="window-position">center-on-parent</property>
-    <property name="icon-name">pardus-hotspot-manager</property>
+    <property name="icon-name">xapp-favorites-app</property>
     <property name="type-hint">dialog</property>
-    <property name="program-name">Hotspot Manager</property>
+    <property name="program-name">Pardus Hotspot Manager</property>
     <property name="version">0.1.0</property>
     <property name="copyright">© 2024 Pardus</property>
     <property name="comments" translatable="yes">Simple hotspot manager.</property>
@@ -530,10 +530,13 @@ Ali Rıza Keskin</property>
         <property name="title" translatable="yes">Pardus Hotspot App</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="menu_button">
+          <object class="GtkMenuButton" id="menu_button">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
             <property name="receives-default">True</property>
+            <property name="popover">menu_popover</property>
             <child>
               <object class="GtkImage" id="menu_img">
                 <property name="visible">True</property>
