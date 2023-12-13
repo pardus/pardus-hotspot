@@ -56,13 +56,16 @@ def create_hotspot(ssid="Hotspot", passwd=None):
     )
 
     security_settings = (
-        dbus.Dictionary({"key-mgmt": "wpa-psk", "psk": passwd})
-        if passwd
-        else dbus.Dictionary({"key-mgmt": "none"})
+        dbus.Dictionary({
+            "key-mgmt": "wpa-psk",
+            "psk": passwd,
+            "pairwise": ["ccmp"],
+            "proto", ["rsn"]
+        })
     )
 
     ip4_settings = dbus.Dictionary({"method": "shared"})
-    ip6_settings = dbus.Dictionary({"method": "ignore"})
+    ip6_settings = dbus.Dictionary({"method": "auto"})
 
     connection = dbus.Dictionary(
         {
