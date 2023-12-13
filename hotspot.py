@@ -60,7 +60,7 @@ def create_hotspot(ssid="Hotspot", passwd=None):
             "key-mgmt": "wpa-psk",
             "psk": passwd,
             "pairwise": ["ccmp"],
-            "proto", ["rsn"]
+            "proto": ["rsn"]
         })
     )
 
