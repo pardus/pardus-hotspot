@@ -55,13 +55,11 @@ def create_hotspot(ssid="Hotspot", passwd=None):
         }
     )
 
-    security_settings = (
-        dbus.Dictionary({
-            "key-mgmt": "wpa-psk",
-            "psk": passwd,
-            "pairwise": ["ccmp"],
-            "proto": ["rsn"]
-        })
+    security_settings = dbus.Dictionary(
+        {"key-mgmt": "sae",
+         "psk": passwd,
+         "pairwise": ["ccmp"],
+         "proto": ["rsn"]}
     )
 
     ip4_settings = dbus.Dictionary({"method": "shared"})
@@ -146,12 +144,25 @@ def remove_hotspot():
     """
     Disconnect from the hotspot and remove the connection.
     """
+    global device_path, device_proxy, device_iface
     global active_connection_path, active_connection_proxy, active_connection_props
-    device_iface.Disconnect()
+
+    # Check if the device interface is initialized
+    if device_iface is None:
+        print("No network device interface found.")
+        return False
+
+    # Attempt to disconnect
+    try:
+        device_iface.Disconnect()
+    except Exception as e:
+        print(f"Error disconnecting the device: {e}")
+
     find_and_remove_connection()
 
     # Reset variables
     active_connection_path = None
     active_connection_proxy = None
     active_connection_props = None
+
     return True
