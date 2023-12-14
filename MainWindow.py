@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk
+from gi.repository import Gtk, GLib
 import os
 
 import hotspot
@@ -83,19 +83,33 @@ class MainWindow:
         self.network_combo.append_text("access point")
         self.network_combo.append_text("infrastructure")
 
-        self.band_combo.append_text("bg")
-        self.band_combo.append_text("a")
+        self.band_combo.append_text("2.4GHz")
+        self.band_combo.append_text("5GHz")
 
         self.encrypt_combo.append_text("WPA-PSK")
         self.encrypt_combo.append_text("SAE")
 
         get_interface_names(self.ifname_combo, self.window)
 
+        # Start the Wi-Fi checker with a timeout (every 5 seconds)
+        GLib.timeout_add_seconds(5, self.check_wifi_and_update_hotspot)
+
         self.window.show_all()
 
 
     def on_main_window_destroy(self, widget):
         self.window.get_application().quit()
+
+
+    def check_wifi_and_update_hotspot(self):
+        if not hotspot.is_wifi_enabled():
+            print("Wi-Fi is off. Disabling hotspot.")
+            hotspot.remove_hotspot()
+            # Update GUI for disconnection
+            self.create_button.set_label("Create Hotspot")
+            self.connection_img.set_from_icon_name("network-wireless-disabled-symbolic",
+                                                Gtk.IconSize.BUTTON)
+        return True
 
 
     def password_entry_icon_press(self, entry, icon_pos, event):
