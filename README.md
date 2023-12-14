@@ -55,3 +55,9 @@ cards in the computer and getting the Wi-Fi's status.
 - [ ] Add a connection status label
 - [x] Check if the Wi-Fi is on or off
 - [ ] Check how many devices are connected to the hotspot
+- [ ] Show connected device infos
+- [x] Enable connection for iPhones
+- [ ] ADD QR feature
+- [x] Automatically disable connection if Wi-Fi signal lost
+- [ ] Add hidden parameter to show hotspot connection or not (only specific
+  devices allowed)
