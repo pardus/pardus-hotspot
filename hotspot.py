@@ -1,7 +1,7 @@
 import dbus
 
-# Define a UUID for the Wi-Fi hotspot
-HOTSPOT_UUID = "2b0d0f1d-b79d-43af-bde1-71744625642e"
+import uuid
+
 
 # Initialize D-Bus system bus
 bus = dbus.SystemBus()
@@ -26,6 +26,7 @@ device_iface = None
 active_connection_path = None
 active_connection_proxy = None
 active_connection_props = None
+current_hotspot_uuid = None
 
 
 def set_network_interface(iface):
@@ -42,8 +43,12 @@ def create_hotspot(ssid="Hotspot", passwd=None):
     """
     Create a Wi-Fi hotspot with the specified SSID and optional password.
     """
+    global current_hotspot_uuid
+    # Create an unique uuid for hotspot
+    current_hotspot_uuid = str(uuid.uuid4())
+
     connection_settings = dbus.Dictionary(
-        {"type": "802-11-wireless", "uuid": HOTSPOT_UUID, "id": "hotspot"}
+        {"type": "802-11-wireless", "uuid": current_hotspot_uuid, "id": "hotspot"}
     )
 
     wifi_settings = dbus.Dictionary(
@@ -128,15 +133,20 @@ def find_and_remove_connection():
     """
     Find an existing hotspot connection and remove it.
     """
+    global current_hotspot_uuid
+
     for path in settings_iface.ListConnections():
         connection_proxy = bus.get_object("org.freedesktop.NetworkManager", path)
         connection_settings = dbus.Interface(
             connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
         ).GetSettings()
-        if connection_settings["connection"]["uuid"] == HOTSPOT_UUID:
+
+        if connection_settings["connection"]["uuid"] == current_hotspot_uuid:
             dbus.Interface(
                 connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
             ).Delete()
+
+            current_hotspot_uuid = None
             break
 
 
