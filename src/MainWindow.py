@@ -16,7 +16,9 @@ class MainWindow:
         self.builder = Gtk.Builder()
 
         # Import UI file:
-        glade_file = os.path.dirname(os.path.abspath(__file__)) + "/../ui/MainWindow.glade"
+        glade_file = (
+            os.path.dirname(os.path.abspath(__file__)) + "/../ui/MainWindow.glade"
+        )
 
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
@@ -37,6 +39,7 @@ class MainWindow:
         self.ok_button = self.builder.get_object("ok_button")
         self.menu_about = self.builder.get_object("menu_about")
         self.menu_settings = self.builder.get_object("menu_settings")
+        self.save_button = self.builder.get_object("save_button")
 
         # Stack for switching between settings and main boxes
         self.hotspot_stack = self.builder.get_object("hotspot_stack")
@@ -77,6 +80,7 @@ class MainWindow:
         self.ok_button.connect("clicked", self.on_ok_button_clicked)
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
         self.password_entry.connect("icon-release", self.password_entry_icon_release)
+        self.save_button.connect("clicked", self.on_save_button_clicked)
 
         # Fill comboboxes
         self.network_combo.append_text("access point")
@@ -97,7 +101,7 @@ class MainWindow:
 
 
     def on_main_window_destroy(self, widget):
-        self.window.get_application().quit() 
+        self.window.get_application().quit()
 
 
     def check_wifi_and_update_hotspot(self):
@@ -106,8 +110,9 @@ class MainWindow:
             hotspot.remove_hotspot()
             # Update GUI for disconnection
             self.create_button.set_label("Create Hotspot")
-            self.connection_img.set_from_icon_name("network-wireless-disabled-symbolic",
-                                                Gtk.IconSize.BUTTON)
+            self.connection_img.set_from_icon_name(
+                "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
+            )
         return True
 
     def password_entry_icon_press(self, entry, icon_pos, event):
@@ -123,7 +128,7 @@ class MainWindow:
     def on_menu_about_clicked(self, button):
         self.menu_popover.popdown()
         self.hotspot_dialog.run()
-        self.hotspot_dialog.hide()
+        # self.hotspot_dialog.hide()
 
 
     def on_menu_settings_clicked(self, button):
@@ -137,14 +142,17 @@ class MainWindow:
 
 
     def on_create_button_clicked(self, button):
-        # If hotspot is disabled
+        # If hotspot is disabled (to remove)
         if self.create_button.get_label() == "Disable Connection":
+            print("aaaaaaaaa")
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
             self.create_button.set_label("Create Hotspot")
 
-        # If hotspot is enabled
+        # If hotspot is enabled(to open)
         else:
+            print("bbbb")
+
             # Change the icon of the gtk image widget
             enable_icon_name = "network-wireless-signal-good-symbolic"
 
@@ -194,4 +202,23 @@ class MainWindow:
 
     def on_ok_button_clicked(self, button):
         # Send a speacial flag if you want to exit !
+        self.hotspot_stack.set_visible_child_name("page_main")
+
+
+    def on_save_button_clicked(self, button):
+        # Remove current connection
+        hotspot.remove_hotspot()
+        enable_icon_name = "network-wireless-disabled-symbolic"
+        hotspot.remove_hotspot()
+        self.create_button.set_label("Create Hotspot")
+        self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
+
+        # Get selected values from the comboboxes
+        selected_band = self.band_combo.get_active_text()
+        selected_encrypt = self.encrypt_combo.get_active_text()
+
+        # Update the hotspot settings
+        hotspot.update_hotspot_settings(selected_band, selected_encrypt)
+
+        # Switch back to the main page
         self.hotspot_stack.set_visible_child_name("page_main")
