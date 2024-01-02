@@ -52,7 +52,6 @@ class MainWindow:
 
         # Comboboxes (Gtk.ComboBoxText)
         self.ifname_combo = self.builder.get_object("ifname_combo")
-        self.network_combo = self.builder.get_object("network_combo")
         self.band_combo = self.builder.get_object("band_combo")
         self.encrypt_combo = self.builder.get_object("encrypt_combo")
 
@@ -70,6 +69,9 @@ class MainWindow:
         # Dialog
         self.hotspot_dialog = self.builder.get_object("hotspot_dialog")
 
+        # Header Bar
+        self.header_bar = self.builder.get_object("header_bar")
+
         # Popover
         self.menu_popover = self.builder.get_object("menu_popover")
 
@@ -81,10 +83,6 @@ class MainWindow:
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
         self.password_entry.connect("icon-release", self.password_entry_icon_release)
         self.save_button.connect("clicked", self.on_save_button_clicked)
-
-        # Fill comboboxes
-        self.network_combo.append_text("access point")
-        self.network_combo.append_text("infrastructure")
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -136,22 +134,22 @@ class MainWindow:
         current_page = self.hotspot_stack.get_visible_child_name()
 
         if current_page == "page_settings":
+            self.header_bar.set_title("Pardus Hotspot App")
             self.hotspot_stack.set_visible_child_name("page_main")
         else:
+            self.header_bar.set_title("Settings")
             self.hotspot_stack.set_visible_child_name("page_settings")
 
 
     def on_create_button_clicked(self, button):
         # If hotspot is disabled (to remove)
         if self.create_button.get_label() == "Disable Connection":
-            print("aaaaaaaaa")
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
             self.create_button.set_label("Create Hotspot")
 
         # If hotspot is enabled(to open)
         else:
-            print("bbbb")
 
             # Change the icon of the gtk image widget
             enable_icon_name = "network-wireless-signal-good-symbolic"

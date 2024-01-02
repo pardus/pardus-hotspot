@@ -260,46 +260,7 @@ Ali Rıza Keskin</property>
                 <property name="valign">center</property>
                 <property name="margin-start">50</property>
                 <property name="margin-end">50</property>
-                <property name="margin-top">30</property>
-                <property name="homogeneous">True</property>
-                <child>
-                  <object class="GtkLabel" id="network_lbl">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Network Mode:</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBoxText" id="network_combo">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">center</property>
-                <property name="margin-start">50</property>
-                <property name="margin-end">50</property>
+                <property name="margin-top">60</property>
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="band_lbl">
