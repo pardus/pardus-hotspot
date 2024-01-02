@@ -129,11 +129,123 @@ def is_wifi_enabled():
     return wifi_enabled
 
 
-def find_and_remove_connection():
+def update_hotspot_settings(band, encrypt, ssid="Hotspot", passwd=None):
+    """
+    Update hotspot settings based on user selection.
+    """
+    global wifi_settings, security_settings
+
+    # Set the band settings based on user selection
+    if band == "2.4GHz":
+        wifi_band = "bg"
+    elif band == "5GHz":
+        wifi_band = "a"
+    else:
+        wifi_band = "bg"  # Default to 2.4GHz if band is not specified
+
+    # Set the encryption settings based on user selection
+    if encrypt == "WPA-PSK":
+        key_mgmt = "wpa-psk"
+    elif encrypt == "SAE":
+        key_mgmt = "sae"
+    elif encrypt == "None":
+        key_mgmt = "none"
+    else:
+        # Handle unsupported encryption methods
+        print("Unsupported encryption method:", encrypt)
+        key_mgmt = "none"  # Default to no encryption if not supported
+
+    ssid_bytes = dbus.ByteArray(ssid.encode("utf-8")) if ssid is not None else b""
+    passwd_bytes = dbus.ByteArray(passwd.encode("utf-8")) if passwd is not None else b""
+
+    wifi_settings = {
+        "ssid": ssid_bytes,
+        "mode": "ap",
+        "band": wifi_band,
+        "channel": dbus.UInt32(1),
+    }
+
+    security_settings = {
+        "key-mgmt": key_mgmt,
+        "pairwise": ["ccmp"],
+        "proto": ["rsn"],
+    }
+
+    # Check if encryption method requires a password
+    if key_mgmt not in ["none", "ieee8021x"] and not passwd:
+        print("Password is required for encryption. Defaulting to no encryption.")
+        security_settings["key-mgmt"] = "none"
+    else:
+        security_settings["psk"] = passwd_bytes
+
+
+def update_hotspot_settings_helper(band, encrypt, ssid="Hotspot", passwd=None):
+    """
+    Helper function to update hotspot settings based on user selection.
+    """
+    global current_hotspot_uuid
+
+    # Set the band settings based on user selection
+    if band == "2.4GHz":
+        wifi_band = "bg"
+    elif band == "5GHz":
+        wifi_band = "a"
+    else:
+        wifi_band = "bg"  # Default to 2.4GHz if band is not specified
+
+    # Set the encryption settings based on user selection
+    if encrypt == "WPA-PSK":
+        key_mgmt = "wpa-psk"
+    elif encrypt == "SAE":
+        key_mgmt = "sae"
+    elif encrypt == "None":
+        key_mgmt = "none"
+    else:
+        # Handle unsupported encryption methods
+        print("Unsupported encryption method:", encrypt)
+        key_mgmt = "none"  # Default to no encryption if not supported
+
+    ssid_bytes = dbus.ByteArray(ssid.encode("utf-8")) if ssid is not None else b""
+    passwd_bytes = dbus.ByteArray(passwd.encode("utf-8")) if passwd is not None else b""
+
+    wifi_settings = {
+        "ssid": ssid_bytes,
+        "mode": "ap",
+        "band": wifi_band,
+        "channel": dbus.UInt32(1),
+    }
+
+    security_settings = {
+        "key-mgmt": key_mgmt,
+        "psk": passwd_bytes,
+        "pairwise": ["ccmp"],
+        "proto": ["rsn"],
+    }
+
+    ip4_settings = {"method": "shared"}
+    ip6_settings = {"method": "auto"}
+
+    connection_settings = {"type": "802-11-wireless", "uuid": current_hotspot_uuid, "id": "hotspot"}
+
+    connection = {
+        "connection": connection_settings,
+        "802-11-wireless": wifi_settings,
+        "802-11-wireless-security": security_settings,
+        "ipv4": ip4_settings,
+        "ipv6": ip6_settings,
+    }
+
+    return connection
+
+
+def find_and_remove_connection(hotspot_uuid=None):
     """
     Find an existing hotspot connection and remove it.
     """
     global current_hotspot_uuid
+
+    if hotspot_uuid is None:
+        hotspot_uuid = current_hotspot_uuid
 
     for path in settings_iface.ListConnections():
         connection_proxy = bus.get_object("org.freedesktop.NetworkManager", path)
@@ -141,12 +253,11 @@ def find_and_remove_connection():
             connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
         ).GetSettings()
 
-        if connection_settings["connection"]["uuid"] == current_hotspot_uuid:
+        if connection_settings["connection"]["uuid"] == hotspot_uuid:
             dbus.Interface(
                 connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
             ).Delete()
 
-            current_hotspot_uuid = None
             break
 
 
