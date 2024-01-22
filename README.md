@@ -1,3 +1,6 @@
+
+[🇹🇷](README_TR.md) [🇬🇧](README.md)
+
 # Pardus Hotspot Application
 
 ## Introduction
@@ -46,18 +49,24 @@ management.
 cards in the computer and getting the Wi-Fi's status.
 
 ## To-Dos
-- [x] Implement dynamic retrieval of network interfaces.
+- [x] Implement dynamic retrieval of network interfaces
 - [x] Stack page for important errors
-- [ ] Add support for different encryption methods.
-- [ ] Introduce a feature to save and load preset configurations.
-- [x] Improve error handling and user feedback.
+- [x] Add support for different encryption methods
+- [x] Improve error handling and user feedback
 - [ ] Check if app is working on a virtual machine
-- [ ] Add a connection status label
 - [x] Check if the Wi-Fi is on or off
+- [x] Enable connection for iPhones
+- [x] Automatically disable connection if Wi-Fi signal lost
+- [x] Remove connection if user wants to close hotspot manager
+  window
+- [x] Disable fullscreen mode
+- [x] Fix freezing issue when switching between the about and settings buttons.
 - [ ] Check how many devices are connected to the hotspot
 - [ ] Show connected device infos
-- [x] Enable connection for iPhones
-- [ ] ADD QR feature
-- [x] Automatically disable connection if Wi-Fi signal lost
 - [ ] Add hidden parameter to show hotspot connection or not (only specific
   devices allowed)
+- [ ] ADD QR feature
+
+
+ __NOTE :__ When adding the application to GitHub, delete the __To-Dos__ section
+ and update the __URL__
