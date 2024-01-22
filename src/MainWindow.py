@@ -83,6 +83,7 @@ class MainWindow:
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
         self.password_entry.connect("icon-release", self.password_entry_icon_release)
         self.save_button.connect("clicked", self.on_save_button_clicked)
+        self.window.connect("destroy", self.on_main_window_destroy)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -113,6 +114,7 @@ class MainWindow:
             )
         return True
 
+
     def password_entry_icon_press(self, entry, icon_pos, event):
         entry.set_visibility(True)
         entry.set_icon_from_icon_name(1, "view-reveal-symbolic")
@@ -126,7 +128,7 @@ class MainWindow:
     def on_menu_about_clicked(self, button):
         self.menu_popover.popdown()
         self.hotspot_dialog.run()
-        # self.hotspot_dialog.hide()
+        self.hotspot_dialog.hide()
 
 
     def on_menu_settings_clicked(self, button):
@@ -147,10 +149,8 @@ class MainWindow:
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
             self.create_button.set_label("Create Hotspot")
-
         # If hotspot is enabled(to open)
         else:
-
             # Change the icon of the gtk image widget
             enable_icon_name = "network-wireless-signal-good-symbolic"
 
