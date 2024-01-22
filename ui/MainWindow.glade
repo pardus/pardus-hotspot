@@ -69,6 +69,7 @@ Ali Rıza Keskin</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">50</property>
                 <property name="margin-end">50</property>
+                <property name="margin-top">5</property>
                 <property name="pixel-size">128</property>
                 <property name="icon-name">network-wireless-disabled-symbolic</property>
               </object>
@@ -250,7 +251,7 @@ Ali Rıza Keskin</property>
           <object class="GtkBox" id="settings_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-top">35</property>
+            <property name="margin-top">45</property>
             <property name="orientation">vertical</property>
             <property name="spacing">15</property>
             <child>
@@ -260,7 +261,7 @@ Ali Rıza Keskin</property>
                 <property name="valign">center</property>
                 <property name="margin-start">50</property>
                 <property name="margin-end">50</property>
-                <property name="margin-top">60</property>
+                <property name="margin-top">65</property>
                 <property name="homogeneous">True</property>
                 <child>
                   <object class="GtkLabel" id="band_lbl">
@@ -446,7 +447,7 @@ Ali Rıza Keskin</property>
       <object class="GtkHeaderBar" id="header_bar">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="title" translatable="yes">Pardus Hotspot App</property>
+        <property name="title" translatable="yes">Pardus Hotspot Application</property>
         <property name="show-close-button">True</property>
         <child>
           <object class="GtkMenuButton" id="menu_button">
