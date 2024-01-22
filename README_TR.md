@@ -1,4 +1,4 @@
-[🇹🇷](README_TR.md) [🇬🇧](README.md)
+[🇹🇷](./README_TR.md) [🇬🇧](./README.md)
 
 # Pardus Hotspot Uygulaması
 
