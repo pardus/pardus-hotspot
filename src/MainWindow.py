@@ -27,6 +27,7 @@ class MainWindow:
         self.window = self.builder.get_object("main_window")
         self.window.set_application(application)
         self.window.set_position(Gtk.WindowPosition.CENTER)
+        self.window.set_resizable(False)
 
         # Img to change due to connection success
         self.connection_img = self.builder.get_object("connection_img")
@@ -68,6 +69,8 @@ class MainWindow:
 
         # Dialog
         self.hotspot_dialog = self.builder.get_object("hotspot_dialog")
+        self.hotspot_dialog.set_transient_for(self.window)
+        self.hotspot_dialog.set_position(Gtk.WindowPosition.CENTER_ON_PARENT)
 
         # Header Bar
         self.header_bar = self.builder.get_object("header_bar")
