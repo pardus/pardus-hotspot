@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk, GLib, Gdk
 import os
 
 import hotspot
@@ -102,6 +102,9 @@ class MainWindow:
 
         self.encrypt_combo.append_text("WPA-PSK")
         self.encrypt_combo.append_text("SAE")
+
+        self.band_combo.set_active(0)       # Set default: 2.4Ghz
+        self.encrypt_combo.set_active(1)    # Set default: SAE
 
         get_interface_names(self.ifname_combo, self.window)
 
