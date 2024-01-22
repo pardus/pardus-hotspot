@@ -29,6 +29,15 @@ class MainWindow:
         self.window.set_position(Gtk.WindowPosition.CENTER)
         self.window.set_resizable(False)
 
+        self.defineComponents()
+
+        # Start the Wi-Fi checker with a timeout (every 5 seconds)
+        GLib.timeout_add_seconds(5, self.check_wifi_and_update_hotspot)
+
+        self.window.show_all()
+
+
+    def defineComponents(self):
         # Img to change due to connection success
         self.connection_img = self.builder.get_object("connection_img")
         self.menu_img = self.builder.get_object("menu_img")
@@ -96,11 +105,6 @@ class MainWindow:
 
         get_interface_names(self.ifname_combo, self.window)
 
-        # Start the Wi-Fi checker with a timeout (every 5 seconds)
-        GLib.timeout_add_seconds(5, self.check_wifi_and_update_hotspot)
-
-        self.window.show_all()
-
 
     def on_main_window_destroy(self, widget):
         # Remove connected hotspot before destroying the window
@@ -109,6 +113,10 @@ class MainWindow:
 
 
     def check_wifi_and_update_hotspot(self):
+        """
+        Regularly checks Wi-Fi status and updates the hotspot state and UI
+        elements accordingly.
+        """
         if not hotspot.is_wifi_enabled():
             print("Wi-Fi is off. Disabling hotspot.")
             hotspot.remove_hotspot()
@@ -137,26 +145,38 @@ class MainWindow:
 
 
     def on_menu_settings_clicked(self, button):
-        # only else block will be stay here, add a return button for page_main
+        """
+        Siwtches between the main and settings pages, updating the title
+        accordingly.
+        """
         current_page = self.hotspot_stack.get_visible_child_name()
 
         if current_page == "page_settings":
-            self.header_bar.set_title("Pardus Hotspot App")
+            self.header_bar.set_title("Pardus Hotspot Application")
             self.hotspot_stack.set_visible_child_name("page_main")
         else:
-            self.header_bar.set_title("Settings")
+            self.header_bar.set_title("Hotspot Settings")
             self.hotspot_stack.set_visible_child_name("page_settings")
 
 
     def on_create_button_clicked(self, button):
-        # If hotspot is disabled (to remove)
+        """
+        Manages the creation and deactivation of a hotspot connection.
+        Toggles the hotspot state based on its current status:
+        - If the hotspot is active, it gets disabled and the button label is
+        updated to 'Create Hotspot'.
+        - If the hotspot is inactive, it performs checks for Wi-Fi status,
+        interface selection, connection name, and password validity.
+        If all checks pass, it activates the hotspot and updates the button
+        label to 'Disable Connection'.
+        In both cases, it updates the connection icon accordingly.
+        """
+
         if self.create_button.get_label() == "Disable Connection":
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
             self.create_button.set_label("Create Hotspot")
-        # If hotspot is enabled(to open)
         else:
-            # Change the icon of the gtk image widget
             enable_icon_name = "network-wireless-signal-good-symbolic"
 
             ssid = self.connection_entry.get_text()  # Connection Name
@@ -196,7 +216,6 @@ class MainWindow:
                 return
 
             hotspot.set_network_interface(ifname)
-
             hotspot.create_hotspot(ssid, password)
             self.create_button.set_label("Disable Connection")
 
@@ -209,6 +228,10 @@ class MainWindow:
 
 
     def on_save_button_clicked(self, button):
+        """
+        Applies changes to hotspot settings and updates the UI to reflect these
+        changes.
+        """
         # Remove current connection
         hotspot.remove_hotspot()
         enable_icon_name = "network-wireless-disabled-symbolic"
