@@ -100,6 +100,8 @@ class MainWindow:
 
 
     def on_main_window_destroy(self, widget):
+        # Remove connected hotspot before destroying the window
+        hotspot.remove_hotspot()
         self.window.get_application().quit()
 
 
