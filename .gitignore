@@ -155,3 +155,12 @@ cython_debug/
 *.glade~
 
 .vscode/
+
+
+# Ignore files generated during .deb packaging
+pardus-hotspot-app*.dsc
+pardus-hotspot-app_*.tar.xz
+pardus-hotspot-app_*.deb
+pardus-hotspot-app_*.build
+pardus-hotspot-app_*.buildinfo
+pardus-hotspot-app_*.changes
