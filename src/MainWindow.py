@@ -121,10 +121,10 @@ class MainWindow:
         elements accordingly.
         """
         if not hotspot.is_wifi_enabled():
-            print("Wi-Fi is off. Disabling hotspot.")
+            # print("Wi-Fi is off. Disabling hotspot.")
             hotspot.remove_hotspot()
             # Update GUI for disconnection
-            self.create_button.set_label("Create Hotspot")
+            self.create_button.set_label(_("Create Hotspot"))
             self.connection_img.set_from_icon_name(
                 "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
             )
@@ -155,10 +155,10 @@ class MainWindow:
         current_page = self.hotspot_stack.get_visible_child_name()
 
         if current_page == "page_settings":
-            self.header_bar.set_title("Pardus Hotspot Application")
+            self.header_bar.set_title(_("Pardus Hotspot"))
             self.hotspot_stack.set_visible_child_name("page_main")
         else:
-            self.header_bar.set_title("Hotspot Settings")
+            self.header_bar.set_title(_("Hotspot Settings"))
             self.hotspot_stack.set_visible_child_name("page_settings")
 
 
@@ -178,7 +178,7 @@ class MainWindow:
         if self.create_button.get_label() == "Disable Connection":
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
-            self.create_button.set_label("Create Hotspot")
+            self.create_button.set_label(_("Create Hotspot"))
         else:
             enable_icon_name = "network-wireless-signal-good-symbolic"
 
@@ -220,7 +220,7 @@ class MainWindow:
 
             hotspot.set_network_interface(ifname)
             hotspot.create_hotspot(ssid, password)
-            self.create_button.set_label("Disable Connection")
+            self.create_button.set_label(_("Disable Connection"))
 
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
 
@@ -239,7 +239,7 @@ class MainWindow:
         hotspot.remove_hotspot()
         enable_icon_name = "network-wireless-disabled-symbolic"
         hotspot.remove_hotspot()
-        self.create_button.set_label("Create Hotspot")
+        self.create_button.set_label(_("Create Hotspot"))
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
 
         # Get selected values from the comboboxes
