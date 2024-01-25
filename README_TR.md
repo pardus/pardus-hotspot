@@ -1,6 +1,6 @@
 [🇹🇷](./README_TR.md) [🇬🇧](./README.md)
 
-# Pardus Hotspot Uygulaması
+# Pardus Kablosuz Erişim Noktası
 
 ## Giriş
 Bu uygulama, Linux sistemleri için tasarlanmış olup, kullanıcıların Wi-Fi hotspot'u kolayca oluşturmasını ve yönetmesini sağlar.
@@ -26,15 +26,15 @@ Grafiksel bir arayüze sahip olup, ağ ayarlarının konfigürasyonunu ve yönet
 
 Hotspot aktif değilken:
 
-<img src="img/disable.png" alt="Hotspot Devre Dışı" width="500" height="auto"/>
+<img src="screenshots/disable.png" alt="Hotspot Devre Dışı" width="500" height="auto"/>
 
 Hotspot aktifken:
 
-<img src="img/enable.png" alt="Hotspot Etkin" width="500" height="auto"/>
+<img src="screenshots/enable.png" alt="Hotspot Etkin" width="500" height="auto"/>
 
 Ayarların konfigürasyonu:
 
-<img src="img/settings.png" alt="Hotspot Ayarları" width="500" height="auto"/>
+<img src="screenshots/settings.png" alt="Hotspot Ayarları" width="500" height="auto"/>
 
 ### Hotspot Konfigürasyonu
 - Arayüz, SSID, bağlantı adı, parola ve diğer ağla ilgili konfigürasyonları ayarlamanıza olanak tanır.
@@ -53,9 +53,11 @@ ___
 - [x] Wi-Fi'nin açık olup olmadığını kontrol etme
 - [x] iPhone'lar için bağlantıyı etkinleştirme
 - [x] Wi-Fi sinyali kaybolduğunda bağlantıyı otomatik olarak devre dışı bırakma
-- [x] Kullanıcı, hotspot yöneticisi penceresini kapatmak istediğinde bağlantıyı kaldırma
+- [x] Kullanıcı, hotspot penceresini kapatmak istediğinde bağlantıyı kaldırma
 - [x] Tam ekran modunu devre dışı bırakma
-- [x] Hakkında ve ayarlar butonları arasında geçiş yaparken oluşan donma sorununu düzeltme
+- [x] Hakkında ve ayarlar butonları arasında geçiş yaparken oluşan donma
+  sorununu düzeltme
+- [ ] Uygulamanın sanal makinede çalışıp çalışmadığını kontrol etme
 - [ ] Hotspota bağlı cihaz sayısını kontrol etme
 - [ ] Bağlı cihaz bilgilerini gösterme
 - [ ] Gizli parametre ekleme (sadece belirli cihazlara hotspot bağlantısını gösterme)

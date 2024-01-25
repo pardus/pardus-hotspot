@@ -1,7 +1,6 @@
-
 [🇹🇷](./README_TR.md) [🇬🇧](./README.md)
 
-# Pardus Hotspot Application
+# Pardus Hotspot
 
 ## Introduction
 This application is designed for Linux systems, providing a straightforward way
@@ -28,15 +27,15 @@ Featuring a graphical interface, it facilitates the configuration and management
 
 When the hotspot is not active:
 
-<img src="img/disable.png" alt="Hotspot Disabled" width="500" height="auto"/>
+<img src="screenshots/disable.png" alt="Hotspot Disabled" width="500" height="auto"/>
 
 When the hotspot is active:
 
-<img src="img/enable.png" alt="Hotspot Enabled" width="500" height="auto"/>
+<img src="screenshots/enable.png" alt="Hotspot Enabled" width="500" height="auto"/>
 
 Settings configuration:
 
-<img src="img/settings.png" alt="Hotspot Settings" width="500" height="auto"/>
+<img src="screenshots/settings.png" alt="Hotspot Settings" width="500" height="auto"/>
 
 ### Hotspot Configuration
 - The interface allows for setting the SSID, connection name, password, and other network-related configurations.
@@ -53,14 +52,15 @@ cards in the computer and getting the Wi-Fi's status.
 - [x] Stack page for important errors
 - [x] Add support for different encryption methods
 - [x] Improve error handling and user feedback
-- [ ] Check if app is working on a virtual machine
 - [x] Check if the Wi-Fi is on or off
 - [x] Enable connection for iPhones
 - [x] Automatically disable connection if Wi-Fi signal lost
-- [x] Remove connection if user wants to close hotspot manager
+- [x] Remove connection if user wants to close hotspot
   window
 - [x] Disable fullscreen mode
 - [x] Fix freezing issue when switching between the about and settings buttons.
+
+- [ ] Check if app is working on a virtual machine
 - [ ] Check how many devices are connected to the hotspot
 - [ ] Show connected device infos
 - [ ] Add hidden parameter to show hotspot connection or not (only specific
