@@ -1,7 +1,7 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GLib, Gdk
+from gi.repository import Gtk, GLib
 import os
 
 import hotspot
@@ -9,6 +9,9 @@ from network_utils import get_interface_names
 
 import locale
 from locale import gettext as _
+locale.bindtextdomain('pardus-hotspot', '/usr/share/locale')
+locale.textdomain('pardus-hotspot')
+_ = locale.gettext
 
 
 class MainWindow:
@@ -87,6 +90,16 @@ class MainWindow:
         # Popover
         self.menu_popover = self.builder.get_object("menu_popover")
 
+        # Set version if it cannot be retrieved from __version__ file,
+        # then use MainWindow.glade file
+        try:
+            version = open(
+                os.path.dirname(os.path.abspath(__file__)) + "/__version__"
+                ).readline()
+            self.hotspot_dialog.set_version(version)
+        except:
+            pass
+
         # Signals
         self.menu_about.connect("clicked", self.on_menu_about_clicked)
         self.menu_settings.connect("clicked", self.on_menu_settings_clicked)
@@ -152,8 +165,9 @@ class MainWindow:
         Siwtches between the main and settings pages, updating the title
         accordingly.
         """
-        current_page = self.hotspot_stack.get_visible_child_name()
+        self.menu_popover.popdown()
 
+        current_page = self.hotspot_stack.get_visible_child_name()
         if current_page == "page_settings":
             self.header_bar.set_title(_("Pardus Hotspot"))
             self.hotspot_stack.set_visible_child_name("page_main")
@@ -174,8 +188,7 @@ class MainWindow:
         label to 'Disable Connection'.
         In both cases, it updates the connection icon accordingly.
         """
-
-        if self.create_button.get_label() == "Disable Connection":
+        if self.create_button.get_label() == _("Disable Connection"):
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
             self.create_button.set_label(_("Create Hotspot"))
@@ -228,6 +241,7 @@ class MainWindow:
     def on_ok_button_clicked(self, button):
         # Send a speacial flag if you want to exit !
         self.hotspot_stack.set_visible_child_name("page_main")
+        self.menu_button.set_visible(True)
 
 
     def on_save_button_clicked(self, button):

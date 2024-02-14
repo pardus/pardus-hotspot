@@ -20,6 +20,7 @@ def get_interface_names(ifname_combo, window):
     if wifi_interfaces:
         for iface in wifi_interfaces:
             ifname_combo.append_text(iface)
+            ifname_combo.set_active(0)
     else:
         ifname_combo.append_text("No wireless interfaces available")
         dialog = Gtk.MessageDialog(
