@@ -14,7 +14,7 @@
     <property name="website">https://github.com/pardus/pardus-hotspot</property>
     <property name="authors">Emel Öztürk
 Ali Rıza Keskin</property>
-    <property name="translator-credits" translatable="yes">Emel Öztürk
+    <property name="translator-credits">Emel Öztürk
 Ali Rıza Keskin</property>
     <property name="logo-icon-name">xapp-favorites-app</property>
     <property name="license-type">gpl-3-0</property>
@@ -60,6 +60,51 @@ Ali Rıza Keskin</property>
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
+            <child type="center">
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="margin-start">50</property>
+                <property name="margin-end">50</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">2</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="opacity">0.50196078431372548</property>
+                    <property name="label">©TÜBİTAK ULAKBİM | 2024</property>
+                    <attributes>
+                      <attribute name="size" value="10000"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="pack-type">end</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
             <child>
               <object class="GtkImage" id="connection_img">
                 <property name="visible">True</property>
@@ -226,7 +271,7 @@ Ali Rıza Keskin</property>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="padding">20</property>
+                    <property name="padding">10</property>
                     <property name="position">4</property>
                   </packing>
                 </child>
@@ -241,14 +286,14 @@ Ali Rıza Keskin</property>
           </object>
           <packing>
             <property name="name">page_main</property>
-            <property name="title" translatable="yes">Pardus Hostpot App</property>
+            <property name="title" translatable="yes">Pardus Hotspot</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="settings_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="margin-top">45</property>
+            <property name="margin-top">40</property>
             <property name="orientation">vertical</property>
             <property name="spacing">15</property>
             <child>
@@ -391,7 +436,6 @@ Ali Rıza Keskin</property>
                   <object class="GtkLabel" id="warning_msgs_lbl">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">warning_message</property>
                     <property name="wrap">True</property>
                     <property name="wrap-mode">word-char</property>
                   </object>
@@ -474,6 +518,10 @@ Ali Rıza Keskin</property>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="margin-start">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-top">5</property>
+        <property name="margin-bottom">5</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkButton" id="menu_settings">
