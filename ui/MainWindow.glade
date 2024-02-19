@@ -16,7 +16,7 @@
 Ali Rıza Keskin</property>
     <property name="translator-credits">Emel Öztürk
 Ali Rıza Keskin</property>
-    <property name="logo-icon-name">xapp-favorites-app</property>
+    <property name="logo-icon-name">pardus-hotspot</property>
     <property name="license-type">gpl-3-0</property>
     <child internal-child="vbox">
       <object class="GtkBox">
