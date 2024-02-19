@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Pardus Hotspot
+Name[tr]=Pardus Kablosuz Erişim Noktası
+Comment=Simple Hotspot Application
+Comment[tr]=Basit Kablosuz Erişim Noktası Uygulaması
+Exec=pardus-hotspot
+Icon=pardus-hotspot
+Terminal=false
+Type=Application
+Categories=GTK;Utility;X-Pardus-Apps;
+StartupNotify=true

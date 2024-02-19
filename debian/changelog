@@ -1,0 +1,89 @@
+pardus-hotspot (1.0) unstable; urgency=medium
+
+  [ emel.ozturk ]
+  * Initial commit
+
+  [ Emel Öztürk ]
+  * Implement initial structure of the app
+  * Add .gitignore file
+  * Add green signal img
+  * Re-design app structure
+  * Add app ss
+  * Add app description and ss for readme
+
+  [ emel.ozturk ]
+  * Fix typo
+
+  [ Emel Öztürk ]
+  * Add settings page structure
+  * Add img for settings
+  * Add settings img for readme
+  * Add new repo content
+
+  [ aliriza ]
+  * add hotspot.py file
+
+  [ Emel Öztürk ]
+  * Replace old imgs with updated ones
+  * Del routing method in ui, take user entries, import hotspot
+  * Update readme
+
+  [ emel.ozturk ]
+  * Update 'README.md'
+
+  [ Emel Öztürk ]
+  * Get interface names
+  * Add a page to show errors
+  * Add todos
+  * Add controls in main page, warn msgs
+
+  [ aliriza ]
+  * get_state function added.
+  * typo fix
+  * better readability and commends
+
+  [ Emel Öztürk ]
+  * Check if wi-fi is enabled
+  * Refactor code for enhanced readability and PEP 8 compliance
+  * Add about section
+  * Tick off completed tasks
+  * Add menu components
+
+  [ aliriza ]
+  * add missing parameters
+
+  [ Emel Öztürk ]
+  * Fix typo
+  * Del unnecessary setting widgets
+  * Add new todos
+  * Opt. key management for iphone compatibility
+  * Check Wi-Fi connection in every 5 secs
+  * Create an unique id for hotspot
+  * Del files organize files
+  * Create a folder structure to org. files
+  * Add band selection & encryption method for main
+  * Add connection for user selections
+  * Del network settings and prints
+  * Fix app name
+  * Fix freezing issue when switching between about & settings
+  * Remove current session if app is closed
+  * Disable fullscreen mode, open dialogs center of the parent window
+  * Add descriptions for funcs, use a func to define widgets and signals
+  * Set default values for settings
+  * Add new ss for the app
+  * Add readme for TR & EN
+
+  [ emel.ozturk ]
+  * Fix url
+  * Fix url for gittea
+
+  [ Emel Öztürk ]
+  * Add translatable wigdets
+  * Change app name
+  * Change folder name for screenshots
+  * Add .gitignore
+  * Add req. files for deb packaging
+  * Change app name, ss sources for readme
+  * Fix typos, add folders for deb pack
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Fri, 26 Jan 2024 14:50:59 +0300
