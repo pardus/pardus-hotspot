@@ -26,13 +26,8 @@ class MainWindow:
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
 
-        # Window
-        self.window = self.builder.get_object("main_window")
-        self.window.set_application(application)
-        self.window.set_position(Gtk.WindowPosition.CENTER)
-        self.window.set_resizable(False)
-
         self.defineComponents()
+        self.window.set_application(application)
 
         # Start the Wi-Fi checker with a timeout (every 5 seconds)
         GLib.timeout_add_seconds(5, self.check_wifi_and_update_hotspot)
@@ -41,10 +36,16 @@ class MainWindow:
 
 
     def defineComponents(self):
+        # Window
+        self.window = self.builder.get_object("main_window")
+        self.window.set_position(Gtk.WindowPosition.CENTER)
+        self.window.set_resizable(False)
+
         # Img to change due to connection success
         self.connection_img = self.builder.get_object("connection_img")
         self.menu_img = self.builder.get_object("menu_img")
         self.warning_img = self.builder.get_object("warning_img")
+        self.settings_img = self.builder.get_object("settings_img")
 
         # Buttons
         self.menu_button = self.builder.get_object("menu_button")
@@ -75,6 +76,7 @@ class MainWindow:
         # Labels
         # self.status_lbl = self.builder.get_object("status_lbl")
         self.warning_msgs_lbl = self.builder.get_object("warning_msgs_lbl")
+        self.settings_lbl = self.builder.get_object("settings_lbl")
 
         # Switch
         self.auto_switch = self.builder.get_object("auto_switch")
@@ -159,7 +161,6 @@ class MainWindow:
         self.hotspot_dialog.run()
         self.hotspot_dialog.hide()
 
-
     def on_menu_settings_clicked(self, button):
         """
         Siwtches between the main and settings pages, updating the title
@@ -167,8 +168,16 @@ class MainWindow:
         """
         self.menu_popover.popdown()
 
+        self.settings_lbl.set_text(_("Home Page"))
+        self.settings_img.set_from_icon_name("user-home-symbolic",
+            Gtk.IconSize.BUTTON
+        )
         current_page = self.hotspot_stack.get_visible_child_name()
         if current_page == "page_settings":
+            self.settings_img.set_from_icon_name("preferences-other-symbolic",
+                Gtk.IconSize.BUTTON
+            )
+            self.settings_lbl.set_text(_("Settings"))
             self.header_bar.set_title(_("Pardus Hotspot"))
             self.hotspot_stack.set_visible_child_name("page_main")
         else:
@@ -252,7 +261,14 @@ class MainWindow:
         # Remove current connection
         hotspot.remove_hotspot()
         enable_icon_name = "network-wireless-disabled-symbolic"
+        self.settings_img.set_from_icon_name("preferences-other-symbolic",
+                Gtk.IconSize.BUTTON
+        )
+        self.settings_lbl.set_text(_("Settings"))
+        self.header_bar.set_title(_("Pardus Hotspot"))
+
         hotspot.remove_hotspot()
+
         self.create_button.set_label(_("Create Hotspot"))
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
 
