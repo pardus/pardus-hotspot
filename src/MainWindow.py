@@ -7,6 +7,14 @@ import os
 import hotspot
 from network_utils import get_interface_names
 
+try:
+    gi.require_version('AppIndicator3', '0.1')
+    from gi.repository import AppIndicator3 as appindicator
+except:
+    # fall back to Ayatana
+    gi.require_version('AyatanaAppIndicator3', '0.1')
+    from gi.repository import AyatanaAppIndicator3 as appindicator
+
 import locale
 from locale import gettext as _
 locale.bindtextdomain('pardus-hotspot', '/usr/share/locale')
@@ -26,8 +34,12 @@ class MainWindow:
         self.builder.add_from_file(glade_file)
         self.builder.connect_signals(self)
 
-        self.defineComponents()
+        self.define_components()
+
         self.window.set_application(application)
+
+        self.init_indicator()
+        self.set_indicator()
 
         # Start the Wi-Fi checker with a timeout (every 5 seconds)
         GLib.timeout_add_seconds(5, self.check_wifi_and_update_hotspot)
@@ -35,7 +47,7 @@ class MainWindow:
         self.window.show_all()
 
 
-    def defineComponents(self):
+    def define_components(self):
         # Window
         self.window = self.builder.get_object("main_window")
         self.window.set_position(Gtk.WindowPosition.CENTER)
@@ -124,9 +136,55 @@ class MainWindow:
         get_interface_names(self.ifname_combo, self.window)
 
 
+    def init_indicator(self):
+        self.indicator = appindicator.Indicator.new(
+            "pardus-hotspot", "network-wireless",
+             appindicator.IndicatorCategory.APPLICATION_STATUS
+        )
+        self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+        self.indicator.set_title(_("Pardus Hotspot"))
+
+        # Create a menu for the indicator
+        self.menu = Gtk.Menu()
+
+        # Show App Menu Item
+        self.item_show_app = Gtk.MenuItem(label=_("Show App"))
+        self.item_show_app.connect("activate", self.on_menu_show_app)
+
+        self.item_separator1 = Gtk.SeparatorMenuItem()
+
+        # Quit App Menu Item
+        self.item_quit = Gtk.MenuItem(label=_("Quit"))
+        self.item_quit.connect("activate", self.on_main_window_destroy)
+
+        self.menu.append(self.item_show_app)
+        self.menu.append(self.item_separator1)
+        self.menu.append(self.item_quit)
+
+        self.menu.show_all()
+        self.indicator.set_menu(self.menu)
+
+
+    def on_menu_show_app(self, *args):
+        window_state = self.window.is_visible()
+        if window_state:
+            self.window.set_visible(False)
+            self.item_show_app.set_label(_("Show App"))
+        else:
+            self.window.set_visible(True)
+            self.item_show_app.set_label(_("Hide App"))
+
+
+    def set_indicator(self):
+        if self.window.is_visible():
+            self.item_show_app.set_label(_("Hide App"))
+        else:
+            self.item_show_app.set_label(_("Show App"))
+
+
     def on_main_window_destroy(self, widget):
         # Remove connected hotspot before destroying the window
-        hotspot.remove_hotspot()
+        # hotspot.remove_hotspot()
         self.window.get_application().quit()
 
 
@@ -161,9 +219,10 @@ class MainWindow:
         self.hotspot_dialog.run()
         self.hotspot_dialog.hide()
 
+
     def on_menu_settings_clicked(self, button):
         """
-        Siwtches between the main and settings pages, updating the title
+        Switches between the main and settings pages, updating the title
         accordingly.
         """
         self.menu_popover.popdown()
