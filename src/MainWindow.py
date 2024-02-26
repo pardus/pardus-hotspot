@@ -69,12 +69,14 @@ class MainWindow:
 
         # Stack for switching between settings and main boxes
         self.hotspot_stack = self.builder.get_object("hotspot_stack")
+        self.connection_stack = self.builder.get_object("connection_stack")
 
         # Boxes
         self.main_box = self.builder.get_object("main_box")
         self.settings_box = self.builder.get_object("settings_box")
         self.connection_box = self.builder.get_object("connection_box")
         self.errors_box = self.builder.get_object("errors_box")
+        self.connected_box = self.builder.get_object("connected_box")
 
         # Comboboxes (Gtk.ComboBoxText)
         self.ifname_combo = self.builder.get_object("ifname_combo")
@@ -84,11 +86,17 @@ class MainWindow:
         # Entries
         self.password_entry = self.builder.get_object("password_entry")
         self.connection_entry = self.builder.get_object("connection_entry")
+        self.con_entry = self.builder.get_object("con_entry")
+        self.con_password_entry = self.builder.get_object("con_password_entry")
+        self.security_entry = self.builder.get_object("security_entry")
 
         # Labels
         # self.status_lbl = self.builder.get_object("status_lbl")
         self.warning_msgs_lbl = self.builder.get_object("warning_msgs_lbl")
         self.settings_lbl = self.builder.get_object("settings_lbl")
+        self.con_name_lbl = self.builder.get_object("con_name_lbl")
+        self.con_password_lbl = self.builder.get_object("con_password_lbl")
+        self.security_lbl = self.builder.get_object("security_lbl")
 
         # Switch
         self.auto_switch = self.builder.get_object("auto_switch")
@@ -121,8 +129,9 @@ class MainWindow:
         self.ok_button.connect("clicked", self.on_ok_button_clicked)
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
         self.password_entry.connect("icon-release", self.password_entry_icon_release)
+        self.con_password_entry.connect("icon-press", self.password_entry_icon_press)
+        self.con_password_entry.connect("icon-release", self.password_entry_icon_release)
         self.save_button.connect("clicked", self.on_save_button_clicked)
-        self.window.connect("destroy", self.on_main_window_destroy)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -155,7 +164,7 @@ class MainWindow:
 
         # Quit App Menu Item
         self.item_quit = Gtk.MenuItem(label=_("Quit"))
-        self.item_quit.connect("activate", self.on_main_window_destroy)
+        self.item_quit.connect("activate", Gtk.main_quit)
 
         self.menu.append(self.item_show_app)
         self.menu.append(self.item_separator1)
@@ -182,10 +191,10 @@ class MainWindow:
             self.item_show_app.set_label(_("Show App"))
 
 
-    def on_main_window_destroy(self, widget):
-        # Remove connected hotspot before destroying the window
-        # hotspot.remove_hotspot()
-        self.window.get_application().quit()
+    def on_window_delete_event(self, widget=None, event=None):
+        self.window.hide()
+        self.item_show_app.set_label(_("Show App"))
+        return True
 
 
     def check_wifi_and_update_hotspot(self):
@@ -259,6 +268,7 @@ class MainWindow:
         if self.create_button.get_label() == _("Disable Connection"):
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
+            self.connection_stack.set_visible_child_name("page_connect")
             self.create_button.set_label(_("Create Hotspot"))
         else:
             enable_icon_name = "network-wireless-signal-good-symbolic"
@@ -266,6 +276,7 @@ class MainWindow:
             ssid = self.connection_entry.get_text()  # Connection Name
             password = self.password_entry.get_text()
             ifname = self.ifname_combo.get_active_text()
+            selected_encrypt = self.encrypt_combo.get_active_text()
 
             # Check if Wi-Fi is enabled
             if not hotspot.is_wifi_enabled():
@@ -301,6 +312,12 @@ class MainWindow:
 
             hotspot.set_network_interface(ifname)
             hotspot.create_hotspot(ssid, password)
+
+            self.connection_stack.set_visible_child_name("page_connected")
+            self.con_entry.set_text(ssid)
+            self.con_password_entry.set_text(password)
+            self.security_entry.set_text(selected_encrypt)
+
             self.create_button.set_label(_("Disable Connection"))
 
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
