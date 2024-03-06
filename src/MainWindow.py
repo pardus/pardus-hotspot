@@ -164,7 +164,7 @@ class MainWindow:
 
         # Quit App Menu Item
         self.item_quit = Gtk.MenuItem(label=_("Quit"))
-        self.item_quit.connect("activate", Gtk.main_quit)
+        self.item_quit.connect("activate", self.on_window_destroy)
 
         self.menu.append(self.item_show_app)
         self.menu.append(self.item_separator1)
@@ -172,6 +172,13 @@ class MainWindow:
 
         self.menu.show_all()
         self.indicator.set_menu(self.menu)
+
+
+    def set_indicator(self):
+        if self.window.is_visible():
+            self.item_show_app.set_label(_("Show App"))
+        else:
+            self.item_show_app.set_label(_("Hide App"))
 
 
     def on_menu_show_app(self, *args):
@@ -184,17 +191,14 @@ class MainWindow:
             self.item_show_app.set_label(_("Hide App"))
 
 
-    def set_indicator(self):
-        if self.window.is_visible():
-            self.item_show_app.set_label(_("Hide App"))
-        else:
-            self.item_show_app.set_label(_("Show App"))
-
-
     def on_window_delete_event(self, widget=None, event=None):
         self.window.hide()
         self.item_show_app.set_label(_("Show App"))
         return True
+
+
+    def on_window_destroy(self, widget, event=None):
+        self.window.get_application().quit()
 
 
     def check_wifi_and_update_hotspot(self):
@@ -315,8 +319,11 @@ class MainWindow:
 
             self.connection_stack.set_visible_child_name("page_connected")
             self.con_entry.set_text(ssid)
+            self.con_entry.set_sensitive(False)
             self.con_password_entry.set_text(password)
+            self.con_password_entry.set_editable(False)
             self.security_entry.set_text(selected_encrypt)
+            self.security_entry.set_sensitive(False)
 
             self.create_button.set_label(_("Disable Connection"))
 
