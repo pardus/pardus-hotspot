@@ -160,6 +160,12 @@ class MainWindow:
         self.item_show_app = Gtk.MenuItem(label=_("Show App"))
         self.item_show_app.connect("activate", self.on_menu_show_app)
 
+        self.item_settings = Gtk.MenuItem(label=_("Settings"))
+        self.item_settings.connect("activate", self.on_menu_settings_clicked)
+
+        self.item_enable = Gtk.MenuItem(label=_("Enable"))
+        self.item_enable.connect("activate", self.on_create_button_clicked)
+
         self.item_separator1 = Gtk.SeparatorMenuItem()
 
         # Quit App Menu Item
@@ -167,6 +173,8 @@ class MainWindow:
         self.item_quit.connect("activate", self.on_window_destroy)
 
         self.menu.append(self.item_show_app)
+        self.menu.append(self.item_settings)
+        self.menu.append(self.item_enable)
         self.menu.append(self.item_separator1)
         self.menu.append(self.item_quit)
 
@@ -241,6 +249,7 @@ class MainWindow:
         self.menu_popover.popdown()
 
         self.settings_lbl.set_text(_("Home Page"))
+        self.item_settings.set_label(_("Home Page"))
         self.settings_img.set_from_icon_name("user-home-symbolic",
             Gtk.IconSize.BUTTON
         )
@@ -250,6 +259,7 @@ class MainWindow:
                 Gtk.IconSize.BUTTON
             )
             self.settings_lbl.set_text(_("Settings"))
+            self.item_settings.set_label(_("Settings"))
             self.header_bar.set_title(_("Pardus Hotspot"))
             self.hotspot_stack.set_visible_child_name("page_main")
         else:
@@ -274,6 +284,7 @@ class MainWindow:
             hotspot.remove_hotspot()
             self.connection_stack.set_visible_child_name("page_connect")
             self.create_button.set_label(_("Create Hotspot"))
+            self.item_enable.set_label(_("Enable"))
         else:
             enable_icon_name = "network-wireless-signal-good-symbolic"
 
@@ -326,6 +337,7 @@ class MainWindow:
             self.security_entry.set_sensitive(False)
 
             self.create_button.set_label(_("Disable Connection"))
+            self.item_enable.set_label(_("Disable"))
 
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
 
