@@ -6,6 +6,7 @@ import os
 
 import hotspot
 from network_utils import get_interface_names
+from hotspot_settings import HotspotSettings
 
 try:
     gi.require_version('AppIndicator3', '0.1')
@@ -35,6 +36,7 @@ class MainWindow:
         self.builder.connect_signals(self)
 
         self.define_components()
+        self.init_settings()
 
         self.window.set_application(application)
 
@@ -48,6 +50,10 @@ class MainWindow:
 
 
     def define_components(self):
+        # Take last connection settings
+        self.hotspot_settings = HotspotSettings()
+        self.hotspot_settings.read_config()
+
         # Window
         self.window = self.builder.get_object("main_window")
         self.window.set_position(Gtk.WindowPosition.CENTER)
@@ -145,6 +151,29 @@ class MainWindow:
         get_interface_names(self.ifname_combo, self.window)
 
 
+    def init_settings(self):
+        self.connection_entry.set_text(self.hotspot_settings.ssid)
+        self.password_entry.set_text(self.hotspot_settings.password)
+        self.get_comboboxtext_value(
+            self.ifname_combo,
+            self.hotspot_settings.interface
+        )
+        self.get_comboboxtext_value(
+            self.encrypt_combo,
+            self.hotspot_settings.encryption
+        )
+
+
+    def get_comboboxtext_value(self, widget, settings_val):
+        model = widget.get_model()
+        index = 0
+        for row in model:
+            if row[0] == settings_val:
+                widget.set_active(index)
+                break
+            index += 1
+
+
     def init_indicator(self):
         self.indicator = appindicator.Indicator.new(
             "pardus-hotspot", "network-wireless",
@@ -206,6 +235,14 @@ class MainWindow:
 
 
     def on_window_destroy(self, widget, event=None):
+        # Save last connection settings
+        self.hotspot_settings.ssid = self.connection_entry.get_text()
+        self.hotspot_settings.password = self.password_entry.get_text()
+        self.hotspot_settings.interface = self.ifname_combo.get_active_text()
+        self.hotspot_settings.encryption = self.encrypt_combo.get_active_text()
+        self.hotspot_settings.write_config()
+
+        hotspot.remove_hotspot()
         self.window.get_application().quit()
 
 
