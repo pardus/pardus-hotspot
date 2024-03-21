@@ -3,24 +3,32 @@
 # Pardus Kablosuz Erişim Noktası
 
 ## Giriş
-Bu uygulama, Linux sistemleri için tasarlanmış olup, kullanıcıların Wi-Fi hotspot'u kolayca oluşturmasını ve yönetmesini sağlar.
-Grafiksel bir arayüze sahip olup, ağ ayarlarının konfigürasyonunu ve yönetimini kolaylaştırır.
+Bu uygulama, Linux sistemleri için tasarlanmıştır ve kullanıcıların Wi-Fi hotspot'u kolayca oluşturup yönetmelerini sağlar.
+Grafik arayüzü sayesinde ağ ayarlarının yapılandırılmasını ve yönetimini kolaylaştırır.
 
 ## Kurulum
 
 ### Önkoşullar
-- Sisteminizde NetworkManager ve Python 3.x'in yüklü olduğundan emin olun.
-- Uygulamanın NetworkManager ile etkileşimde bulunabilmesi için D-Bus Python bağlantıları gereklidir.
+Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki gereksinimleri karşıladığından emin olun:
+
+- `network-manager`: Uygulama, ağ bağlantılarını yönetmek için NetworkManager'a bağlıdır.
+- `python3`: Pardus Kablosuz Erişim Noktası, Python 3 ile geliştirilmiştir; sistemde Python 3.x'in yüklü olduğundan emin olun.
+- `python3-dbus`: Uygulamanın NetworkManager ile etkileşime geçebilmesi için gereklidir.
+- `libgtk-3-dev` ve `libglib2.0-dev`: Grafik arayüzü için gereklidir.
+- `gir1.2-ayatanaappindicator3-0.1`: Sistem tepsisi ikonu oluşturmak için kullanılır.
 
 ### Kullanım
-- Depoyu klonlayın:
+- Depoyu klonlayın ve klonlanan dizine gidin:
 
     ```
-    git clone https://git.pardus.net.tr/emel.ozturk/pardus-hotspot-app.git
+    git clone https://git.pardus.net.tr/emel.ozturk/pardus-hotspot.git
+    cd pardus-hotspot
     ```
 
-- Uygulamayı başlatmak için şunu çalıştırın:
-    `python3 Main.py`
+- Uygulamayı başlatın:
+  ```
+  python3 Main.py
+  ```
 
 ### Arayüz
 
@@ -32,16 +40,16 @@ Hotspot aktifken:
 
 <img src="screenshots/enable.png" alt="Hotspot Etkin" width="500" height="auto"/>
 
-Ayarların konfigürasyonu:
+Ayarların yapılandırılması:
 
 <img src="screenshots/settings.png" alt="Hotspot Ayarları" width="500" height="auto"/>
 
-### Hotspot Konfigürasyonu
-- Arayüz, SSID, bağlantı adı, parola ve diğer ağla ilgili konfigürasyonları ayarlamanıza olanak tanır.
 
 ## Geliştirici Notları
-`MainWindow.py`, uygulamanın giriş noktası olarak hareket eder. Sistemin ağ yönetimiyle etkileşimde bulunmak için `hotspot.py`'ı kullanır.
-`network_utils.py`, bilgisayarda bulunan Wi-Fi kartlarını listeleme ve Wi-Fi durumunu alma gibi işlemler için kullanılır.
+`MainWindow.py`, uygulamanın giriş noktası olarak işlev görür. Sistemin ağ yönetimiyle etkileşim kurmak için `hotspot.py` kullanılır.
+`network_utils.py`, bilgisayarda bulunan Wi-Fi kartlarını listeleme ve Wi-Fi durumunu kontrol etme gibi işlemler için kullanılır.
+`hotspot_settings.py:` başlangıçta otomatik başlatma, son bağlantı bilgilerini
+kaydetme gibi işlevsellikleri yönetmek için kullanılır.
 
 ___
 ## Yapılacaklar
@@ -49,7 +57,6 @@ ___
 - [x] Önemli hatalar için stack sayfası
 - [x] Farklı şifreleme yöntemleri için destek ekleme
 - [x] Hata yönetimi ve kullanıcı geri bildirimlerini geliştirme
-- [ ] Uygulamanın sanal makinede çalışıp çalışmadığını kontrol etme
 - [x] Wi-Fi'nin açık olup olmadığını kontrol etme
 - [x] iPhone'lar için bağlantıyı etkinleştirme
 - [x] Wi-Fi sinyali kaybolduğunda bağlantıyı otomatik olarak devre dışı bırakma
@@ -57,6 +64,7 @@ ___
 - [x] Tam ekran modunu devre dışı bırakma
 - [x] Hakkında ve ayarlar butonları arasında geçiş yaparken oluşan donma
   sorununu düzeltme
+- [x] Uygulamanın başlangıçta otomatik açılması
 - [ ] Uygulamanın sanal makinede çalışıp çalışmadığını kontrol etme
 - [ ] Hotspota bağlı cihaz sayısını kontrol etme
 - [ ] Bağlı cihaz bilgilerini gösterme

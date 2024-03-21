@@ -5,23 +5,34 @@
 ## Introduction
 This application is designed for Linux systems, providing a straightforward way
 for users to effortlessly create and manage a Wi-Fi hotspot.
-Featuring a graphical interface, it facilitates the configuration and management of network settings with ease.
+Featuring a graphical interface, it facilitates the configuration and management
+of network settings with ease.
+
 
 ## Installation
 
-### Prerequisites
-- Ensure you have NetworkManager and Python 3.x installed on your system.
-- D-Bus Python bindings are required for the application to interact with NetworkManager.
+### Requirements
+Before installing Pardus Hotspot, ensure your system meets the following requirements:
+
+- `network-manager`: The application relies on NetworkManager for managing network connections.
+- `python3`: Pardus Hotspot is built with Python 3; make sure Python 3.x is installed on your system.
+- `python3-dbus`: Required for the application to interact with NetworkManager.
+- `libgtk-3-dev` and `libglib2.0-dev`: Required for the graphical interface.
+- `gir1.2-ayatanaappindicator3-0.1`: Used for creating a system tray icon.
+
 
 ### Usage
-- Clone the repository:
+- Clone the repository and navigate to the cloned directory:
 
     ```
-    git clone https://git.pardus.net.tr/emel.ozturk/pardus-hotspot-app.git
+    git clone https://git.pardus.net.tr/emel.ozturk/pardus-hotspot.git
+    cd pardus-hotspot
     ```
 
-- To start the application, run:
-    `python3 Main.py`
+- Start the application:
+    ```
+    python3 Main.py
+    ```
 
 ### Interface
 
@@ -37,8 +48,6 @@ Settings configuration:
 
 <img src="screenshots/settings.png" alt="Hotspot Settings" width="500" height="auto"/>
 
-### Hotspot Configuration
-- The interface allows for setting the SSID, connection name, password, and other network-related configurations.
 
 ## Developer Notes
 `MainWindow.py` acts as the entry point of the application. It utilizes
@@ -46,7 +55,10 @@ Settings configuration:
 management.
 `network_utils.py` is used for operations such as listing the available Wi-Fi
 cards in the computer and getting the Wi-Fi's status.
+`hotspot_settings.py:` handles configuration persistence and autostart
+functionality.
 
+___
 ## To-Dos
 - [x] Implement dynamic retrieval of network interfaces
 - [x] Stack page for important errors
@@ -59,7 +71,7 @@ cards in the computer and getting the Wi-Fi's status.
   window
 - [x] Disable fullscreen mode
 - [x] Fix freezing issue when switching between the about and settings buttons.
-
+- [x] Add 'launch at startup' option
 - [ ] Check if app is working on a virtual machine
 - [ ] Check how many devices are connected to the hotspot
 - [ ] Show connected device infos
