@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-19 14:44+0300\n"
-"PO-Revision-Date: 2024-01-26 09:33+0300\n"
+"POT-Creation-Date: 2024-03-21 15:10+0300\n"
+"PO-Revision-Date: 2024-03-21 15:29+0300\n"
 "Last-Translator: Emel Öztürk <emel.ozturk@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -23,87 +23,122 @@ msgstr ""
 msgid "Simple hotspot application."
 msgstr "Basit kablosuz erişim noktası uygulaması."
 
-#: ui/MainWindow.glade:142
+#: ui/MainWindow.glade:146
 msgid "Interface Name:"
 msgstr "Arayüz Adı:"
 
-#: ui/MainWindow.glade:157
+#: ui/MainWindow.glade:161
 msgid "Choose an interface name"
 msgstr "Bir arayüz adı seçin"
 
-#: ui/MainWindow.glade:184
+#: ui/MainWindow.glade:186 ui/MainWindow.glade:284
 msgid "Connection Name:"
 msgstr "Bağlantı Adı:"
 
-#: ui/MainWindow.glade:199
+#: ui/MainWindow.glade:201 ui/MainWindow.glade:299
 msgid "Enter hotspot name"
 msgstr "Kablosuz erişim noktası adı girin"
 
-#: ui/MainWindow.glade:227
+#: ui/MainWindow.glade:227 ui/MainWindow.glade:324
 msgid "Password:"
 msgstr "Parola:"
 
-#: ui/MainWindow.glade:242
+#: ui/MainWindow.glade:242 ui/MainWindow.glade:339
 msgid "Enter at least 8 characters"
 msgstr "En az 8 karakter girin"
 
-#: ui/MainWindow.glade:263 src/MainWindow.py:140 src/MainWindow.py:194
-#: src/MainWindow.py:256
+#: ui/MainWindow.glade:369
+msgid "Security Type:"
+msgstr "Güvenlik Türü:"
+
+#: ui/MainWindow.glade:415 src/MainWindow.py:264 src/MainWindow.py:329
+#: src/MainWindow.py:410
 msgid "Create Hotspot"
 msgstr "Kablosuz Erişim Noktası Oluştur"
 
-#: ui/MainWindow.glade:289 ui/MainWindow.glade:491 src/MainWindow.py:172
+#: ui/MainWindow.glade:433 ui/MainWindow.glade:719 src/MainWindow.py:185
+#: src/MainWindow.py:306 src/MainWindow.py:406
 msgid "Pardus Hotspot"
 msgstr "Pardus Kablosuz Erişim Noktası"
 
-#: ui/MainWindow.glade:313
+#: ui/MainWindow.glade:501
 msgid "Band Selection:"
 msgstr "Band Seçimi:"
 
-#: ui/MainWindow.glade:352
+#: ui/MainWindow.glade:540
 msgid "Encryption Method:"
 msgstr "Şifreleme Yöntemi:"
 
-#: ui/MainWindow.glade:380
+#: ui/MainWindow.glade:578
+msgid "Launch at Startup:"
+msgstr "Başlangıçta Çalıştır:"
+
+#: ui/MainWindow.glade:608
 msgid "Save"
 msgstr "Kaydet"
 
-#: ui/MainWindow.glade:399 ui/MainWindow.glade:553
+#: ui/MainWindow.glade:627 ui/MainWindow.glade:781 src/MainWindow.py:194
+#: src/MainWindow.py:304 src/MainWindow.py:305 src/MainWindow.py:405
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ui/MainWindow.glade:450
+#: ui/MainWindow.glade:678
 msgid "OK"
 msgstr "Tamam"
 
-#: ui/MainWindow.glade:481
+#: ui/MainWindow.glade:709
 msgid "Error"
 msgstr "Hata"
 
-#: ui/MainWindow.glade:608
+#: ui/MainWindow.glade:836
 msgid "About"
 msgstr "Hakkında"
 
-#: src/MainWindow.py:175
+#: src/MainWindow.py:191 src/MainWindow.py:218 src/MainWindow.py:227
+#: src/MainWindow.py:235
+msgid "Show App"
+msgstr "Göster"
+
+#: src/MainWindow.py:197 src/MainWindow.py:330
+msgid "Enable"
+msgstr "Etkinleştir"
+
+#: src/MainWindow.py:203
+msgid "Quit"
+msgstr "Çıkış"
+
+#: src/MainWindow.py:220 src/MainWindow.py:230
+msgid "Hide App"
+msgstr "Gizle"
+
+#: src/MainWindow.py:294 src/MainWindow.py:295
+msgid "Home Page"
+msgstr "Ana Sayfa"
+
+#: src/MainWindow.py:309
 msgid "Hotspot Settings"
 msgstr "Kablosuz Erişim Noktası Ayarları"
 
-#: src/MainWindow.py:191 src/MainWindow.py:236
+#: src/MainWindow.py:325 src/MainWindow.py:382
 msgid "Disable Connection"
 msgstr "Bağlantıyı Kapat"
 
-#: src/MainWindow.py:204
+#: src/MainWindow.py:341
 msgid "Please enable Wi-Fi to continue"
 msgstr "Devam etmek için Wi-Fi açın"
 
-#: src/MainWindow.py:212
+#: src/MainWindow.py:349
 msgid "Please select a network interface for the hotspot"
 msgstr "Lütfen kablosuz erişim noktası için bir ağ arayüzü seçin"
 
-#: src/MainWindow.py:220
+#: src/MainWindow.py:357
 msgid "Please enter a name for your hotspot connection"
 msgstr "Lütfen kablosuz erişim noktanız için bir isim girin"
 
-#: src/MainWindow.py:228
+#: src/MainWindow.py:365
 msgid "Password must be at least 8 characters long"
 msgstr "Parola en az 8 karakter uzunluğunda olmalı"
+
+#: src/MainWindow.py:383
+msgid "Disable"
+msgstr "Devre Dışı Bırak"
