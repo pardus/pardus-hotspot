@@ -50,6 +50,7 @@ data_files = [
             "src/MainWindow.py",
             "src/hotspot.py",
             "src/network_utils.py",
+            "src/hotspot_settings.py",
             "src/__version__",
         ],
     ),
