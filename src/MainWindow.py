@@ -105,7 +105,7 @@ class MainWindow:
         self.security_lbl = self.builder.get_object("security_lbl")
 
         # Switch
-        self.auto_switch = self.builder.get_object("auto_switch")
+        self.startup_switch = self.builder.get_object("startup_switch")
 
         # Dialog
         self.hotspot_dialog = self.builder.get_object("hotspot_dialog")
@@ -138,6 +138,8 @@ class MainWindow:
         self.con_password_entry.connect("icon-press", self.password_entry_icon_press)
         self.con_password_entry.connect("icon-release", self.password_entry_icon_release)
         self.save_button.connect("clicked", self.on_save_button_clicked)
+        self.startup_switch.connect("state-set", self.on_startup_switch_state_set)
+        self.startup_switch.set_active(self.hotspot_settings.autostart)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -244,6 +246,10 @@ class MainWindow:
 
         hotspot.remove_hotspot()
         self.window.get_application().quit()
+
+
+    def on_startup_switch_state_set(self, switch, state):
+        self.autostart_temp = state
 
 
     def check_wifi_and_update_hotspot(self):
@@ -413,3 +419,11 @@ class MainWindow:
 
         # Switch back to the main page
         self.hotspot_stack.set_visible_child_name("page_main")
+
+        if self.autostart_temp is not None:
+            self.hotspot_settings.autostart = self.autostart_temp
+            self.hotspot_settings.set_autostart(self.autostart_temp)
+
+        self.hotspot_settings.write_config()
+        self.startup_switch.set_active(self.hotspot_settings.autostart)
+        self.autostart_temp = None

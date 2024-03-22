@@ -14,14 +14,14 @@ class Application(Gtk.Application):
                          flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs
         )
         self.window = None
-    
+
+
     def do_activate(self):
         # We only allow a single window and raise any existing ones
         if not self.window:
             self.window = MainWindow(self)
         else:
             self.window.present()
-
 
 
     def do_command_line(self, command_line):

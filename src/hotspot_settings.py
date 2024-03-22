@@ -111,8 +111,11 @@ class HotspotSettings:
                 os.path.dirname(os.path.abspath(__file__)),
                 "../data/tr.org.pardus.hotspot-autostart.desktop"
             )
+            # Check if the symlink already exists before creating it
             if not Path(autostart_file_path).exists():
                 os.symlink(target_desktop_file, autostart_file_path)
+            else:
+                print("Autostart symlink already exists")
         else:
             try:
                 Path(autostart_file_path).unlink(missing_ok=True)

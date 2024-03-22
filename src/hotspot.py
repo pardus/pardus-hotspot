@@ -225,7 +225,9 @@ def update_hotspot_settings_helper(band, encrypt, ssid="Hotspot", passwd=None):
     ip4_settings = {"method": "shared"}
     ip6_settings = {"method": "auto"}
 
-    connection_settings = {"type": "802-11-wireless", "uuid": current_hotspot_uuid, "id": "hotspot"}
+    connection_settings = {
+        "type": "802-11-wireless", "uuid": current_hotspot_uuid, "id": "hotspot"
+    }
 
     connection = {
         "connection": connection_settings,
@@ -270,7 +272,7 @@ def remove_hotspot():
 
     # Check if the device interface is initialized
     if device_iface is None:
-        print("No network device interface found.")
+        # print("No network device interface found.")
         return False
 
     # Attempt to disconnect
