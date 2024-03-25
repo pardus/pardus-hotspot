@@ -72,6 +72,7 @@ class MainWindow:
         self.menu_about = self.builder.get_object("menu_about")
         self.menu_settings = self.builder.get_object("menu_settings")
         self.save_button = self.builder.get_object("save_button")
+        self.restore_button = self.builder.get_object("restore_button")
 
         # Stack for switching between settings and main boxes
         self.hotspot_stack = self.builder.get_object("hotspot_stack")
@@ -420,10 +421,10 @@ class MainWindow:
         # Switch back to the main page
         self.hotspot_stack.set_visible_child_name("page_main")
 
-        if self.autostart_temp is not None:
-            self.hotspot_settings.autostart = self.autostart_temp
-            self.hotspot_settings.set_autostart(self.autostart_temp)
+        # if self.autostart_temp is not None:
+        #     self.hotspot_settings.autostart = self.autostart_temp
+        #     self.hotspot_settings.set_autostart(self.autostart_temp)
 
-        self.hotspot_settings.write_config()
-        self.startup_switch.set_active(self.hotspot_settings.autostart)
-        self.autostart_temp = None
+        # self.hotspot_settings.write_config()
+        # self.startup_switch.set_active(self.hotspot_settings.autostart)
+        # self.autostart_temp = None
