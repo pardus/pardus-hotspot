@@ -245,6 +245,9 @@ class MainWindow:
         self.hotspot_settings.encryption = self.encrypt_combo.get_active_text()
         self.hotspot_settings.write_config()
 
+        if self.hotspot_dialog.is_visible():
+            self.hotspot_dialog.hide()
+
         hotspot.remove_hotspot()
         self.window.get_application().quit()
 
