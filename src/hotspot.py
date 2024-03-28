@@ -289,3 +289,22 @@ def remove_hotspot():
     active_connection_props = None
 
     return True
+
+
+def find_and_remove_all_hotspot_connections():
+    """
+    Do not use this function - only for test -
+    """
+    global settings_iface
+
+    connection_paths = settings_iface.ListConnections()
+    for path in connection_paths:
+        connection_proxy = bus.get_object("org.freedesktop.NetworkManager", path)
+        connection_settings = dbus.Interface(
+            connection_proxy, dbus_interface="org.freedesktop.NetworkManager.Settings.Connection"
+        )
+        settings = connection_settings.GetSettings()
+
+        if settings.get('802-11-wireless', {}).get('mode') == 'ap':
+            print(f"Hotspot connection found and being removed: {settings.get('connection', {}).get('id')}")
+            connection_settings.Delete()

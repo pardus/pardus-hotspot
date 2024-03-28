@@ -168,6 +168,7 @@ class MainWindow:
             self.hotspot_settings.encryption
         )
 
+        # hotspot.find_and_remove_all_hotspot_connections()
 
     def get_comboboxtext_value(self, widget, settings_val):
         model = widget.get_model()
