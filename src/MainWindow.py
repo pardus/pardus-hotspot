@@ -134,8 +134,10 @@ class MainWindow:
         self.menu_settings.connect("clicked", self.on_menu_settings_clicked)
         self.create_button.connect("clicked", self.on_create_button_clicked)
         self.ok_button.connect("clicked", self.on_ok_button_clicked)
+        self.password_entry.connect("changed", self.on_password_entry_changed)
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
         self.password_entry.connect("icon-release", self.password_entry_icon_release)
+        self.connection_entry.connect("changed", self.on_password_entry_changed)
         self.con_password_entry.connect("icon-press", self.password_entry_icon_press)
         self.con_password_entry.connect("icon-release", self.password_entry_icon_release)
         self.save_button.connect("clicked", self.on_save_button_clicked)
@@ -280,6 +282,22 @@ class MainWindow:
     def password_entry_icon_release(self, entry, icon_pos, event):
         entry.set_visibility(False)
         entry.set_icon_from_icon_name(1, "view-conceal-symbolic")
+
+
+    def on_password_entry_changed(self, entry):
+        """
+        Changes connect button's style based on the password length and whether
+        the connection name is provided
+        """
+        password = self.password_entry.get_text()
+        connection_name = self.connection_entry.get_text()
+
+        style_context = self.create_button.get_style_context()
+
+        if connection_name and len(password) >= 8:
+            style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+        else:
+            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
 
 
     def on_menu_about_clicked(self, button):
