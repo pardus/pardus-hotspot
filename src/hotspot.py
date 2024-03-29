@@ -39,7 +39,7 @@ def set_network_interface(iface):
     device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
 
 
-def create_hotspot(ssid="Hotspot", passwd=None):
+def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
     """
     Create a Wi-Fi hotspot with the specified SSID and optional password.
     """
@@ -55,13 +55,13 @@ def create_hotspot(ssid="Hotspot", passwd=None):
         {
             "ssid": dbus.ByteArray(ssid.encode("utf-8")),
             "mode": "ap",
-            "band": "bg",
+            "band": band,
             "channel": dbus.UInt32(1),
         }
     )
 
     security_settings = dbus.Dictionary(
-        {"key-mgmt": "sae",
+        {"key-mgmt": encrypt,
          "psk": passwd,
          "pairwise": ["ccmp"],
          "proto": ["rsn"]}

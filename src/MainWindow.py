@@ -168,7 +168,6 @@ class MainWindow:
             self.hotspot_settings.encryption
         )
 
-        # hotspot.find_and_remove_all_hotspot_connections()
 
     def get_comboboxtext_value(self, widget, settings_val):
         model = widget.get_model()
@@ -357,7 +356,17 @@ class MainWindow:
             ssid = self.connection_entry.get_text()  # Connection Name
             password = self.password_entry.get_text()
             ifname = self.ifname_combo.get_active_text()
-            selected_encrypt = self.encrypt_combo.get_active_text()
+            encrypt = self.encrypt_combo.get_active_text()
+            band = self.band_combo.get_active_text()
+
+            # Determine wifi band and encryption based on user selection
+            # Choose "sae" for apple products
+            selected_band = "bg" if band == "2.4GHz" else "a"
+            selected_encrypt = (
+                "wpa-psk" if encrypt == "WPA-PSK"
+                else "sae" if encrypt == "SAE"
+                else None
+            )
 
             # Check if Wi-Fi is enabled
             if not hotspot.is_wifi_enabled():
@@ -392,14 +401,14 @@ class MainWindow:
                 return
 
             hotspot.set_network_interface(ifname)
-            hotspot.create_hotspot(ssid, password)
+            hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band)
 
             self.connection_stack.set_visible_child_name("page_connected")
             self.con_entry.set_text(ssid)
             self.con_entry.set_sensitive(False)
             self.con_password_entry.set_text(password)
             self.con_password_entry.set_editable(False)
-            self.security_entry.set_text(selected_encrypt)
+            self.security_entry.set_text(encrypt)
             self.security_entry.set_sensitive(False)
 
             self.create_button.set_label(_("Disable Connection"))
@@ -427,8 +436,6 @@ class MainWindow:
         )
         self.settings_lbl.set_text(_("Settings"))
         self.header_bar.set_title(_("Pardus Hotspot"))
-
-        hotspot.remove_hotspot()
 
         self.create_button.set_label(_("Create Hotspot"))
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
