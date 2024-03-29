@@ -293,11 +293,13 @@ class MainWindow:
         connection_name = self.connection_entry.get_text()
 
         style_context = self.create_button.get_style_context()
+        style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+        style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
 
         if connection_name and len(password) >= 8:
             style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
-        else:
-            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+        elif self.create_button.get_label() == _("Disable Connection"):
+            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
 
 
     def on_menu_about_clicked(self, button):
@@ -344,12 +346,16 @@ class MainWindow:
         label to 'Disable Connection'.
         In both cases, it updates the connection icon accordingly.
         """
+        style_context = self.create_button.get_style_context()
+
         if self.create_button.get_label() == _("Disable Connection"):
             enable_icon_name = "network-wireless-disabled-symbolic"
             hotspot.remove_hotspot()
             self.connection_stack.set_visible_child_name("page_connect")
             self.create_button.set_label(_("Create Hotspot"))
             self.item_enable.set_label(_("Enable"))
+            style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
         else:
             enable_icon_name = "network-wireless-signal-good-symbolic"
 
@@ -367,6 +373,10 @@ class MainWindow:
                 else "sae" if encrypt == "SAE"
                 else None
             )
+
+            # After successful connection setup, change the button to red
+            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
 
             # Check if Wi-Fi is enabled
             if not hotspot.is_wifi_enabled():
