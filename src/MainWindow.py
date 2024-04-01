@@ -143,6 +143,7 @@ class MainWindow:
         self.save_button.connect("clicked", self.on_save_button_clicked)
         self.startup_switch.connect("state-set", self.on_startup_switch_state_set)
         self.startup_switch.set_active(self.hotspot_settings.autostart)
+        self.restore_button.connect("clicked", self.on_restore_button_clicked)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -332,6 +333,13 @@ class MainWindow:
         else:
             self.header_bar.set_title(_("Hotspot Settings"))
             self.hotspot_stack.set_visible_child_name("page_settings")
+
+
+    def on_restore_button_clicked(self, button):
+        self.band_combo.set_active(0)           # Set default: 2.4Ghz
+        self.encrypt_combo.set_active(1)        # Set default: SAE
+        self.startup_switch.set_active(False)   # Set default: False
+
 
 
     def on_create_button_clicked(self, button):
