@@ -140,11 +140,13 @@ class MainWindow:
         self.connection_entry.connect("changed", self.on_password_entry_changed)
         self.con_password_entry.connect("icon-press", self.password_entry_icon_press)
         self.con_password_entry.connect("icon-release", self.password_entry_icon_release)
-        self.save_button.connect("clicked", self.on_save_button_clicked)
         self.startup_switch.connect("state-set", self.on_startup_switch_state_set)
         self.startup_switch.set_active(self.hotspot_settings.autostart)
         self.restore_button.connect("clicked", self.on_restore_button_clicked)
         self.home_button.connect("clicked", self.on_home_button_clicked)
+        self.band_combo.connect("changed", lambda widget: self.on_settings_changed())
+        self.encrypt_combo.connect("changed", lambda widget: self.on_settings_changed())
+        # self.startup_switch.connect("changed", self.on_settings_changed)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -441,7 +443,7 @@ class MainWindow:
         self.menu_button.set_visible(True)
 
 
-    def on_save_button_clicked(self, button):
+    def on_settings_changed(self):
         """
         Applies changes to hotspot settings and updates the UI to reflect these
         changes.
@@ -452,29 +454,28 @@ class MainWindow:
         self.settings_img.set_from_icon_name("preferences-other-symbolic",
                 Gtk.IconSize.BUTTON
         )
-        self.settings_lbl.set_text(_("Settings"))
-        self.header_bar.set_title(_("Pardus Hotspot"))
-
         self.create_button.set_label(_("Create Hotspot"))
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
+
+        style_context = self.create_button.get_style_context()
+        style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+        style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
 
         # Get selected values from the comboboxes
         selected_band = self.band_combo.get_active_text()
         selected_encrypt = self.encrypt_combo.get_active_text()
 
+        ssid = self.connection_entry.get_text()
+        password = self.password_entry.get_text()
+
+        self.con_entry.set_text(ssid)
+        self.con_entry.set_sensitive(True)
+        self.con_password_entry.set_text(password)
+        self.con_password_entry.set_editable(True)
+        self.security_entry.set_text(str(selected_encrypt))
+
         # Update the hotspot settings
         hotspot.update_hotspot_settings(selected_band, selected_encrypt)
-
-        # Switch back to the main page
-        self.hotspot_stack.set_visible_child_name("page_main")
-
-        # if self.autostart_temp is not None:
-        #     self.hotspot_settings.autostart = self.autostart_temp
-        #     self.hotspot_settings.set_autostart(self.autostart_temp)
-
-        # self.hotspot_settings.write_config()
-        # self.startup_switch.set_active(self.hotspot_settings.autostart)
-        # self.autostart_temp = None
 
 
     def on_home_button_clicked(self, button):
