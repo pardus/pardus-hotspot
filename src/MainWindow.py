@@ -71,7 +71,7 @@ class MainWindow:
         self.ok_button = self.builder.get_object("ok_button")
         self.menu_about = self.builder.get_object("menu_about")
         self.menu_settings = self.builder.get_object("menu_settings")
-        self.save_button = self.builder.get_object("save_button")
+        self.home_button = self.builder.get_object("home_button")
         self.restore_button = self.builder.get_object("restore_button")
 
         # Stack for switching between settings and main boxes
@@ -144,6 +144,7 @@ class MainWindow:
         self.startup_switch.connect("state-set", self.on_startup_switch_state_set)
         self.startup_switch.set_active(self.hotspot_settings.autostart)
         self.restore_button.connect("clicked", self.on_restore_button_clicked)
+        self.home_button.connect("clicked", self.on_home_button_clicked)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -341,7 +342,6 @@ class MainWindow:
         self.startup_switch.set_active(False)   # Set default: False
 
 
-
     def on_create_button_clicked(self, button):
         """
         Manages the creation and deactivation of a hotspot connection.
@@ -475,3 +475,12 @@ class MainWindow:
         # self.hotspot_settings.write_config()
         # self.startup_switch.set_active(self.hotspot_settings.autostart)
         # self.autostart_temp = None
+
+
+    def on_home_button_clicked(self, button):
+        self.hotspot_stack.set_visible_child_name("page_main")
+        self.settings_img.set_from_icon_name("preferences-other-symbolic",
+                Gtk.IconSize.BUTTON
+        )
+        self.settings_lbl.set_text(_("Settings"))
+        self.item_settings.set_label(_("Settings"))
