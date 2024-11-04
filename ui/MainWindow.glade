@@ -47,7 +47,7 @@ Ali Rıza Keskin</property>
     </child>
   </object>
   <object class="GtkWindow" id="main_window">
-    <property name="width-request">500</property>
+    <property name="width-request">530</property>
     <property name="height-request">500</property>
     <property name="can-focus">False</property>
     <property name="role">header_bar</property>
@@ -131,12 +131,16 @@ Ali Rıza Keskin</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
                     <property name="margin-start">20</property>
                     <property name="margin-end">50</property>
                     <child>
                       <object class="GtkImage" id="qr_Image">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
                         <property name="stock">gtk-missing-image</property>
                       </object>
                     </child>

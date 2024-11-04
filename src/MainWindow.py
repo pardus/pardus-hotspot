@@ -1,8 +1,10 @@
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gtk, GLib
+from gi.repository import Gtk, GLib, GdkPixbuf
 import os
+import qrcode
+import io
 
 import hotspot
 from network_utils import get_interface_names
@@ -354,6 +356,39 @@ class MainWindow:
         self.startup_switch.set_active(False)   # Set default: False
 
 
+    def generate_qr_code(self, ssid, password, encryption):
+        # Format the Wi-Fi connection string
+        if encryption == "WPA-PSK" or encryption == "SAE":
+            wifi_string = f"WIFI:S:{ssid};T:WPA;P:{password};;"
+        else:
+            wifi_string = f"WIFI:S:{ssid};T:nopass;;"
+
+        # Generate QR code with smaller box size and border
+        qr = qrcode.QRCode(version=1, box_size=6, border=2)
+        qr.add_data(wifi_string)
+        qr.make(fit=True)
+
+        # Create QR code image
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+
+        # Convert PIL image to GdkPixbuf
+        buffer = io.BytesIO()
+        qr_img.save(buffer, format='PNG')
+        buffer.seek(0)
+
+        loader = GdkPixbuf.PixbufLoader.new_with_type('png')
+        loader.write(buffer.read())
+        loader.close()
+
+        pixbuf = loader.get_pixbuf()
+
+        # Scale the pixbuf if needed (e.g., to make it smaller or adjust to your UI)
+        scaled_pixbuf = pixbuf.scale_simple(120, 120, GdkPixbuf.InterpType.BILINEAR)
+
+        # Set the QR code image to the Gtk.Image widget
+        self.qr_image.set_from_pixbuf(scaled_pixbuf)
+
+
     def on_create_button_clicked(self, button):
         """
         Manages the creation and deactivation of a hotspot connection.
@@ -375,6 +410,7 @@ class MainWindow:
             self.create_button.set_label(_("Create Hotspot"))
             self.item_enable.set_label(_("Enable"))
             self.qr_button.set_visible(False)
+            self.qr_image.clear()
 
             style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
             style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
@@ -391,9 +427,9 @@ class MainWindow:
             # Choose "sae" for apple products
             selected_band = "bg" if band == "2.4GHz" else "a"
             selected_encrypt = (
-                "wpa-psk" if encrypt == "WPA-PSK"
-                else "sae" if encrypt == "SAE"
-                else None
+                    "wpa-psk" if encrypt == "WPA-PSK"
+                    else "sae" if encrypt == "SAE"
+                    else "sae"
             )
 
             # After successful connection setup, change the button to red
@@ -452,6 +488,12 @@ class MainWindow:
             self.create_button.set_label(_("Disable Connection"))
             self.item_enable.set_label(_("Disable"))
             self.qr_button.set_visible(True)
+
+            # Generate initial QR code
+            ssid = self.connection_entry.get_text()
+            password = self.password_entry.get_text()
+            encrypt = self.encrypt_combo.get_active_text()
+            self.generate_qr_code(ssid, password, encrypt)
 
         self.connection_img.set_from_icon_name(enable_icon_name, Gtk.IconSize.BUTTON)
 
