@@ -14,8 +14,13 @@ Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki g
 - `network-manager`: Uygulama, ağ bağlantılarını yönetmek için NetworkManager'a bağlıdır.
 - `python3`: Pardus Kablosuz Erişim Noktası, Python 3 ile geliştirilmiştir; sistemde Python 3.x'in yüklü olduğundan emin olun.
 - `python3-dbus`: Uygulamanın NetworkManager ile etkileşime geçebilmesi için gereklidir.
-- `libgtk-3-dev` ve `libglib2.0-dev`: Grafik arayüzü için gereklidir.
+- `libgtk-3-dev` & `libglib2.0-dev`: Grafik arayüzü için gereklidir.
 - `gir1.2-ayatanaappindicator3-0.1`: Sistem tepsisi ikonu oluşturmak için kullanılır.
+- `python3-gi`: Python'un GTK ve GNOME kütüphanelerini kullanmasını sağlar.
+- `gir1.2-gtk-3.0`: Pencere ve butonları oluşturmak için gerekli kütüphaneyi sağlar.
+- `gir1.2-gdkpixbuf-2.0`: QR kodları gibi resimleri görüntülemeyi sağlar.
+- `python3-qrcode`: QR kodları oluşturmak için kullanılır.
+- `python3-pil` / `python3-pillow`: QR kodları için gerekli olan resimlerin işlenmesine yardımcı olur.
 
 ### Kullanım
 - Depoyu klonlayın ve klonlanan dizine gidin:
@@ -69,7 +74,8 @@ ___
 - [ ] Hotspota bağlı cihaz sayısını kontrol etme
 - [ ] Bağlı cihaz bilgilerini gösterme
 - [ ] Gizli parametre ekleme (sadece belirli cihazlara hotspot bağlantısını gösterme)
-- [ ] QR özelliği ekleme
+- [x] QR özelliği ekleme
+- [ ] İconları yenileme
 
 __NOT :__ GitHub'a uygulama eklenirken __Yapılacaklar__ kısmını silelim,
 __URL__'i güncelleyelim.

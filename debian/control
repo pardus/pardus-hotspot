@@ -13,10 +13,15 @@ Package: pardus-hotspot
 Architecture: all
 Depends: ${misc:Depends},
          ${python3:Depends},
+         network-manager,
          gir1.2-ayatanaappindicator3-0.1,
          gir1.2-glib-2.0,
          gir1.2-gtk-3.0,
-         python3-dbus
+         gir1.2-gdkpixbuf-2.0,
+         python3-gi,
+         python3-dbus,
+         python3-qrcode,
+         python3-pil | python3-pillow
 Description: Pardus Hotspot.
  Simple hotspot application
  

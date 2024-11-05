@@ -17,9 +17,13 @@ Before installing Pardus Hotspot, ensure your system meets the following require
 - `network-manager`: The application relies on NetworkManager for managing network connections.
 - `python3`: Pardus Hotspot is built with Python 3; make sure Python 3.x is installed on your system.
 - `python3-dbus`: Required for the application to interact with NetworkManager.
-- `libgtk-3-dev` and `libglib2.0-dev`: Required for the graphical interface.
+- `libgtk-3-dev` & `libglib2.0-dev`: Required for the graphical interface.
 - `gir1.2-ayatanaappindicator3-0.1`: Used for creating a system tray icon.
-
+- `python3-gi`: Allows Python to use GTK and GNOME libraries.
+- `gir1.2-gtk-3.0`: Provides the library for building windows and buttons.
+- `gir1.2-gdkpixbuf-2.0`: Enables showing images, like QR codes.
+- `python3-qrcode`: Used to create QR codes.
+- `python3-pil` / `python3-pillow`: Helps handle images needed for QR codes.
 
 ### Usage
 - Clone the repository and navigate to the cloned directory:
@@ -77,7 +81,8 @@ ___
 - [ ] Show connected device infos
 - [ ] Add hidden parameter to show hotspot connection or not (only specific
   devices allowed)
-- [ ] ADD QR feature
+- [x] ADD QR feature
+- [ ] Change icons & tray icon
 
 
  __NOTE :__ When adding the application to GitHub, delete the __To-Dos__ section
