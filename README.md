@@ -1,13 +1,22 @@
-[🇹🇷](./README_TR.md) [🇬🇧](./README.md)
 
 # Pardus Hotspot
 
-## Introduction
-This application is designed for Linux systems, providing a straightforward way
-for users to effortlessly create and manage a Wi-Fi hotspot.
-Featuring a graphical interface, it facilitates the configuration and management
-of network settings with ease.
+[![License](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](LICENSE)  
 
+[🇹🇷](./README_TR.md) | [🇬🇧](./README.md)
+
+## Introduction
+Pardus Hotspot is a Linux application that helps you easily create and manage a Wi-Fi hotspot on your computer.
+With its simple interface, you can quickly set up and share your internet connection with other devices.
+
+## Features
+- User-friendly interface
+- Support for both 2.4GHz and 5GHz frequency bands
+- WPA2 (WPA-PSK) and WPA3 (SAE) security protocols
+- QR code generation for easy connection sharing
+- System tray integration
+- Automatic configuration saving
+- Autostart capability
 
 ## Installation
 
@@ -15,7 +24,7 @@ of network settings with ease.
 Before installing Pardus Hotspot, ensure your system meets the following requirements:
 
 - `network-manager`: The application relies on NetworkManager for managing network connections.
-- `python3`: Pardus Hotspot is built with Python 3; make sure Python 3.x is installed on your system.
+- `python3`: Pardus Hotspot is built with Python 3
 - `python3-dbus`: Required for the application to interact with NetworkManager.
 - `libgtk-3-dev` & `libglib2.0-dev`: Required for the graphical interface.
 - `gir1.2-ayatanaappindicator3-0.1`: Used for creating a system tray icon.
@@ -26,64 +35,61 @@ Before installing Pardus Hotspot, ensure your system meets the following require
 - `python3-pil` / `python3-pillow`: Helps handle images needed for QR codes.
 
 ### Usage
-- Clone the repository and navigate to the cloned directory:
 
+  - __From Package Manager__
+    ```bash
+    sudo apt install pardus-hotspot
     ```
-    git clone https://git.pardus.net.tr/emel.ozturk/pardus-hotspot.git
+  - __From Source__
+    ```
+    # Clone the repository
+    git clone https://github.com/pardus/pardus-hotspot
+
+    # Navigate to the project directory
     cd pardus-hotspot
-    ```
 
-- Start the application:
-    ```
+    # Install dependencies
+    sudo apt install network-manager python3 python3-dbus libgtk-3-dev libglib2.0-dev \
+        gir1.2-ayatanaappindicator3-0.1 python3-gi gir1.2-gtk-3.0 \
+        gir1.2-gdkpixbuf-2.0 python3-qrcode python3-pil
+
+    # Run the application
     python3 Main.py
+
     ```
 
-### Interface
+### Usage Guide
 
-When the hotspot is not active:
+ ##### Creating a Hotspot
 
-<img src="screenshots/disable.png" alt="Hotspot Disabled" width="500" height="auto"/>
+  1. Launch the application
+  2. Enter a connection name (SSID)
+  3. Set a password (minimum 8 characters)
+  4. Select your wireless interface (interfaces are detected automatically)
+  5. Click to "Create Hotspot"
 
-When the hotspot is active:
+ ##### Advanced Settings
 
-<img src="screenshots/enable.png" alt="Hotspot Enabled" width="500" height="auto"/>
-
-Settings configuration:
-
-<img src="screenshots/settings.png" alt="Hotspot Settings" width="500" height="auto"/>
-
-
-## Developer Notes
-`MainWindow.py` acts as the entry point of the application. It utilizes
-`hotspot.py` for the underlying logic to interact with the system's network
-management.
-`network_utils.py` is used for operations such as listing the available Wi-Fi
-cards in the computer and getting the Wi-Fi's status.
-`hotspot_settings.py:` handles configuration persistence and autostart
-functionality.
-
-___
-## To-Dos
-- [x] Implement dynamic retrieval of network interfaces
-- [x] Stack page for important errors
-- [x] Add support for different encryption methods
-- [x] Improve error handling and user feedback
-- [x] Check if the Wi-Fi is on or off
-- [x] Enable connection for iPhones
-- [x] Automatically disable connection if Wi-Fi signal lost
-- [x] Remove connection if user wants to close hotspot
-  window
-- [x] Disable fullscreen mode
-- [x] Fix freezing issue when switching between the about and settings buttons.
-- [x] Add 'launch at startup' option
-- [ ] Check if app is working on a virtual machine
-- [ ] Check how many devices are connected to the hotspot
-- [ ] Show connected device infos
-- [ ] Add hidden parameter to show hotspot connection or not (only specific
-  devices allowed)
-- [x] ADD QR feature
-- [ ] Change icons & tray icon
+  - __Band Selection__: Choose between 2.4GHz and 5GHz bands
+  - __Security Protocol__: Select WPA2 (WPA-PSK) or WPA3 (SAE).
+  - __Autostart__: Enable/disable automatic startup with system
+  > __Note__: For Apple products, select **SAE** for the encryption method.
 
 
- __NOTE :__ When adding the application to GitHub, delete the __To-Dos__ section
- and update the __URL__
+##### QR Code Sharing
+Once the hotspot is active, a scannable QR code automatically appears for easy connection sharing with mobile devices.
+
+
+## Interface
+- Application interface for active/inactive connection states:
+
+<p align="center">
+  <img src="screenshots/disable.png" alt="Hotspot Disabled" width="400"/>
+  <img src="screenshots/enable.png" alt="Hotspot Enabled" width="400"/>
+</p>
+
+ - Settings configuration:
+ <p align= "center">
+<img src="screenshots/settings.png" alt="Hotspot Settings" width="400"/>
+</p>
+

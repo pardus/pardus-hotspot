@@ -1,10 +1,22 @@
-[🇹🇷](./README_TR.md) [🇬🇧](./README.md)
 
 # Pardus Kablosuz Erişim Noktası
 
+[![License](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](LICENSE)  
+
+[🇹🇷](./README_TR.md) | [🇬🇧](./README.md)
+
+
 ## Giriş
-Bu uygulama, Linux sistemleri için tasarlanmıştır ve kullanıcıların Wi-Fi hotspot'u kolayca oluşturup yönetmelerini sağlar.
-Grafik arayüzü sayesinde ağ ayarlarının yapılandırılmasını ve yönetimini kolaylaştırır.
+Pardus Hotspot, bilgisayarınızda kolayca bir Wi-Fi hotspot oluşturmanıza ve yönetmenize yardımcı olan bir Linux uygulamasıdır. Basit arayüzü sayesinde, internet bağlantınızı diğer cihazlarla hızlı bir şekilde paylaşabilirsiniz.
+
+## Özellikler
+- Kullanıcı dostu arayüz
+- 2.4GHz ve 5GHz frekans bant desteği
+- WPA2 (WPA-PSK) ve WPA3 (SAE) güvenlik protokolleri
+- Kolay bağlantı paylaşımı için QR kodu oluşturma
+- Sistem tepsisi entegrasyonu
+- Otomatik yapılandırma kaydetme
+- Otomatik başlatma özelliği
 
 ## Kurulum
 
@@ -12,7 +24,7 @@ Grafik arayüzü sayesinde ağ ayarlarının yapılandırılmasını ve yönetim
 Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki gereksinimleri karşıladığından emin olun:
 
 - `network-manager`: Uygulama, ağ bağlantılarını yönetmek için NetworkManager'a bağlıdır.
-- `python3`: Pardus Kablosuz Erişim Noktası, Python 3 ile geliştirilmiştir; sistemde Python 3.x'in yüklü olduğundan emin olun.
+- `python3`: Pardus Kablosuz Erişim Noktası, Python 3 ile geliştirilmiştir.
 - `python3-dbus`: Uygulamanın NetworkManager ile etkileşime geçebilmesi için gereklidir.
 - `libgtk-3-dev` & `libglib2.0-dev`: Grafik arayüzü için gereklidir.
 - `gir1.2-ayatanaappindicator3-0.1`: Sistem tepsisi ikonu oluşturmak için kullanılır.
@@ -23,59 +35,58 @@ Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki g
 - `python3-pil` / `python3-pillow`: QR kodları için gerekli olan resimlerin işlenmesine yardımcı olur.
 
 ### Kullanım
-- Depoyu klonlayın ve klonlanan dizine gidin:
-
+  - __Paket Yöneticisi ile__
+    ```bash
+    sudo apt install pardus-hotspot
     ```
-    git clone https://git.pardus.net.tr/emel.ozturk/pardus-hotspot.git
+  - __Kaynak Koddan__
+    ```
+    # Depoyu klonlayın
+    git clone https://github.com/pardus/pardus-hotspot
+
+    # Klonlanan dizine gidin
     cd pardus-hotspot
+
+    # Bağımlılıkları indirin
+    sudo apt install network-manager python3 python3-dbus libgtk-3-dev libglib2.0-dev \
+        gir1.2-ayatanaappindicator3-0.1 python3-gi gir1.2-gtk-3.0 \
+        gir1.2-gdkpixbuf-2.0 python3-qrcode python3-pil
+
+    # Uygulamayı çalıştırın
+    python3 Main.py
+
     ```
 
-- Uygulamayı başlatın:
-  ```
-  python3 Main.py
-  ```
+### Kullanma Rehberi
 
-### Arayüz
+ ##### Kablosuz Erişim Noktası Oluşturma
 
-Hotspot aktif değilken:
+  1. Uygulamayı başlatın
+  2. Bir bağlantı adı (SSID) girin
+  3. Bir parola belirleyin (en az 8 karakter)
+  4. Kablosuz arayüzünüzü seçin (arayüzler otomatik olarak algılanır)
+  5. "Hotspot Oluştur" butonuna tıklayın
 
-<img src="screenshots/disable.png" alt="Hotspot Devre Dışı" width="500" height="auto"/>
+##### Gelişmiş Ayarlar
 
-Hotspot aktifken:
+ - __Bant Seçimi__: 2.4GHz ve 5GHz bantları arasında seçim yapın
+ - __Güvenlik Protokolü__: WPA2 (WPA-PSK) veya WPA3 (SAE) seçin.
+ - __Otomatik Başlat__: Sistemle birlikte otomatik başlatmayı etkinleştirin/devre dışı bırakın
+ > __Not__: Apple ürünleri için, şifreleme yöntemi olarak **SAE** seçin.
 
-<img src="screenshots/enable.png" alt="Hotspot Etkin" width="500" height="auto"/>
+##### QR Kod Paylaşımı
+  Hotspot etkin hale geldiğinde, mobil cihazlarla kolay bağlantı paylaşımı için taranabilir bir QR kodu otomatik olarak görünür.
 
-Ayarların yapılandırılması:
+## Arayüz
+ - Aktif / pasif bağlantılar için uygulama arayüzü:
 
-<img src="screenshots/settings.png" alt="Hotspot Ayarları" width="500" height="auto"/>
 
+<p align="center">
+  <img src="screenshots/disable.png" alt="Hotspot Disabled" width="400"/>
+  <img src="screenshots/enable.png" alt="Hotspot Enabled" width="400"/>
+</p>
 
-## Geliştirici Notları
-`MainWindow.py`, uygulamanın giriş noktası olarak işlev görür. Sistemin ağ yönetimiyle etkileşim kurmak için `hotspot.py` kullanılır.
-`network_utils.py`, bilgisayarda bulunan Wi-Fi kartlarını listeleme ve Wi-Fi durumunu kontrol etme gibi işlemler için kullanılır.
-`hotspot_settings.py:` başlangıçta otomatik başlatma, son bağlantı bilgilerini
-kaydetme gibi işlevsellikleri yönetmek için kullanılır.
-
-___
-## Yapılacaklar
-- [x] Ağ arayüzlerinin dinamik olarak alınması
-- [x] Önemli hatalar için stack sayfası
-- [x] Farklı şifreleme yöntemleri için destek ekleme
-- [x] Hata yönetimi ve kullanıcı geri bildirimlerini geliştirme
-- [x] Wi-Fi'nin açık olup olmadığını kontrol etme
-- [x] iPhone'lar için bağlantıyı etkinleştirme
-- [x] Wi-Fi sinyali kaybolduğunda bağlantıyı otomatik olarak devre dışı bırakma
-- [x] Kullanıcı, hotspot penceresini kapatmak istediğinde bağlantıyı kaldırma
-- [x] Tam ekran modunu devre dışı bırakma
-- [x] Hakkında ve ayarlar butonları arasında geçiş yaparken oluşan donma
-  sorununu düzeltme
-- [x] Uygulamanın başlangıçta otomatik açılması
-- [ ] Uygulamanın sanal makinede çalışıp çalışmadığını kontrol etme
-- [ ] Hotspota bağlı cihaz sayısını kontrol etme
-- [ ] Bağlı cihaz bilgilerini gösterme
-- [ ] Gizli parametre ekleme (sadece belirli cihazlara hotspot bağlantısını gösterme)
-- [x] QR özelliği ekleme
-- [ ] İconları yenileme
-
-__NOT :__ GitHub'a uygulama eklenirken __Yapılacaklar__ kısmını silelim,
-__URL__'i güncelleyelim.
+- Ayarların yapılandırılması:
+<p align="center">
+<img src="screenshots/settings.png" alt="Hotspot Settings" width="400"/>
+</p>
