@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-21 15:10+0300\n"
+"POT-Creation-Date: 2024-11-07 15:57+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,122 +21,124 @@ msgstr ""
 msgid "Simple hotspot application."
 msgstr ""
 
-#: ui/MainWindow.glade:146
+#: ui/MainWindow.glade:183
 msgid "Interface Name:"
 msgstr ""
 
-#: ui/MainWindow.glade:161
+#: ui/MainWindow.glade:198
 msgid "Choose an interface name"
 msgstr ""
 
-#: ui/MainWindow.glade:186 ui/MainWindow.glade:284
+#: ui/MainWindow.glade:223 ui/MainWindow.glade:321
 msgid "Connection Name:"
 msgstr ""
 
-#: ui/MainWindow.glade:201 ui/MainWindow.glade:299
+#: ui/MainWindow.glade:238 ui/MainWindow.glade:336
 msgid "Enter hotspot name"
 msgstr ""
 
-#: ui/MainWindow.glade:227 ui/MainWindow.glade:324
+#: ui/MainWindow.glade:264 ui/MainWindow.glade:361
 msgid "Password:"
 msgstr ""
 
-#: ui/MainWindow.glade:242 ui/MainWindow.glade:339
+#: ui/MainWindow.glade:279 ui/MainWindow.glade:376
 msgid "Enter at least 8 characters"
 msgstr ""
 
-#: ui/MainWindow.glade:369
+#: ui/MainWindow.glade:406
 msgid "Security Type:"
 msgstr ""
 
-#: ui/MainWindow.glade:415 src/MainWindow.py:264 src/MainWindow.py:329
-#: src/MainWindow.py:410
+#: ui/MainWindow.glade:452 src/MainWindow.py:279 src/MainWindow.py:410
+#: src/MainWindow.py:518
 msgid "Create Hotspot"
 msgstr ""
 
-#: ui/MainWindow.glade:433 ui/MainWindow.glade:719 src/MainWindow.py:185
-#: src/MainWindow.py:306 src/MainWindow.py:406
+#: ui/MainWindow.glade:470 ui/MainWindow.glade:844 src/MainWindow.py:199
+#: src/MainWindow.py:346
 msgid "Pardus Hotspot"
 msgstr ""
 
-#: ui/MainWindow.glade:501
+#: ui/MainWindow.glade:538
 msgid "Band Selection:"
 msgstr ""
 
-#: ui/MainWindow.glade:540
+#: ui/MainWindow.glade:577
 msgid "Encryption Method:"
 msgstr ""
 
-#: ui/MainWindow.glade:578
+#: ui/MainWindow.glade:615
 msgid "Launch at Startup:"
 msgstr ""
 
-#: ui/MainWindow.glade:608
-msgid "Save"
-msgstr ""
-
-#: ui/MainWindow.glade:627 ui/MainWindow.glade:781 src/MainWindow.py:194
-#: src/MainWindow.py:304 src/MainWindow.py:305 src/MainWindow.py:405
-msgid "Settings"
-msgstr ""
-
-#: ui/MainWindow.glade:678
-msgid "OK"
-msgstr ""
-
-#: ui/MainWindow.glade:709
-msgid "Error"
-msgstr ""
-
-#: ui/MainWindow.glade:836
-msgid "About"
-msgstr ""
-
-#: src/MainWindow.py:191 src/MainWindow.py:218 src/MainWindow.py:227
-#: src/MainWindow.py:235
-msgid "Show App"
-msgstr ""
-
-#: src/MainWindow.py:197 src/MainWindow.py:330
-msgid "Enable"
-msgstr ""
-
-#: src/MainWindow.py:203
-msgid "Quit"
-msgstr ""
-
-#: src/MainWindow.py:220 src/MainWindow.py:230
-msgid "Hide App"
-msgstr ""
-
-#: src/MainWindow.py:294 src/MainWindow.py:295
+#: ui/MainWindow.glade:678 src/MainWindow.py:334 src/MainWindow.py:335
 msgid "Home Page"
 msgstr ""
 
-#: src/MainWindow.py:309
-msgid "Hotspot Settings"
+#: ui/MainWindow.glade:725
+msgid "Restore Defaults"
 msgstr ""
 
-#: src/MainWindow.py:325 src/MainWindow.py:382
+#: ui/MainWindow.glade:752 ui/MainWindow.glade:906 src/MainWindow.py:208
+#: src/MainWindow.py:344 src/MainWindow.py:345 src/MainWindow.py:547
+#: src/MainWindow.py:548
+msgid "Settings"
+msgstr ""
+
+#: ui/MainWindow.glade:803
+msgid "OK"
+msgstr ""
+
+#: ui/MainWindow.glade:834
+msgid "Error"
+msgstr ""
+
+#: ui/MainWindow.glade:961
+msgid "About"
+msgstr ""
+
+#: src/MainWindow.py:205 src/MainWindow.py:232 src/MainWindow.py:241
+#: src/MainWindow.py:249
+msgid "Show App"
+msgstr ""
+
+#: src/MainWindow.py:211 src/MainWindow.py:411
+msgid "Enable"
+msgstr ""
+
+#: src/MainWindow.py:217
+msgid "Quit"
+msgstr ""
+
+#: src/MainWindow.py:234 src/MainWindow.py:244
+msgid "Hide App"
+msgstr ""
+
+#: src/MainWindow.py:285 src/MainWindow.py:317 src/MainWindow.py:406
+#: src/MainWindow.py:488
 msgid "Disable Connection"
 msgstr ""
 
-#: src/MainWindow.py:341
+#: src/MainWindow.py:349
+msgid "Hotspot Settings"
+msgstr ""
+
+#: src/MainWindow.py:441
 msgid "Please enable Wi-Fi to continue"
 msgstr ""
 
-#: src/MainWindow.py:349
+#: src/MainWindow.py:449
 msgid "Please select a network interface for the hotspot"
 msgstr ""
 
-#: src/MainWindow.py:357
+#: src/MainWindow.py:457
 msgid "Please enter a name for your hotspot connection"
 msgstr ""
 
-#: src/MainWindow.py:365
+#: src/MainWindow.py:465
 msgid "Password must be at least 8 characters long"
 msgstr ""
 
-#: src/MainWindow.py:383
+#: src/MainWindow.py:489
 msgid "Disable"
 msgstr ""
