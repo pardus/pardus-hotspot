@@ -82,11 +82,11 @@ Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki g
 
 
 <p align="center">
-  <img src="screenshots/disable.png" alt="Hotspot Disabled" width="400"/>
-  <img src="screenshots/enable.png" alt="Hotspot Enabled" width="400"/>
+  <img src="screenshots/disable-tr.png" alt="Hotspot Disabled" width="400"/>
+  <img src="screenshots/enable-tr.png" alt="Hotspot Enabled" width="400"/>
 </p>
 
 - Ayarların yapılandırılması:
 <p align="center">
-<img src="screenshots/settings.png" alt="Hotspot Settings" width="400"/>
+<img src="screenshots/settings-tr.png" alt="Hotspot Settings" width="400"/>
 </p>
