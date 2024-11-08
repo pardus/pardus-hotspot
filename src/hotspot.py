@@ -34,7 +34,6 @@ def set_network_interface(iface):
     device_proxy = bus.get_object("org.freedesktop.NetworkManager", device_path)
     device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
 
-
 def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
     """
     Create a Wi-Fi hotspot with parameters.
@@ -57,6 +56,10 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
     # Default to 2.4GHz band if not specified or invalid
     band = band if band in ["bg", "a"] else "bg"
 
+    # For 2.4GHz (bg), use channel 1
+    # For 5GHz (a), use channel 36
+    channel = dbus.UInt32(1 if band == "bg" else 36)
+
     current_hotspot_uuid = str(uuid.uuid4())
 
     # Basic connection settings
@@ -71,7 +74,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
         "ssid": dbus.ByteArray(ssid.encode("utf-8")),
         "mode": "ap",               # Access Point mode
         "band": band,               # Frequency band
-        "channel": dbus.UInt32(1)   # Auto channel selection
+        "channel": channel          # Channel for the band
     })
 
     # Security settings (WPA3/WPA2)
