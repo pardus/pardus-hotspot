@@ -1,3 +1,44 @@
+pardus-hotspot (1.0.0) unstable; urgency=medium
+
+  * Add translations
+  * Write main without checking __name__
+  * Change app icon
+  * Remove footer logo margins
+  * Add footer logo for settings
+  * Change return icons due to page
+  * Add indicator
+  * Add a new stack for connection
+  * Keep showing app indicator after app is closed
+  * Add en-disable/settings sections for indicator
+  * Get settings from last connection
+  * Add autostart to settings
+  * Update readmes to document newly added feat.
+  * Add autostart
+  * Add improv. to files for deb pkg
+  * Add translations
+  * Add restore button
+  * Fix destroy func.
+  * Add button styling based on input validation
+  * Remove all hotspot connections
+  * Update encrypt method&band selection for gnome settings
+  * Change connection button action  due to connection status
+  * Set default vals of settings
+  * Return main page - instead of using save button
+  * Use changed signal for settings
+  * Add ui for QR
+  * Fix hotspot encryption
+  * Add QR feature
+  * Add new dependencies
+  * Edit readme
+  * Add translations
+  * Add screenshots
+  * Use valid channel for 5GHz
+  * Edit readme
+  * Edit ui
+  * Fix control file
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Mon, 11 Nov 2024 10:20:29 +0300
+
 pardus-hotspot (1.0) unstable; urgency=medium
 
   [ emel.ozturk ]
