@@ -178,6 +178,11 @@ class MainWindow:
             self.encrypt_combo,
             self.hotspot_settings.encryption
         )
+        self.get_comboboxtext_value(
+            self.band_combo,
+            self.hotspot_settings.band
+        )
+        self.startup_switch.set_active(self.hotspot_settings.autostart)
 
 
     def get_comboboxtext_value(self, widget, settings_val):
@@ -249,13 +254,13 @@ class MainWindow:
         self.item_show_app.set_label(_("Show App"))
         return True
 
-
     def on_window_destroy(self, widget, event=None):
         # Save last connection settings
         self.hotspot_settings.ssid = self.connection_entry.get_text()
         self.hotspot_settings.password = self.password_entry.get_text()
         self.hotspot_settings.interface = self.ifname_combo.get_active_text()
         self.hotspot_settings.encryption = self.encrypt_combo.get_active_text()
+        self.hotspot_settings.band = self.band_combo.get_active_text()
         self.hotspot_settings.write_config()
 
         if self.hotspot_dialog.is_visible():
@@ -264,9 +269,9 @@ class MainWindow:
         hotspot.remove_hotspot()
         self.window.get_application().quit()
 
-
     def on_startup_switch_state_set(self, switch, state):
-        self.autostart_temp = state
+        self.hotspot_settings.autostart = state
+        self.hotspot_settings.set_autostart(state)
 
 
     def check_wifi_and_update_hotspot(self):
