@@ -75,7 +75,6 @@ class MainWindow:
         self.menu_settings = self.builder.get_object("menu_settings")
         self.home_button = self.builder.get_object("home_button")
         self.restore_button = self.builder.get_object("restore_button")
-        self.qr_button = self.builder.get_object("qr_button")
 
         # Stack for switching between settings and main boxes
         self.hotspot_stack = self.builder.get_object("hotspot_stack")
@@ -160,9 +159,7 @@ class MainWindow:
         self.band_combo.set_active(0)       # Set default: 2.4Ghz
         self.encrypt_combo.set_active(1)    # Set default: SAE
 
-        self.qr_button.set_visible(False)
-        style_context = self.qr_button.get_style_context()
-        style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+        self.qr_image.set_visible(False)
 
         get_interface_names(self.ifname_combo, self.window)
 
@@ -285,12 +282,12 @@ class MainWindow:
             self.connection_img.set_from_icon_name(
                 "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
             )
-            self.qr_button.set_visible(False)
+            self.qr_image.set_visible(False)
         else:
             if self.create_button.get_label() == _("Disable Connection"):
-                self.qr_button.set_visible(True)
+                self.qr_image.set_visible(True)
             else:
-                self.qr_button.set_visible(False)
+                self.qr_image.set_visible(False)
 
         return True
 
@@ -414,7 +411,7 @@ class MainWindow:
             self.connection_stack.set_visible_child_name("page_connect")
             self.create_button.set_label(_("Create Hotspot"))
             self.item_enable.set_label(_("Enable"))
-            self.qr_button.set_visible(False)
+            self.qr_image.set_visible(False)
             self.qr_image.clear()
 
             style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
@@ -492,7 +489,7 @@ class MainWindow:
 
             self.create_button.set_label(_("Disable Connection"))
             self.item_enable.set_label(_("Disable"))
-            self.qr_button.set_visible(True)
+            self.qr_image.set_visible(True)
 
             # Generate initial QR code
             ssid = self.connection_entry.get_text()
