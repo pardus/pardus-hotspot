@@ -1,5 +1,6 @@
 import dbus
 import uuid
+import time
 
 # Initialize D-Bus system bus
 bus = dbus.SystemBus()
@@ -27,12 +28,44 @@ active_connection_props = None
 current_hotspot_uuid = None
 
 
+def disconnect_wifi_connections():
+    """Disconnect from all active WiFi connections before creating hotspot."""
+    try:
+        has_active_wifi = False
+        # Get all network devices
+        devices = nm_iface.GetAllDevices()
+
+        for device in devices:
+            dev_proxy = bus.get_object("org.freedesktop.NetworkManager", device)
+            dev_props = dbus.Interface(dev_proxy, "org.freedesktop.DBus.Properties")
+
+            # Check if this is a WiFi device (DT 2 is WiFi)
+            if dev_props.Get("org.freedesktop.NetworkManager.Device", "DeviceType") != 2:
+                continue
+
+            # Get active connection if any
+            active_connection = dev_props.Get("org.freedesktop.NetworkManager.Device", "ActiveConnection")
+            if active_connection != "/":
+                dev_iface = dbus.Interface(dev_proxy, "org.freedesktop.NetworkManager.Device")
+                has_active_wifi = True
+                dev_iface.Disconnect()
+
+        if has_active_wifi:
+            time.sleep(1)
+
+        return True
+    except Exception as e:
+        print(f"Error disconnecting WiFi: {e}")
+        return False
+
+
 def set_network_interface(iface):
     """Initialize network interface for hotspot creation."""
     global device_path, device_proxy, device_iface
     device_path = nm_iface.GetDeviceByIpIface(iface)
     device_proxy = bus.get_object("org.freedesktop.NetworkManager", device_path)
     device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
+
 
 def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
     """
@@ -45,6 +78,8 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
         band (str): Frequency band (bg = 2.4GHz, a = 5GHz)
     """
     global current_hotspot_uuid
+
+    disconnect_wifi_connections()
 
     # Default to SAE (WPA3) if password exists, otherwise no encryption
     if passwd:
