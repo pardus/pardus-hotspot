@@ -69,12 +69,13 @@ Before installing Pardus Hotspot, ensure your system meets the following require
   5. Click to "Create Hotspot"
 
  ##### Advanced Settings
-
   - __Band Selection__: Choose between 2.4GHz and 5GHz bands
   - __Security Protocol__: Select WPA2 (WPA-PSK) or WPA3 (SAE).
   - __Autostart__: Enable/disable automatic startup with system
-  > __Note__: For Apple products, select __SAE__ for the encryption method. If the connection isn’t visible on other devices, try switching the encryption method to __WPA-PSK__
 
+> __Notes:__
+    - For Apple products, select **SAE** for the encryption method. If the connection isn't visible on other devices, try switching to **WPA-PSK**
+    - Due to Linux limitations, **2.4GHz** mode is recommended
 
 ##### QR Code Sharing
 Once the hotspot is active, a scannable QR code automatically appears for easy connection sharing with mobile devices.

@@ -72,7 +72,10 @@ Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki g
  - __Bant Seçimi__: 2.4GHz ve 5GHz bantları arasında seçim yapın
  - __Güvenlik Protokolü__: WPA2 (WPA-PSK) veya WPA3 (SAE) seçin.
  - __Otomatik Başlat__: Sistemle birlikte otomatik başlatmayı etkinleştirin/devre dışı bırakın
- > __Not__: Apple ürünleri için, şifreleme yöntemi olarak **SAE** seçin. Diğer cihazlar için, bağlantı görünmüyorsa şifreleme yöntemi olarak **WPA-PSK** seçin.
+
+> __Notlar:__
+    - Apple ürünleri için şifreleme yöntemi olarak **SAE** seçin. Eğer bağlantı diğer cihazlarda görünmüyorsa, **WPA-PSK**'ya geçmeyi deneyin.
+    - Linux sistemlerindeki sınırlamalar nedeniyle **2.4GHz** modu önerilir.
 
 ##### QR Kod Paylaşımı
   Hotspot etkin hale geldiğinde, mobil cihazlarla kolay bağlantı paylaşımı için taranabilir bir QR kodu otomatik olarak görünür.
