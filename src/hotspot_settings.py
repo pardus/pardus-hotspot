@@ -119,7 +119,7 @@ class HotspotSettings:
         autostart_file_path = os.path.join(self.autostartdir, self.autostart_file)
         target_desktop_file = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
-            "../data/pardus-hotspot-autostart.desktop"
+            "../data/tr.org.pardus.hotspot-autostart.desktop"
         )
 
         if state:
