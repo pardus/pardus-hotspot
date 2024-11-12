@@ -110,24 +110,39 @@ class HotspotSettings:
 
 
     def set_autostart(self, state):
-        os.makedirs(self.autostartdir, exist_ok=True)
+        try:
+            os.makedirs(self.autostartdir, exist_ok=True)
+        except OSError as e:
+            print(f"Error creating directory {self.autostartdir}: {e}")
+            return
+
         autostart_file_path = os.path.join(self.autostartdir, self.autostart_file)
+        target_desktop_file = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "../data/pardus-hotspot-autostart.desktop"
+        )
 
         if state:
-            target_desktop_file = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)),
-                "../data/tr.org.pardus.hotspot-autostart.desktop"
-            )
-            # Check if the symlink already exists before creating it
-            if not Path(autostart_file_path).exists():
-                os.symlink(target_desktop_file, autostart_file_path)
+            if not os.path.exists(target_desktop_file):
+                print(f"Target desktop file does not exist: {target_desktop_file}")
+                return
+
+            # Create the symlink
+            if not os.path.exists(autostart_file_path):
+                try:
+                    os.symlink(target_desktop_file, autostart_file_path)
+                except OSError as e:
+                    print(f"Error creating symlink: {e}")
             else:
                 print("Autostart symlink already exists")
         else:
-            try:
-                Path(autostart_file_path).unlink(missing_ok=True)
-            except Exception as e:
-                print(f"Error removing autostart symlink: {e}")
+            # Remove the symlink
+            if os.path.exists(autostart_file_path):
+                try:
+                    os.unlink(autostart_file_path)
+                except OSError as e:
+                    print(f"Error removing autostart symlink: {e}")
 
+        # Update the autostart setting and write to config
         self.autostart = state
         self.write_config()

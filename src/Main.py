@@ -14,6 +14,16 @@ class Application(Gtk.Application):
                          flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs
         )
         self.window = None
+        GLib.set_prgname("tr.org.pardus.pardus-hotspot")
+
+        self.add_main_option(
+            "tray",
+            ord("t"),
+            GLib.OptionFlags(0),
+            GLib.OptionArg(0),
+            "Start application on tray mode",
+            None,
+        )
 
 
     def do_activate(self):
