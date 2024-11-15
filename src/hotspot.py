@@ -17,6 +17,7 @@ nm_proxy = bus.get_object(
     "org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager"
 )
 nm_iface = dbus.Interface(nm_proxy, "org.freedesktop.NetworkManager")
+nm_props = dbus.Interface(nm_proxy, "org.freedesktop.DBus.Properties")
 
 # Initialize variables
 device_path = None
@@ -57,6 +58,54 @@ def disconnect_wifi_connections():
     except Exception as e:
         print(f"Error disconnecting WiFi: {e}")
         return False
+
+
+def get_active_hotspot_info():
+    """Return SSID, password, and encryption type of the active hotspot"""
+
+    active_connections = nm_props.Get("org.freedesktop.NetworkManager", "ActiveConnections")
+
+    for active_conn_path in active_connections:
+        active_conn_proxy = bus.get_object("org.freedesktop.NetworkManager", active_conn_path)
+        active_conn_props = dbus.Interface(active_conn_proxy, "org.freedesktop.DBus.Properties")
+
+        # Take connection path and get connection object
+        connection_path = active_conn_props.Get("org.freedesktop.NetworkManager.Connection.Active", "Connection")
+        connection_proxy = bus.get_object("org.freedesktop.NetworkManager", connection_path)
+        connection_iface = dbus.Interface(connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection")
+
+        settings = connection_iface.GetSettings()
+
+        # Check if connection is a hotspot
+        if settings["connection"]["type"] == "802-11-wireless" and settings["802-11-wireless"]["mode"] == "ap":
+            ssid_bytes = settings["802-11-wireless"]["ssid"]
+            ssid = "".join([chr(b) for b in ssid_bytes])
+            password = ""
+            encryption = ""
+
+            if "802-11-wireless-security" in settings:
+                wireless_security = settings.get("802-11-wireless-security", {})
+
+                try:
+                    secrets = connection_iface.GetSecrets("802-11-wireless-security")
+                    if "802-11-wireless-security" in secrets:
+                        wireless_security.update(secrets["802-11-wireless-security"])
+                except dbus.DBusException as e:
+                    print(f"Error retrieving secrets: {e}")
+
+                # Take password and encryption type
+                password = wireless_security.get("psk", "")
+                encryption = wireless_security.get("key-mgmt", "")
+            else:
+                encryption = "none"
+
+            return {
+                "ssid": ssid,
+                "password": password,
+                "encryption": encryption
+            }
+
+    return None
 
 
 def set_network_interface(iface):

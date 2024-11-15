@@ -45,6 +45,10 @@ class MainWindow:
         self.init_indicator()
         self.set_indicator()
 
+        # Check if there is an existing hotspot
+        # if not, takes info from the last connection (settings.ini)
+        self.check_existing_hotspot()
+
         # Start the Wi-Fi checker with a timeout (every 5 seconds)
         GLib.timeout_add_seconds(5, self.check_wifi_and_update_hotspot)
 
@@ -271,6 +275,69 @@ class MainWindow:
         self.hotspot_settings.set_autostart(state)
 
 
+    def check_existing_hotspot(self):
+        """
+        Check if there is an existing hotspot connection, if so,
+        update UI with its information.
+        """
+        # TODO: Write a func to update UI elements, use it everywhere
+
+        hotspot_info = hotspot.get_active_hotspot_info()
+        if hotspot_info:
+            ssid = hotspot_info["ssid"]
+            password = hotspot_info["password"]
+            encryption = hotspot_info["encryption"]
+
+            # Update the UI
+            self.connection_stack.set_visible_child_name("page_connected")
+            self.con_entry.set_text(ssid)
+            self.con_entry.set_sensitive(False)
+            self.con_password_entry.set_text(password)
+            self.con_password_entry.set_editable(False)
+            self.security_entry.set_text(encryption)
+            self.security_entry.set_sensitive(False)
+
+            self.create_button.set_label(_("Disable Connection"))
+            self.item_enable.set_label(_("Disable"))
+            self.qr_image.set_visible(True)
+            self.generate_qr_code(ssid, password, encryption)
+
+            self.connection_img.set_from_icon_name(
+                "network-wireless-signal-good-symbolic",
+                Gtk.IconSize.BUTTON
+            )
+
+            # Set connection button style to disable action
+            style_context = self.create_button.get_style_context()
+            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+        else:
+            # No active hotspot
+            # Always update the UI
+            self.create_button.set_label(_("Create Hotspot"))
+            self.item_enable.set_label(_("Enable"))
+            self.qr_image.set_visible(False)
+            self.qr_image.clear()
+            self.connection_img.set_from_icon_name(
+                "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
+            )
+
+            # Set create button style
+            style_context = self.create_button.get_style_context()
+            style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+
+            # Enable input fields
+            self.con_entry.set_sensitive(True)
+            self.con_entry.set_editable(True)
+            self.con_password_entry.set_sensitive(True)
+            self.con_password_entry.set_editable(True)
+            self.security_entry.set_sensitive(True)
+            self.security_entry.set_editable(True)
+
+            self.connection_stack.set_visible_child_name("page_connect")
+
+
     def check_wifi_and_update_hotspot(self):
         """
         Regularly checks Wi-Fi status and updates the hotspot state and UI
@@ -284,10 +351,14 @@ class MainWindow:
             )
             self.qr_image.set_visible(False)
         else:
+            self.check_existing_hotspot()
+
             if self.create_button.get_label() == _("Disable Connection"):
                 self.qr_image.set_visible(True)
             else:
                 self.qr_image.set_visible(False)
+                self.qr_image.clear()
+
 
         return True
 
