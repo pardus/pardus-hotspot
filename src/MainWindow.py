@@ -288,32 +288,56 @@ class MainWindow:
             password = hotspot_info["password"]
             encryption = hotspot_info["encryption"]
 
-            # Update the UI
+            if encryption == "wpa-psk":
+                display_encryption = "WPA-PSK"
+            elif encryption == "sae":
+                display_encryption = "SAE"
+            else:
+                display_encryption = "SAE"
+
+            # Update input fields
+            self.connection_entry.set_text(ssid)
+            self.password_entry.set_text(password)
+            if encryption:
+                self.get_comboboxtext_value(self.encrypt_combo, display_encryption)
+
+            # Update connection info
             self.connection_stack.set_visible_child_name("page_connected")
             self.con_entry.set_text(ssid)
             self.con_entry.set_sensitive(False)
             self.con_password_entry.set_text(password)
             self.con_password_entry.set_editable(False)
-            self.security_entry.set_text(encryption)
+            self.security_entry.set_text(display_encryption)
             self.security_entry.set_sensitive(False)
 
+            # Update buttons and indicators
             self.create_button.set_label(_("Disable Connection"))
             self.item_enable.set_label(_("Disable"))
-            self.qr_image.set_visible(True)
-            self.generate_qr_code(ssid, password, encryption)
-
             self.connection_img.set_from_icon_name(
-                "network-wireless-signal-good-symbolic",
-                Gtk.IconSize.BUTTON
+                "network-wireless-signal-good-symbolic", Gtk.IconSize.BUTTON
             )
 
-            # Set connection button style to disable action
             style_context = self.create_button.get_style_context()
-            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
             style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+
+            # Generate and show QR
+            self.qr_image.set_visible(True)
+            self.generate_qr_code(ssid, password, display_encryption)
+
+            # Save settings to config file - override latest conn.
+            self.hotspot_settings.ssid = ssid
+            self.hotspot_settings.password = password
+            self.hotspot_settings.encryption = display_encryption
+            if "interface" in hotspot_info:
+                self.hotspot_settings.interface = hotspot_info["interface"]
+                self.get_comboboxtext_value(self.ifname_combo, hotspot_info["interface"])
+            if "band" in hotspot_info:
+                band_display = "2.4GHz" if hotspot_info["band"] == "bg" else "5GHz"
+                self.hotspot_settings.band = band_display
+                self.get_comboboxtext_value(self.band_combo, band_display)
+            self.hotspot_settings.write_config()
         else:
-            # No active hotspot
-            # Always update the UI
             self.create_button.set_label(_("Create Hotspot"))
             self.item_enable.set_label(_("Enable"))
             self.qr_image.set_visible(False)
@@ -322,7 +346,6 @@ class MainWindow:
                 "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
             )
 
-            # Set create button style
             style_context = self.create_button.get_style_context()
             style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
             style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
@@ -431,8 +454,10 @@ class MainWindow:
 
     def generate_qr_code(self, ssid, password, encryption):
         # Format the Wi-Fi connection string
-        if encryption == "WPA-PSK" or encryption == "SAE":
-            wifi_string = f"WIFI:S:{ssid};T:WPA;P:{password};;"
+        if encryption == "SAE":
+            wifi_string = f"WIFI:S:{ssid};T:SAE;P:{password};H:true;;"
+        elif encryption == "WPA-PSK":
+            wifi_string = f"WIFI:S:{ssid};T:WPA;P:{password};H:false;;"
         else:
             wifi_string = f"WIFI:S:{ssid};T:nopass;;"
 
@@ -455,7 +480,6 @@ class MainWindow:
 
         pixbuf = loader.get_pixbuf()
 
-        # Scale the pixbuf if needed (e.g., to make it smaller or adjust to your UI)
         scaled_pixbuf = pixbuf.scale_simple(120, 120, GdkPixbuf.InterpType.BILINEAR)
 
         # Set the QR code image to the Gtk.Image widget
