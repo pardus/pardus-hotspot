@@ -54,7 +54,14 @@ data_files = [
             "src/__version__",
         ],
     ),
-    ("/usr/share/icons/hicolor/scalable/apps/", ["data/pardus-hotspot.svg"]),
+    ("/usr/share/pardus/pardus-hotspot/data",
+        ["data/tr.org.pardus.hotspot-autostart.desktop",
+         "data/pardus-hotspot.svg"
+        ]
+    ),
+    ("/usr/share/icons/hicolor/scalable/apps/",
+        ["data/pardus-hotspot.svg"]
+    )
 ] + create_mo_files()
 
 
