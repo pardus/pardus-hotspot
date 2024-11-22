@@ -87,7 +87,7 @@ Ali Rıza Keskin</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="opacity">0.50196078431372548</property>
-                    <property name="label">©TÜBİTAK BİLGEM | 2024</property>
+                    <property name="label">© TÜBİTAK BİLGEM</property>
                     <attributes>
                       <attribute name="size" value="10000"/>
                     </attributes>
@@ -491,7 +491,7 @@ Ali Rıza Keskin</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="opacity">0.50196078431372548</property>
-                    <property name="label">©TÜBİTAK ULAKBİM | 2024</property>
+                    <property name="label">© TÜBİTAK BİLGEM</property>
                     <attributes>
                       <attribute name="size" value="10000"/>
                     </attributes>
