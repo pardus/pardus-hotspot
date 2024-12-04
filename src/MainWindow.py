@@ -445,6 +445,11 @@ class MainWindow:
             self.header_bar.set_title(_("Hotspot Settings"))
             self.hotspot_stack.set_visible_child_name("page_settings")
 
+        self.item_show_app.set_label(_("Hide App"))
+
+        self.window.set_visible(True)
+        self.window.present()
+
 
     def on_restore_button_clicked(self, button):
         self.band_combo.set_active(0)           # Set default: 2.4Ghz
