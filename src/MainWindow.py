@@ -25,6 +25,15 @@ locale.textdomain('pardus-hotspot')
 _ = locale.gettext
 
 
+def getenv(env_name):
+    env = os.environ.get(env_name)
+    return env if env else ""
+
+xfce_desktop = False
+if "xfce" in getenv("SESSION").lower() or "xfce" in getenv("XDG_CURRENT_DESKTOP").lower():
+    xfce_desktop = True
+
+
 class MainWindow:
     def __init__(self, application):
         self.builder = Gtk.Builder()
@@ -197,9 +206,10 @@ class MainWindow:
 
 
     def init_indicator(self):
+        icon_name = "pardus-hotspot-off-symbolic" if xfce_desktop else "pardus-hotspot-status-off-symbolic"
         self.indicator = appindicator.Indicator.new(
-            "pardus-hotspot", "network-wireless",
-             appindicator.IndicatorCategory.APPLICATION_STATUS
+            "pardus-hotspot", icon_name,
+            appindicator.IndicatorCategory.APPLICATION_STATUS
         )
         self.indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
         self.indicator.set_title(_("Pardus Hotspot"))
@@ -310,6 +320,12 @@ class MainWindow:
             self.security_entry.set_text(display_encryption)
             self.security_entry.set_sensitive(False)
 
+            # Update connection icon
+            if xfce_desktop:
+                self.indicator.set_icon("pardus-hotspot-on-symbolic")
+            else:
+                self.indicator.set_icon("pardus-hotspot-status-on-symbolic")
+
             # Update buttons and indicators
             self.create_button.set_label(_("Disable Connection"))
             self.item_enable.set_label(_("Disable"))
@@ -359,6 +375,12 @@ class MainWindow:
             self.security_entry.set_editable(True)
 
             self.connection_stack.set_visible_child_name("page_connect")
+
+            # Update connection icon
+            if xfce_desktop:
+                self.indicator.set_icon("pardus-hotspot-off-symbolic")
+            else:
+                self.indicator.set_icon("pardus-hotspot-status-off-symbolic")
 
 
     def check_wifi_and_update_hotspot(self):

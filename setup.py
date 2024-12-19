@@ -60,7 +60,12 @@ data_files = [
         ]
     ),
     ("/usr/share/icons/hicolor/scalable/apps/",
-        ["data/pardus-hotspot.svg"]
+        ["data/pardus-hotspot.svg",
+         "data/pardus-hotspot-off-symbolic.svg",
+         "data/pardus-hotspot-on-symbolic.svg",
+         "data/pardus-hotspot-status-on-symbolic.svg",
+         "data/pardus-hotspot-status-off-symbolic.svg"
+        ]
     )
 ] + create_mo_files()
 
