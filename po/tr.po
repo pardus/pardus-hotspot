@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 15:57+0300\n"
-"PO-Revision-Date: 2024-11-07 16:00+0300\n"
+"POT-Creation-Date: 2024-12-23 16:52+0300\n"
+"PO-Revision-Date: 2024-12-20 13:30+0300\n"
 "Last-Translator: Emel Öztürk <emel.ozturk@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -23,127 +23,150 @@ msgstr ""
 msgid "Simple hotspot application."
 msgstr "Basit kablosuz erişim noktası uygulaması."
 
-#: ui/MainWindow.glade:183
+#: ui/MainWindow.glade:173
 msgid "Interface Name:"
 msgstr "Arayüz Adı:"
 
-#: ui/MainWindow.glade:198
+#: ui/MainWindow.glade:188
 msgid "Choose an interface name"
 msgstr "Bir arayüz adı seçin"
 
-#: ui/MainWindow.glade:223 ui/MainWindow.glade:321
+#: ui/MainWindow.glade:213 ui/MainWindow.glade:311
 msgid "Connection Name:"
 msgstr "Bağlantı Adı:"
 
-#: ui/MainWindow.glade:238 ui/MainWindow.glade:336
+#: ui/MainWindow.glade:228 ui/MainWindow.glade:326
 msgid "Enter hotspot name"
 msgstr "Kablosuz erişim noktası adı girin"
 
-#: ui/MainWindow.glade:264 ui/MainWindow.glade:361
+#: ui/MainWindow.glade:254 ui/MainWindow.glade:351
 msgid "Password:"
 msgstr "Parola:"
 
-#: ui/MainWindow.glade:279 ui/MainWindow.glade:376
+#: ui/MainWindow.glade:269 ui/MainWindow.glade:366
 msgid "Enter at least 8 characters"
 msgstr "En az 8 karakter girin"
 
-#: ui/MainWindow.glade:406
+#: ui/MainWindow.glade:396
 msgid "Security Type:"
 msgstr "Güvenlik Türü:"
 
-#: ui/MainWindow.glade:452 src/MainWindow.py:279 src/MainWindow.py:410
-#: src/MainWindow.py:518
+#: ui/MainWindow.glade:442 src/MainWindow.py:357 src/MainWindow.py:393
+#: src/MainWindow.py:534 src/MainWindow.py:642
 msgid "Create Hotspot"
 msgstr "Kablosuz Erişim Noktası Oluştur"
 
-#: ui/MainWindow.glade:470 ui/MainWindow.glade:844 src/MainWindow.py:199
-#: src/MainWindow.py:346
+#: ui/MainWindow.glade:460 ui/MainWindow.glade:838 src/MainWindow.py:215
+#: src/MainWindow.py:464
 msgid "Pardus Hotspot"
 msgstr "Pardus Kablosuz Erişim Noktası"
 
-#: ui/MainWindow.glade:538
+#: ui/MainWindow.glade:528
 msgid "Band Selection:"
 msgstr "Band Seçimi:"
 
-#: ui/MainWindow.glade:577
+#: ui/MainWindow.glade:567
 msgid "Encryption Method:"
 msgstr "Şifreleme Yöntemi:"
 
-#: ui/MainWindow.glade:615
+#: ui/MainWindow.glade:579
+msgid ""
+"For Apple products, select  SAE . If the connection isn’t visible on other "
+"devices, try switching to WPA-PSK\n"
+msgstr ""
+"Apple ürünleri için SAE seçin. Diğer cihazlarda bağlantı görünmüyorsa, WPA-"
+"PSK'ya geçmeyi deneyin.\n"
+
+#: ui/MainWindow.glade:607
 msgid "Launch at Startup:"
 msgstr "Başlangıçta Çalıştır:"
 
-#: ui/MainWindow.glade:678 src/MainWindow.py:334 src/MainWindow.py:335
+#: ui/MainWindow.glade:671 src/MainWindow.py:452 src/MainWindow.py:453
 msgid "Home Page"
 msgstr "Ana Sayfa"
 
-#: ui/MainWindow.glade:725
+#: ui/MainWindow.glade:719
 msgid "Restore Defaults"
 msgstr "Varsayılanlara Dön"
 
-#: ui/MainWindow.glade:752 ui/MainWindow.glade:906 src/MainWindow.py:208
-#: src/MainWindow.py:344 src/MainWindow.py:345 src/MainWindow.py:547
-#: src/MainWindow.py:548
+#: ui/MainWindow.glade:746 ui/MainWindow.glade:900 src/MainWindow.py:224
+#: src/MainWindow.py:462 src/MainWindow.py:463 src/MainWindow.py:671
+#: src/MainWindow.py:672
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ui/MainWindow.glade:803
+#: ui/MainWindow.glade:797
 msgid "OK"
 msgstr "Tamam"
 
-#: ui/MainWindow.glade:834
+#: ui/MainWindow.glade:828
 msgid "Error"
 msgstr "Hata"
 
-#: ui/MainWindow.glade:961
+#: ui/MainWindow.glade:955
 msgid "About"
 msgstr "Hakkında"
 
-#: src/MainWindow.py:205 src/MainWindow.py:232 src/MainWindow.py:241
-#: src/MainWindow.py:249
+#: src/MainWindow.py:221 src/MainWindow.py:248 src/MainWindow.py:257
+#: src/MainWindow.py:265
 msgid "Show App"
 msgstr "Göster"
 
-#: src/MainWindow.py:211 src/MainWindow.py:411
+#: src/MainWindow.py:227 src/MainWindow.py:358 src/MainWindow.py:535
 msgid "Enable"
 msgstr "Etkinleştir"
 
-#: src/MainWindow.py:217
+#: src/MainWindow.py:233
 msgid "Quit"
 msgstr "Çıkış"
 
-#: src/MainWindow.py:234 src/MainWindow.py:244
+#: src/MainWindow.py:250 src/MainWindow.py:260 src/MainWindow.py:470
 msgid "Hide App"
 msgstr "Gizle"
 
-#: src/MainWindow.py:285 src/MainWindow.py:317 src/MainWindow.py:406
-#: src/MainWindow.py:488
+#: src/MainWindow.py:330 src/MainWindow.py:401 src/MainWindow.py:435
+#: src/MainWindow.py:530 src/MainWindow.py:612
 msgid "Disable Connection"
 msgstr "Bağlantıyı Kapat"
 
-#: src/MainWindow.py:349
+#: src/MainWindow.py:331 src/MainWindow.py:613
+msgid "Disable"
+msgstr "Devre Dışı Bırak"
+
+#: src/MainWindow.py:467
 msgid "Hotspot Settings"
 msgstr "Kablosuz Erişim Noktası Ayarları"
 
-#: src/MainWindow.py:441
+#: src/MainWindow.py:565
 msgid "Please enable Wi-Fi to continue"
 msgstr "Devam etmek için Wi-Fi açın"
 
-#: src/MainWindow.py:449
+#: src/MainWindow.py:573
 msgid "Please select a network interface for the hotspot"
 msgstr "Lütfen kablosuz erişim noktası için bir ağ arayüzü seçin"
 
-#: src/MainWindow.py:457
+#: src/MainWindow.py:581
 msgid "Please enter a name for your hotspot connection"
 msgstr "Lütfen kablosuz erişim noktanız için bir isim girin"
 
-#: src/MainWindow.py:465
+#: src/MainWindow.py:589
 msgid "Password must be at least 8 characters long"
 msgstr "Parola en az 8 karakter uzunluğunda olmalı"
 
-#: src/MainWindow.py:489
-msgid "Disable"
-msgstr "Devre Dışı Bırak"
+#: src/network_utils.py:31
+msgid "No wireless interfaces available"
+msgstr "Kablosuz ağ arayüzü bulunamadı"
+
+#: src/network_utils.py:37
+msgid "Wi-Fi Network Interface Not Found"
+msgstr "Kablosuz ağ kartı bulunamadı"
+
+#: src/network_utils.py:40
+msgid ""
+"Please ensure your computer has a Wi-Fi adapter and it is working correctly."
+msgstr ""
+"Lütfen bilgisayarınızda bir Wi-Fi adaptörü olduğundan ve düzgün "
+"çalıştığından emin olun."
 
 #~ msgid "Save"
 #~ msgstr "Kaydet"

@@ -1,3 +1,4 @@
 ui/MainWindow.glade
 src/MainWindow.py
-
+src/network_utils.py
+src/hotspot_settings.py
