@@ -59,6 +59,9 @@ data_files = [
          "data/pardus-hotspot.svg"
         ]
     ),
+    ("/usr/share/polkit-1/actions",
+     ["tr.org.pardus.pkexec.pardus-hotspot.policy"]
+    ),
     ("/usr/share/icons/hicolor/scalable/apps/",
         ["data/pardus-hotspot.svg",
          "data/pardus-hotspot-off-symbolic.svg",

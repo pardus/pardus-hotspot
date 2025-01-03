@@ -1,6 +1,8 @@
 import dbus
 import uuid
 import time
+import os
+import subprocess
 
 # Initialize D-Bus system bus
 bus = dbus.SystemBus()
@@ -116,6 +118,16 @@ def set_network_interface(iface):
     device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
 
 
+def check_ip_forwarding():
+    """Check if system is ready for connection sharing"""
+    try:
+        with open('/proc/sys/net/ipv4/ip_forward', 'r') as f:
+            return f.read().strip() == '1'
+    except Exception as e:
+        print(f"Failed to check IP forwarding status: {e}")
+        return False
+
+
 def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
     """
     Create a Wi-Fi hotspot with parameters.
@@ -196,6 +208,16 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
         active_connection_path = nm_iface.ActivateConnection(
             connection_path, device_path, "/"
         )
+
+        # For docker - ip forwarding control
+        if not check_ip_forwarding():
+            actions_path = os.path.dirname(os.path.abspath(__file__)) + "/Actions.py"
+            try:
+                command = ["/usr/bin/pkexec", actions_path, "forward"]
+                subprocess.run(command, check=True)
+            except subprocess.CalledProcessError as e:
+                print(f"Failed to configure IP forwarding: {e}")
+
         active_connection_proxy = bus.get_object(
             "org.freedesktop.NetworkManager", active_connection_path
         )
