@@ -60,7 +60,7 @@ data_files = [
         ]
     ),
     ("/usr/share/polkit-1/actions",
-     ["tr.org.pardus.pkexec.pardus-hotspot.policy"]
+     ["data/tr.org.pardus.pkexec.pardus-hotspot.policy"]
     ),
     ("/usr/share/icons/hicolor/scalable/apps/",
         ["data/pardus-hotspot.svg",
