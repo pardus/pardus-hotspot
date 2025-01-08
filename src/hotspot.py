@@ -119,13 +119,18 @@ def set_network_interface(iface):
 
 
 def check_ip_forwarding():
-    """Check if system is ready for connection sharing"""
-    try:
-        with open('/proc/sys/net/ipv4/ip_forward', 'r') as f:
-            return f.read().strip() == '1'
-    except Exception as e:
-        print(f"Failed to check IP forwarding status: {e}")
-        return False
+    """
+    Check if system needs IP forwarding fix
+    Returns True if Docker is installed or IP forwarding is disabled
+    """
+    # Check if Docker is installed
+    docker_exists = os.path.exists('/var/run/docker.sock')
+
+    # Check IP forwarding status
+    with open('/proc/sys/net/ipv4/ip_forward', 'r') as f:
+        forwarding_disabled = f.read().strip() != '1'
+
+    return docker_exists or forwarding_disabled
 
 
 def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
@@ -210,7 +215,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
         )
 
         # For docker - ip forwarding control
-        if not check_ip_forwarding():
+        if check_ip_forwarding():
             actions_path = os.path.dirname(os.path.abspath(__file__)) + "/Actions.py"
             try:
                 command = ["/usr/bin/pkexec", actions_path, "forward"]
