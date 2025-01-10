@@ -99,6 +99,7 @@ class MainWindow:
         self.connection_box = self.builder.get_object("connection_box")
         self.errors_box = self.builder.get_object("errors_box")
         self.connected_box = self.builder.get_object("connected_box")
+        self.forwarding_box = self.builder.get_object("forwarding_box")
 
         # Comboboxes (Gtk.ComboBoxText)
         self.ifname_combo = self.builder.get_object("ifname_combo")
@@ -119,9 +120,11 @@ class MainWindow:
         self.con_name_lbl = self.builder.get_object("con_name_lbl")
         self.con_password_lbl = self.builder.get_object("con_password_lbl")
         self.security_lbl = self.builder.get_object("security_lbl")
+        self.forwarding_lbl = self.builder.get_object("forwarding_lbl")
 
         # Switch
         self.startup_switch = self.builder.get_object("startup_switch")
+        self.forwarding_switch = self.builder.get_object("forwarding_switch")
 
         # Dialog
         self.hotspot_dialog = self.builder.get_object("hotspot_dialog")
@@ -156,12 +159,12 @@ class MainWindow:
         self.con_password_entry.connect("icon-press", self.password_entry_icon_press)
         self.con_password_entry.connect("icon-release", self.password_entry_icon_release)
         self.startup_switch.connect("state-set", self.on_startup_switch_state_set)
-        self.startup_switch.set_active(self.hotspot_settings.autostart)
         self.restore_button.connect("clicked", self.on_restore_button_clicked)
         self.home_button.connect("clicked", self.on_home_button_clicked)
         self.band_combo.connect("changed", lambda widget: self.on_settings_changed())
         self.encrypt_combo.connect("changed", lambda widget: self.on_settings_changed())
         # self.startup_switch.connect("changed", self.on_settings_changed)
+        self.forwarding_switch.connect("state-set", self.on_forwarding_switch_state_set)
 
         self.band_combo.append_text("2.4GHz")
         self.band_combo.append_text("5GHz")
@@ -192,7 +195,19 @@ class MainWindow:
             self.band_combo,
             self.hotspot_settings.band
         )
+
+        iptables_paths = [
+            "/usr/sbin/iptables",
+            "/usr/bin/iptables",
+            "/sbin/iptables",
+            "/bin/iptables"
+        ]
+
+        if not any(os.path.exists(path) for path in iptables_paths):
+            self.forwarding_box.set_visible(False)
+
         self.startup_switch.set_active(self.hotspot_settings.autostart)
+        self.forwarding_switch.set_active(self.hotspot_settings.forwarding)
 
 
     def get_comboboxtext_value(self, widget, settings_val):
@@ -284,6 +299,10 @@ class MainWindow:
         self.hotspot_settings.autostart = state
         self.hotspot_settings.set_autostart(state)
 
+    def on_forwarding_switch_state_set(self, switch, state):
+        self.hotspot_settings.forwarding = state
+        self.hotspot_settings.write_config()
+        return False
 
     def check_existing_hotspot(self):
         """
@@ -477,7 +496,7 @@ class MainWindow:
         self.band_combo.set_active(0)           # Set default: 2.4Ghz
         self.encrypt_combo.set_active(1)        # Set default: SAE
         self.startup_switch.set_active(False)   # Set default: False
-
+        self.forwarding_switch.set_active(False) # Set default: False
 
     def generate_qr_code(self, ssid, password, encryption):
         # Format the Wi-Fi connection string
@@ -592,8 +611,11 @@ class MainWindow:
                 self.menu_button.set_visible(False)
                 return
 
+            # Check if forwarding is enabled
+            forwarding_enabled = self.forwarding_switch.get_active()
+
             hotspot.set_network_interface(ifname)
-            hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band)
+            hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band, forwarding_enabled)
 
             self.connection_stack.set_visible_child_name("page_connected")
             self.con_entry.set_text(ssid)

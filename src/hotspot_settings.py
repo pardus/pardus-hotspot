@@ -28,6 +28,7 @@ class HotspotSettings:
         self.default_encryption = ''
         self.default_autostart = False
         self.default_band = '2.4GHz'
+        self.default_forwarding = False
 
         self.ssid = self.default_ssid
         self.password = self.default_password
@@ -35,6 +36,7 @@ class HotspotSettings:
         self.encryption = self.default_encryption
         self.autostart = self.default_autostart
         self.band = self.default_band
+        self.forwarding = self.default_forwarding
 
 
     def create_default_config(self, force=False):
@@ -44,7 +46,8 @@ class HotspotSettings:
             "interface": self.interface,
             "encryption": self.encryption,
             "autostart": str(self.autostart),
-            "band": self.band
+            "band": self.band,
+            "forwarding": str(self.forwarding)
         }
 
         config_path = os.path.join(self.config_dir, self.config_file)
@@ -76,6 +79,9 @@ class HotspotSettings:
             self.band = self.config.get(
                 'Hotspot', 'band', fallback=self.default_band
             )
+            self.forwarding = self.config.getboolean(
+                'Hotspot', 'forwarding', fallback=self.default_forwarding
+            )
         except Exception as e:
             print(f"Error reading configuration: {e}")
             self.create_default_config(force=True)
@@ -88,7 +94,8 @@ class HotspotSettings:
             "interface": self.interface,
             "encryption": self.encryption,
             "autostart": self.autostart,
-            "band": self.band
+            "band": self.band,
+            "forwarding": str(self.forwarding)
         }
 
         if self.create_dir(self.config_dir):

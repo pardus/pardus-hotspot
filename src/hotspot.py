@@ -133,7 +133,7 @@ def check_ip_forwarding():
     return docker_exists or forwarding_disabled
 
 
-def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
+def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward=False):
     """
     Create a Wi-Fi hotspot with parameters.
 
@@ -215,7 +215,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None):
         )
 
         # For docker - ip forwarding control
-        if check_ip_forwarding():
+        if check_ip_forwarding() or forward:
             actions_path = os.path.dirname(os.path.abspath(__file__)) + "/Actions.py"
             try:
                 command = ["/usr/bin/pkexec", actions_path, "forward"]
