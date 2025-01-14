@@ -48,6 +48,7 @@ data_files = [
         [
             "src/Main.py",
             "src/MainWindow.py",
+            "src/Actions.py",
             "src/hotspot.py",
             "src/network_utils.py",
             "src/hotspot_settings.py",
