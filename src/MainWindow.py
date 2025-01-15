@@ -575,10 +575,6 @@ class MainWindow:
                     else "sae"
             )
 
-            # After successful connection setup, change the button to red
-            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
-            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
-
             # Check if Wi-Fi is enabled
             if not hotspot.is_wifi_enabled():
                 message = _("Please enable Wi-Fi to continue")
@@ -610,6 +606,10 @@ class MainWindow:
                 self.warning_msgs_lbl.set_text(message)
                 self.menu_button.set_visible(False)
                 return
+
+            # After successful connection setup, change the button to red
+            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
 
             # Check if forwarding is enabled
             forwarding_enabled = self.forwarding_switch.get_active()
