@@ -687,8 +687,9 @@ class MainWindow:
 
     def on_home_button_clicked(self, button):
         self.hotspot_stack.set_visible_child_name("page_main")
+        self.header_bar.set_title(_("Pardus Hotspot"))
         self.settings_img.set_from_icon_name("preferences-other-symbolic",
-                Gtk.IconSize.BUTTON
+            Gtk.IconSize.BUTTON
         )
         self.settings_lbl.set_text(_("Settings"))
         self.item_settings.set_label(_("Settings"))
