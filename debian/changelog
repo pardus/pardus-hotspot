@@ -1,3 +1,31 @@
+pardus-hotspot (1.1.0) unstable; urgency=medium
+
+  * Save band and autostart settings
+  * Add autostart file, fix tray mode
+  * Disconnect active wifi before creating hotspot
+  * Edit readme
+  * Use only image for QR
+  * Fix file name
+  * Add current connection infos
+  * Fix QR generating for exist conn.
+  * Change institute name
+  * Update copyright
+  * Edit setup file for data contents
+  * Change screenshots
+  * Show window due to user choose from indicator
+  * Add icons
+  * Change icons for gnome
+  * Add translations for warnings
+  * Add polkit auth. for ip forwarding
+  * Fix file path
+  * Check if Docker is installed
+  * Add IP forwarding enable section
+  * Update data files
+  * Fix conn. updates
+  * Update readme & ss
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Thu, 16 Jan 2025 10:31:15 +0300
+
 pardus-hotspot (1.0.0) unstable; urgency=medium
 
   * Add translations
