@@ -72,6 +72,7 @@ Pardus Kablosuz Erişim Noktası'nı kurmadan önce, sisteminizin aşağıdaki g
  - __Bant Seçimi__: 2.4GHz ve 5GHz bantları arasında seçim yapın
  - __Güvenlik Protokolü__: WPA2 (WPA-PSK) veya WPA3 (SAE) seçin.
  - __Otomatik Başlat__: Sistemle birlikte otomatik başlatmayı etkinleştirin/devre dışı bırakın
+ - __Ip Forwarding__: Docker kuruluysa veya bağlantı sorunları yaşıyorsanız etkinleştirin. Bu seçenek açıldığında, uygulama IP yönlendirmeyi otomatik yapılandırmak için root yetkisi gerektiren bir alt işlem çalıştıracaktır.
 
 > __Notlar:__
     - Apple ürünleri için şifreleme yöntemi olarak **SAE** seçin. Eğer bağlantı diğer cihazlarda görünmüyorsa, **WPA-PSK**'ya geçmeyi deneyin.

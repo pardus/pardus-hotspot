@@ -66,12 +66,13 @@ Before installing Pardus Hotspot, ensure your system meets the following require
   2. Enter a connection name (SSID)
   3. Set a password (minimum 8 characters)
   4. Select your wireless interface (interfaces are detected automatically)
-  5. Click to "Create Hotspot"
+  5. Click to "Create Hotspot" to enable hotspot
 
  ##### Advanced Settings
   - __Band Selection__: Choose between 2.4GHz and 5GHz bands
-  - __Security Protocol__: Select WPA2 (WPA-PSK) or WPA3 (SAE).
+  - __Security Protocol__: Select WPA2 (WPA-PSK) or WPA3 (SAE)
   - __Autostart__: Enable/disable automatic startup with system
+  - __Ip Forwarding__: Enable this if you experience connection issues (common when Docker is installed). When toggled, the app will request root privileges to run a subprocess that configures IP forwarding automatically.
 
 > __Notes:__
     - For Apple products, select **SAE** for the encryption method. If the connection isn't visible on other devices, try switching to **WPA-PSK**
