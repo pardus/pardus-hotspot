@@ -1,3 +1,15 @@
+pardus-hotspot (1.1.2) unstable; urgency=medium
+
+  [ Hugo Carvalho ]
+  * Add pt lang code
+  * Add Portuguese translations
+  * Add Portuguese translations
+
+  [ Emel Öztürk ]
+  * Disable current hotspot conn.
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Thu, 06 Feb 2025 16:58:13 +0300
+
 pardus-hotspot (1.1.1) unstable; urgency=medium
 
   * Update readme & SS
