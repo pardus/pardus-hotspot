@@ -62,52 +62,78 @@ def disconnect_wifi_connections():
         return False
 
 
+def get_hotspot_connection():
+    """Internal helper function to get active hotspot connection."""
+    try:
+        active_connections = nm_props.Get("org.freedesktop.NetworkManager", "ActiveConnections")
+
+        for active_conn_path in active_connections:
+            active_conn_proxy = bus.get_object("org.freedesktop.NetworkManager", active_conn_path)
+            active_conn_props = dbus.Interface(active_conn_proxy, "org.freedesktop.DBus.Properties")
+
+            connection_path = active_conn_props.Get("org.freedesktop.NetworkManager.Connection.Active", "Connection")
+            connection_proxy = bus.get_object("org.freedesktop.NetworkManager", connection_path)
+            connection_iface = dbus.Interface(connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection")
+
+            settings = connection_iface.GetSettings()
+
+            if settings["connection"]["type"] == "802-11-wireless" and settings["802-11-wireless"]["mode"] == "ap":
+                return active_conn_path, connection_path, connection_iface, settings
+
+        return None, None, None, None
+    except Exception as e:
+        print(f"Error getting active hotspot: {e}")
+        return None, None, None, None
+
+
 def get_active_hotspot_info():
     """Return SSID, password, and encryption type of the active hotspot"""
+    _, _, connection_iface, settings = get_hotspot_connection()
 
-    active_connections = nm_props.Get("org.freedesktop.NetworkManager", "ActiveConnections")
+    if not settings:
+        return None
 
-    for active_conn_path in active_connections:
-        active_conn_proxy = bus.get_object("org.freedesktop.NetworkManager", active_conn_path)
-        active_conn_props = dbus.Interface(active_conn_proxy, "org.freedesktop.DBus.Properties")
+    ssid_bytes = settings["802-11-wireless"]["ssid"]
+    ssid = "".join([chr(b) for b in ssid_bytes])
+    password = ""
+    encryption = ""
 
-        # Take connection path and get connection object
-        connection_path = active_conn_props.Get("org.freedesktop.NetworkManager.Connection.Active", "Connection")
-        connection_proxy = bus.get_object("org.freedesktop.NetworkManager", connection_path)
-        connection_iface = dbus.Interface(connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection")
+    if "802-11-wireless-security" in settings:
+        wireless_security = settings.get("802-11-wireless-security", {})
 
-        settings = connection_iface.GetSettings()
+        try:
+            secrets = connection_iface.GetSecrets("802-11-wireless-security")
+            if "802-11-wireless-security" in secrets:
+                wireless_security.update(secrets["802-11-wireless-security"])
+        except dbus.DBusException as e:
+            print(f"Error retrieving secrets: {e}")
 
-        # Check if connection is a hotspot
-        if settings["connection"]["type"] == "802-11-wireless" and settings["802-11-wireless"]["mode"] == "ap":
-            ssid_bytes = settings["802-11-wireless"]["ssid"]
-            ssid = "".join([chr(b) for b in ssid_bytes])
-            password = ""
-            encryption = ""
+        password = wireless_security.get("psk", "")
+        encryption = wireless_security.get("key-mgmt", "")
+    else:
+        encryption = "none"
 
-            if "802-11-wireless-security" in settings:
-                wireless_security = settings.get("802-11-wireless-security", {})
+    return {
+        "ssid": ssid,
+        "password": password,
+        "encryption": encryption
+    }
 
-                try:
-                    secrets = connection_iface.GetSecrets("802-11-wireless-security")
-                    if "802-11-wireless-security" in secrets:
-                        wireless_security.update(secrets["802-11-wireless-security"])
-                except dbus.DBusException as e:
-                    print(f"Error retrieving secrets: {e}")
 
-                # Take password and encryption type
-                password = wireless_security.get("psk", "")
-                encryption = wireless_security.get("key-mgmt", "")
-            else:
-                encryption = "none"
+def disable_connection():
+    """
+    Disable active hotspot connection if exists.
+    Returns True if successfully disabled
+    """
+    active_conn_path, _, _, _ = get_hotspot_connection()
+    if active_conn_path:
+        try:
+            nm_iface.DeactivateConnection(active_conn_path)
+            return True
+        except Exception as e:
+            print(f"Error disabling connection: {e}")
 
-            return {
-                "ssid": ssid,
-                "password": password,
-                "encryption": encryption
-            }
-
-    return None
+    return False
 
 
 def set_network_interface(iface):
@@ -202,7 +228,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
     })
 
     # Remove any existing hotspot before creating new one
-    find_and_remove_connection()
+    remove_hotspot()
 
     try:
         # Create new connection
@@ -301,7 +327,10 @@ def remove_hotspot():
     global device_path, device_proxy, device_iface
     global active_connection_path, active_connection_proxy, active_connection_props
 
-    # First remove the connection
+    # First disable any active connection
+    disable_connection()
+
+    # Then remove the connection from system
     find_and_remove_connection()
 
     # Then disconnect device if active
