@@ -1,14 +1,14 @@
 # Portuguese translation for pardus-hotspot.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-07 15:57+0300\n"
-"PO-Revision-Date: 2024-12-19 18:59+0000\n"
+"POT-Creation-Date: 2025-01-16 11:43+0300\n"
+"PO-Revision-Date: 2025-02-09 17:58+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
 "Language: pt\n"
@@ -22,124 +22,159 @@ msgstr ""
 msgid "Simple hotspot application."
 msgstr "Aplicação simples de hotspot."
 
-#: ui/MainWindow.glade:183
+#: ui/MainWindow.glade:173
 msgid "Interface Name:"
 msgstr "Nome da interface:"
 
-#: ui/MainWindow.glade:198
+#: ui/MainWindow.glade:188
 msgid "Choose an interface name"
 msgstr "Escolher um nome de interface"
 
-#: ui/MainWindow.glade:223 ui/MainWindow.glade:321
+#: ui/MainWindow.glade:213 ui/MainWindow.glade:311
 msgid "Connection Name:"
 msgstr "Nome da ligação:"
 
-#: ui/MainWindow.glade:238 ui/MainWindow.glade:336
+#: ui/MainWindow.glade:228 ui/MainWindow.glade:326
 msgid "Enter hotspot name"
 msgstr "Introduzir o nome do hotspot"
 
-#: ui/MainWindow.glade:264 ui/MainWindow.glade:361
+#: ui/MainWindow.glade:254 ui/MainWindow.glade:351
 msgid "Password:"
 msgstr "Palavra-passe:"
 
-#: ui/MainWindow.glade:279 ui/MainWindow.glade:376
+#: ui/MainWindow.glade:269 ui/MainWindow.glade:366
 msgid "Enter at least 8 characters"
 msgstr "Introduzir pelo menos 8 caracteres"
 
-#: ui/MainWindow.glade:406
+#: ui/MainWindow.glade:396
 msgid "Security Type:"
 msgstr "Tipo de segurança:"
 
-#: ui/MainWindow.glade:452 src/MainWindow.py:279 src/MainWindow.py:410
-#: src/MainWindow.py:518
+#: ui/MainWindow.glade:442 src/MainWindow.py:376 src/MainWindow.py:412
+#: src/MainWindow.py:553 src/MainWindow.py:664
 msgid "Create Hotspot"
 msgstr "Criar hotspot"
 
-#: ui/MainWindow.glade:470 ui/MainWindow.glade:844 src/MainWindow.py:199
-#: src/MainWindow.py:346
+#: ui/MainWindow.glade:460 ui/MainWindow.glade:880 src/MainWindow.py:230
+#: src/MainWindow.py:483 src/MainWindow.py:690
 msgid "Pardus Hotspot"
 msgstr "Hotspot Pardus"
 
-#: ui/MainWindow.glade:538
+#: ui/MainWindow.glade:528
 msgid "Band Selection:"
 msgstr "Seleção de banda:"
 
-#: ui/MainWindow.glade:577
+#: ui/MainWindow.glade:567
 msgid "Encryption Method:"
 msgstr "Método de encriptação:"
 
-#: ui/MainWindow.glade:615
+#: ui/MainWindow.glade:579
+msgid ""
+"For Apple products, select  SAE . If the connection isn’t visible on other "
+"devices, try switching to WPA-PSK\n"
+msgstr ""
+"Para produtos Apple, selecione SAE . Se a ligação não for visível noutros "
+"dispositivos, experimente mudar para WPA-PSK\n"
+
+#: ui/MainWindow.glade:607
 msgid "Launch at Startup:"
 msgstr "Iniciar no arranque:"
 
-#: ui/MainWindow.glade:678 src/MainWindow.py:334 src/MainWindow.py:335
+#: ui/MainWindow.glade:620
+msgid "App auto-starts on every reboot"
+msgstr "A aplicação inicia automaticamente em cada reiniciar"
+
+#: ui/MainWindow.glade:648
+msgid "IP Forwarding Enable:"
+msgstr "Ativar o reencaminhamento de IP:"
+
+#: ui/MainWindow.glade:661
+msgid "IP forwarding requires root privileges"
+msgstr "O reencaminhamento de IP requer privilégios root"
+
+#: ui/MainWindow.glade:713 src/MainWindow.py:471 src/MainWindow.py:472
 msgid "Home Page"
 msgstr "Página inicial"
 
-#: ui/MainWindow.glade:725
+#: ui/MainWindow.glade:761
 msgid "Restore Defaults"
 msgstr "Repor predefinições"
 
-#: ui/MainWindow.glade:752 ui/MainWindow.glade:906 src/MainWindow.py:208
-#: src/MainWindow.py:344 src/MainWindow.py:345 src/MainWindow.py:547
-#: src/MainWindow.py:548
+#: ui/MainWindow.glade:788 ui/MainWindow.glade:942 src/MainWindow.py:239
+#: src/MainWindow.py:481 src/MainWindow.py:482 src/MainWindow.py:694
+#: src/MainWindow.py:695
 msgid "Settings"
 msgstr "Definições"
 
-#: ui/MainWindow.glade:803
+#: ui/MainWindow.glade:839
 msgid "OK"
 msgstr "OK"
 
-#: ui/MainWindow.glade:834
+#: ui/MainWindow.glade:870
 msgid "Error"
 msgstr "Erro"
 
-#: ui/MainWindow.glade:961
+#: ui/MainWindow.glade:997
 msgid "About"
 msgstr "Acerca"
 
-#: src/MainWindow.py:205 src/MainWindow.py:232 src/MainWindow.py:241
-#: src/MainWindow.py:249
+#: src/MainWindow.py:236 src/MainWindow.py:263 src/MainWindow.py:272
+#: src/MainWindow.py:280
 msgid "Show App"
 msgstr "Mostrar aplicação"
 
-#: src/MainWindow.py:211 src/MainWindow.py:411
+#: src/MainWindow.py:242 src/MainWindow.py:377 src/MainWindow.py:554
 msgid "Enable"
 msgstr "Ativar"
 
-#: src/MainWindow.py:217
+#: src/MainWindow.py:248
 msgid "Quit"
 msgstr "Sair"
 
-#: src/MainWindow.py:234 src/MainWindow.py:244
+#: src/MainWindow.py:265 src/MainWindow.py:275 src/MainWindow.py:489
 msgid "Hide App"
 msgstr "Ocultar aplicação"
 
-#: src/MainWindow.py:285 src/MainWindow.py:317 src/MainWindow.py:406
-#: src/MainWindow.py:488
+#: src/MainWindow.py:349 src/MainWindow.py:420 src/MainWindow.py:454
+#: src/MainWindow.py:549 src/MainWindow.py:634
 msgid "Disable Connection"
 msgstr "Desativar ligação"
 
-#: src/MainWindow.py:349
+#: src/MainWindow.py:350 src/MainWindow.py:635
+msgid "Disable"
+msgstr "Desativar"
+
+#: src/MainWindow.py:486
 msgid "Hotspot Settings"
 msgstr "Definições do Hotspot"
 
-#: src/MainWindow.py:441
+#: src/MainWindow.py:580
 msgid "Please enable Wi-Fi to continue"
 msgstr "Ativar o Wi-Fi para continuar"
 
-#: src/MainWindow.py:449
+#: src/MainWindow.py:588
 msgid "Please select a network interface for the hotspot"
 msgstr "Selecionar uma interface de rede para o hotspot"
 
-#: src/MainWindow.py:457
+#: src/MainWindow.py:596
 msgid "Please enter a name for your hotspot connection"
 msgstr "Introduzir um nome para a sua ligação hotspot"
 
-#: src/MainWindow.py:465
+#: src/MainWindow.py:604
 msgid "Password must be at least 8 characters long"
 msgstr "A palavra-passe deve ter pelo menos 8 caracteres"
 
-#: src/MainWindow.py:489
-msgid "Disable"
-msgstr "Desativar"
+#: src/network_utils.py:31
+msgid "No wireless interfaces available"
+msgstr "Não existem interfaces sem fios disponíveis"
+
+#: src/network_utils.py:37
+msgid "Wi-Fi Network Interface Not Found"
+msgstr "Interface de rede Wi-Fi não encontrada"
+
+#: src/network_utils.py:40
+msgid ""
+"Please ensure your computer has a Wi-Fi adapter and it is working correctly."
+msgstr ""
+"Certifique-se de que o computador tem um adaptador Wi-Fi e que este está a "
+"funcionar corretamente."
