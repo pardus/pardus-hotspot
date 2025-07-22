@@ -193,7 +193,8 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
     connection_settings = dbus.Dictionary({
         "type": "802-11-wireless",
         "uuid": current_hotspot_uuid,
-        "id": "hotspot"
+        "id": "hotspot",
+        "autoconnect": dbus.Boolean(False)
     })
 
     # WiFi settings
@@ -330,8 +331,7 @@ def remove_hotspot():
     # First disable any active connection
     disable_connection()
 
-    # Then remove the connection from system
-    find_and_remove_connection()
+    remove_all_hotspot_connections()
 
     # Then disconnect device if active
     if device_iface is not None:
@@ -351,30 +351,21 @@ def remove_hotspot():
 
     return True
 
-
-def find_and_remove_connection(hotspot_uuid=None):
-    """
-    Find and remove a specific hotspot connection.
-
-    Args:
-        hotspot_uuid (str): UUID of connection to remove. Uses current if None.
-    """
-    if hotspot_uuid is None:
-        hotspot_uuid = current_hotspot_uuid
-
+def remove_all_hotspot_connections():
+    """Delete old hotspot profiles."""
     for path in settings_iface.ListConnections():
         try:
             connection_proxy = bus.get_object("org.freedesktop.NetworkManager", path)
-            connection_settings = dbus.Interface(
+            connection_iface = dbus.Interface(
                 connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
-            ).GetSettings()
+            )
+            settings = connection_iface.GetSettings()
 
-            if connection_settings["connection"]["uuid"] == hotspot_uuid:
-                dbus.Interface(
-                    connection_proxy, "org.freedesktop.NetworkManager.Settings.Connection"
-                ).Delete()
-                break
-        except dbus.exceptions.DBusException:
+            if settings.get("connection", {}).get("type") == "802-11-wireless":
+                wifi_settings = settings.get("802-11-wireless", {})
+                if wifi_settings.get("mode") == "ap":
+                    connection_iface.Delete()
+        except dbus.DBusException:
             continue
 
 
