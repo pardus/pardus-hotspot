@@ -381,10 +381,6 @@ class MainWindow:
                 "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
             )
 
-            style_context = self.create_button.get_style_context()
-            style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
-            style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
-
             # Enable input fields
             self.con_entry.set_sensitive(True)
             self.con_entry.set_editable(True)
@@ -666,7 +662,8 @@ class MainWindow:
 
         style_context = self.create_button.get_style_context()
         style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
-        style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
+
+        self.on_password_entry_changed(self.password_entry)
 
         # Get selected values from the comboboxes
         selected_band = self.band_combo.get_active_text()
