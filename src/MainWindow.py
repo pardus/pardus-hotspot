@@ -312,6 +312,8 @@ class MainWindow:
         # TODO: Write a func to update UI elements, use it everywhere
 
         hotspot_info = hotspot.get_active_hotspot_info()
+        style_context = self.create_button.get_style_context()
+
         if hotspot_info:
             ssid = hotspot_info["ssid"]
             password = hotspot_info["password"]
@@ -352,7 +354,6 @@ class MainWindow:
                 "network-wireless-signal-good-symbolic", Gtk.IconSize.BUTTON
             )
 
-            style_context = self.create_button.get_style_context()
             style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
             style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
 
@@ -380,6 +381,9 @@ class MainWindow:
             self.connection_img.set_from_icon_name(
                 "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
             )
+
+            style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
 
             # Enable input fields
             self.con_entry.set_sensitive(True)
