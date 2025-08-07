@@ -331,7 +331,8 @@ def remove_hotspot():
     # First disable any active connection
     disable_connection()
 
-    remove_all_hotspot_connections()
+    if settings_iface:
+        remove_all_hotspot_connections()
 
     # Then disconnect device if active
     if device_iface is not None:
@@ -353,7 +354,13 @@ def remove_hotspot():
 
 def remove_all_hotspot_connections():
     """Delete old hotspot profiles."""
-    for path in settings_iface.ListConnections():
+    try:
+        connection_paths = settings_iface.ListConnections()
+    except dbus.DBusException as e:
+        print(f"DBus error while listing connections: {e}")
+        return
+
+    for path in connection_paths:
         try:
             connection_proxy = bus.get_object("org.freedesktop.NetworkManager", path)
             connection_iface = dbus.Interface(
@@ -365,7 +372,8 @@ def remove_all_hotspot_connections():
                 wifi_settings = settings.get("802-11-wireless", {})
                 if wifi_settings.get("mode") == "ap":
                     connection_iface.Delete()
-        except dbus.DBusException:
+        except dbus.DBusException as e:
+            print(f"Failed to delete connection {path}: {e}")
             continue
 
 
