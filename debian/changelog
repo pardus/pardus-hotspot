@@ -1,3 +1,10 @@
+pardus-hotspot (1.1.5) unstable; urgency=medium
+
+  * Fix button style for disconnection
+  * Fix dbus conn errors
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Thu, 07 Aug 2025 14:07:03 +0300
+
 pardus-hotspot (1.1.4) unstable; urgency=medium
 
   * Fix button val. logic
