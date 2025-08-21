@@ -193,7 +193,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
     connection_settings = dbus.Dictionary({
         "type": "802-11-wireless",
         "uuid": current_hotspot_uuid,
-        "id": "hotspot",
+        "id": "pardus-hotspot",
         "autoconnect": dbus.Boolean(False)
     })
 
@@ -370,7 +370,8 @@ def remove_all_hotspot_connections():
 
             if settings.get("connection", {}).get("type") == "802-11-wireless":
                 wifi_settings = settings.get("802-11-wireless", {})
-                if wifi_settings.get("mode") == "ap":
+                if (wifi_settings.get("mode") == "ap" and
+                    settings.get("connection", {}).get("id") == "pardus-hotspot"):
                     connection_iface.Delete()
         except dbus.DBusException as e:
             print(f"Failed to delete connection {path}: {e}")
