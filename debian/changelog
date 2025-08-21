@@ -1,3 +1,9 @@
+pardus-hotspot (1.1.6) unstable; urgency=medium
+
+  * Del app specific connections
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Thu, 21 Aug 2025 11:31:41 +0300
+
 pardus-hotspot (1.1.5) unstable; urgency=medium
 
   * Fix button style for disconnection
