@@ -3,6 +3,31 @@ import uuid
 import time
 import os
 import subprocess
+import functools
+import dbus.exceptions
+
+
+def _retry_on_dbus_error(func):
+    """
+    Retry decorator for Dbus connection errors
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except dbus.exceptions.DBusException as e:
+            # Retry for temporary DBus errors
+            temporary_errors = [
+                "org.freedesktop.DBus.Error.ServiceUnknown",
+                "org.freedesktop.DBus.Error.NoReply"
+            ]
+            if any(err in str(e) for err in temporary_errors):
+                print(f"[Retry] Temporary DBus issue in {func.__name__} ..")
+                time.sleep(0.5)
+                return func(*args, **kwargs)
+            raise
+    return wrapper
+
 
 # Initialize D-Bus system bus
 bus = dbus.SystemBus()
@@ -31,6 +56,7 @@ active_connection_props = None
 current_hotspot_uuid = None
 
 
+@_retry_on_dbus_error
 def disconnect_wifi_connections():
     """Disconnect from all active WiFi connections before creating hotspot."""
     try:
@@ -62,6 +88,7 @@ def disconnect_wifi_connections():
         return False
 
 
+@_retry_on_dbus_error
 def get_hotspot_connection():
     """Internal helper function to get active hotspot connection."""
     try:
@@ -86,6 +113,7 @@ def get_hotspot_connection():
         return None, None, None, None
 
 
+@_retry_on_dbus_error
 def get_active_hotspot_info():
     """Return SSID, password, and encryption type of the active hotspot"""
     _, _, connection_iface, settings = get_hotspot_connection()
@@ -120,6 +148,7 @@ def get_active_hotspot_info():
     }
 
 
+@_retry_on_dbus_error
 def disable_connection():
     """
     Disable active hotspot connection if exists.
@@ -135,7 +164,7 @@ def disable_connection():
 
     return False
 
-
+@_retry_on_dbus_error
 def set_network_interface(iface):
     """Initialize network interface for hotspot creation."""
     global device_path, device_proxy, device_iface
@@ -352,6 +381,7 @@ def remove_hotspot():
 
     return True
 
+@_retry_on_dbus_error
 def remove_all_hotspot_connections():
     """Delete old hotspot profiles."""
     try:
@@ -377,7 +407,7 @@ def remove_all_hotspot_connections():
             print(f"Failed to delete connection {path}: {e}")
             continue
 
-
+@_retry_on_dbus_error
 def get_connection_state():
     """Get the current state of the network connection."""
     if active_connection_props is None:
@@ -392,7 +422,14 @@ def is_connection_activated():
     return get_connection_state() == 2  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
 
+@_retry_on_dbus_error
 def is_wifi_enabled():
     """Check if WiFi hardware is enabled and available."""
-    nm_props = dbus.Interface(nm_proxy, "org.freedesktop.DBus.Properties")
-    return nm_props.Get("org.freedesktop.NetworkManager", "WirelessEnabled")
+    try:
+        bus = dbus.SystemBus()
+        nm_proxy = bus.get_object("org.freedesktop.NetworkManager", "/org/freedesktop/NetworkManager")
+        nm_props = dbus.Interface(nm_proxy, "org.freedesktop.DBus.Properties")
+        return nm_props.Get("org.freedesktop.NetworkManager", "WirelessEnabled")
+    except dbus.exceptions.DBusException as e:
+        print(f"[DBus] Wi-Fi check failed: {e}")
+        return False
