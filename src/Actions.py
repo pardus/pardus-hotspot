@@ -3,6 +3,10 @@
 
 import subprocess
 import sys
+from logging_config import get_logger
+
+logger = get_logger()
+
 
 def run_iptables_forward():
     """
@@ -10,11 +14,13 @@ def run_iptables_forward():
     """
     try:
         subprocess.run(["iptables", "-A", "FORWARD", "-j", "ACCEPT"], check=True)
-        print("Successfully added FORWARD rule.")
+        logger.info("Successfully configured iptables FORWARD rule")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Failed to add FORWARD rule: {e}", file=sys.stderr)
+        logger.error("Failed to configure iptables FORWARD rule")
+        logger.debug(f"iptables command error details: {e}")
         return False
+
 
 if __name__ == "__main__":
 

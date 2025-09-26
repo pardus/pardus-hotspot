@@ -5,6 +5,9 @@ import os
 import subprocess
 import functools
 import dbus.exceptions
+from logging_config import get_logger
+
+logger = get_logger()
 
 
 def _retry_on_dbus_error(func):
@@ -22,7 +25,7 @@ def _retry_on_dbus_error(func):
                 "org.freedesktop.DBus.Error.NoReply"
             ]
             if any(err in str(e) for err in temporary_errors):
-                print(f"[Retry] Temporary DBus issue in {func.__name__} ..")
+                logger.info(f"Retrying DBus operation: {func.__name__}")
                 time.sleep(0.5)
                 return func(*args, **kwargs)
             raise
@@ -84,7 +87,8 @@ def disconnect_wifi_connections():
 
         return True
     except Exception as e:
-        print(f"Error disconnecting WiFi: {e}")
+        logger.error("Failed to disconnect WiFi connections")
+        logger.debug(f"Error details: {e}")
         return False
 
 
@@ -109,7 +113,8 @@ def get_hotspot_connection():
 
         return None, None, None, None
     except Exception as e:
-        print(f"Error getting active hotspot: {e}")
+        logger.error("Failed to get active hotspot information")
+        logger.debug(f"Error details: {e}")
         return None, None, None, None
 
 
@@ -134,7 +139,8 @@ def get_active_hotspot_info():
             if "802-11-wireless-security" in secrets:
                 wireless_security.update(secrets["802-11-wireless-security"])
         except dbus.DBusException as e:
-            print(f"Error retrieving secrets: {e}")
+            logger.warning("Failed to retrieve connection secrets")
+            logger.debug(f"DBus error details: {e}")
 
         password = wireless_security.get("psk", "")
         encryption = wireless_security.get("key-mgmt", "")
@@ -160,7 +166,8 @@ def disable_connection():
             nm_iface.DeactivateConnection(active_conn_path)
             return True
         except Exception as e:
-            print(f"Error disabling connection: {e}")
+            logger.error("Failed to disable hotspot connection")
+            logger.debug(f"Error details: {e}")
 
     return False
 
@@ -206,7 +213,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
     if passwd:
         encrypt = encrypt if encrypt in ["sae", "wpa-psk"] else "sae"
     else:
-        print("no password")
+        logger.info("Creating hotspot without password")
         encrypt = "none"
 
     # Default to 2.4GHz band if not specified or invalid
@@ -277,7 +284,8 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
                 command = ["/usr/bin/pkexec", actions_path, "forward"]
                 subprocess.run(command, check=True)
             except subprocess.CalledProcessError as e:
-                print(f"Failed to configure IP forwarding: {e}")
+                logger.warning("Failed to configure IP forwarding")
+                logger.debug(f"Process error details: {e}")
 
         active_connection_proxy = bus.get_object(
             "org.freedesktop.NetworkManager", active_connection_path
@@ -297,7 +305,8 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
             )
         raise
     except Exception as e:
-        print(f"Error creating hotspot: {e}")
+        logger.error("Failed to create hotspot")
+        logger.debug(f"Error details: {e}")
         raise
 
 
@@ -372,7 +381,8 @@ def remove_hotspot():
                 device_iface.Disconnect()
         except dbus.exceptions.DBusException as e:
             if "NotActive" not in str(e):
-                print(f"Error disconnecting device: {e}")
+                logger.warning("Failed to disconnect network device")
+                logger.debug(f"Error details: {e}")
 
     # Reset all connection variables
     active_connection_path = None
@@ -387,7 +397,8 @@ def remove_all_hotspot_connections():
     try:
         connection_paths = settings_iface.ListConnections()
     except dbus.DBusException as e:
-        print(f"DBus error while listing connections: {e}")
+        logger.error("Failed to list network connections")
+        logger.debug(f"DBus error details: {e}")
         return
 
     for path in connection_paths:
@@ -404,7 +415,8 @@ def remove_all_hotspot_connections():
                     settings.get("connection", {}).get("id") == "pardus-hotspot"):
                     connection_iface.Delete()
         except dbus.DBusException as e:
-            print(f"Failed to delete connection {path}: {e}")
+            logger.warning(f"Failed to delete connection: {path}")
+            logger.debug(f"DBus error details: {e}")
             continue
 
 @_retry_on_dbus_error
@@ -431,5 +443,6 @@ def is_wifi_enabled():
         nm_props = dbus.Interface(nm_proxy, "org.freedesktop.DBus.Properties")
         return nm_props.Get("org.freedesktop.NetworkManager", "WirelessEnabled")
     except dbus.exceptions.DBusException as e:
-        print(f"[DBus] Wi-Fi check failed: {e}")
+        logger.warning("WiFi status check failed")
+        logger.debug(f"DBus error details: {e}")
         return False
