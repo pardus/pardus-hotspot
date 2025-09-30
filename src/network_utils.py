@@ -1,11 +1,15 @@
 import os
 from gi.repository import Gtk
+from logging_config import get_logger
 
 import locale
 from locale import gettext as _
 locale.bindtextdomain('pardus-hotspot', '/usr/share/locale')
 locale.textdomain('pardus-hotspot')
 _ = locale.gettext
+
+# Get logger instance
+logger = get_logger()
 
 
 def get_interface_names(ifname_combo, window):
@@ -14,7 +18,8 @@ def get_interface_names(ifname_combo, window):
     try:
         interfaces = os.listdir("/sys/class/net/")
     except OSError as e:
-        print("Error reading network interfaces:", e)
+        logger.error("Failed to read network interfaces")
+        logger.debug(f"Network interface read error: {e}")
         interfaces = []
 
     wifi_interfaces = [

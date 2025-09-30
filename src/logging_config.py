@@ -3,7 +3,7 @@
 
 """
 Pardus Hotspot Logging Configuration
-Log file path: ~/.config/pardus/pardus-hotspot/logs/app.log
+Log file path: ~/.local/share/pardus/pardus-hotspot/logs/app.log
 """
 
 import logging
@@ -14,7 +14,7 @@ from pathlib import Path
 def setup_logging():
 
     # Create log directory
-    log_dir = Path.home() / ".config" / "pardus" / "pardus-hotspot" / "logs"
+    log_dir = Path.home() / ".local" / "share" / "pardus" / "pardus-hotspot" / "logs"
     log_dir.mkdir(parents=True, exist_ok=True)
 
     log_file = log_dir / "app.log"
@@ -27,23 +27,22 @@ def setup_logging():
     if logger.handlers:
         return logger
 
-    # File handler (10MB, 3 backup files)
+    # File handler (5MB, 2 backup files = max 15MB total)
     file_handler = logging.handlers.RotatingFileHandler(
         log_file,
-        maxBytes=10*1024*1024,  # 10MB
-        backupCount=3,
+        maxBytes=5*1024*1024,  # 5MB
+        backupCount=2,
         encoding='utf-8'
     )
-    file_handler.setLevel(logging.DEBUG)
+    file_handler.setLevel(logging.INFO)
 
     # Console handler (only WARNING and above to console)
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.WARNING)
 
-    # Detailed format for file
     formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
-        datefmt='%Y-%m-%d %H:%M:%S'
+        '%(asctime)s [%(levelname)s] %(name)s: %(message)s',
+        datefmt='%H:%M:%S'
     )
 
     # Simple format for console
@@ -59,7 +58,6 @@ def setup_logging():
 
     # Initial log message
     logger.info("Pardus Hotspot logging system initialized")
-    logger.debug(f"Log file: {log_file}")
 
     return logger
 
