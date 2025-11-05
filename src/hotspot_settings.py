@@ -42,16 +42,23 @@ class HotspotSettings:
         self.forwarding = self.default_forwarding
 
 
-    def create_default_config(self, force=False):
-        self.config['Hotspot'] = {
-            "ssid": self.ssid,
-            "password": self.password,
-            "interface": self.interface,
-            "encryption": self.encryption,
+    def _prepare_config_dict(self):
+        """
+        Prepare configuration dictionary with all values as strings.
+        """
+        return {
+            "ssid": str(self.ssid) if self.ssid else "",
+            "password": str(self.password) if self.password else "",
+            "interface": str(self.interface) if self.interface else "",
+            "encryption": str(self.encryption) if self.encryption else "",
             "autostart": str(self.autostart),
-            "band": self.band,
+            "band": str(self.band) if self.band else "",
             "forwarding": str(self.forwarding)
         }
+
+
+    def create_default_config(self, force=False):
+        self.config['Hotspot'] = self._prepare_config_dict()
 
         config_path = os.path.join(self.config_dir, self.config_file)
         if not Path(config_path).is_file() or force:
@@ -92,15 +99,7 @@ class HotspotSettings:
 
 
     def write_config(self):
-        self.config['Hotspot'] = {
-            "ssid": self.ssid,
-            "password": self.password,
-            "interface": self.interface,
-            "encryption": self.encryption,
-            "autostart": self.autostart,
-            "band": self.band,
-            "forwarding": str(self.forwarding)
-        }
+        self.config['Hotspot'] = self._prepare_config_dict()
 
         if self.create_dir(self.config_dir):
             with open(

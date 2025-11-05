@@ -47,4 +47,5 @@ def get_interface_names(ifname_combo, window):
         dialog.run()
         dialog.destroy()
 
-        Gtk.main_quit()
+        app = window.get_application()
+        app.quit() if app else Gtk.main_quit()
