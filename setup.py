@@ -52,6 +52,7 @@ data_files = [
             "src/hotspot.py",
             "src/network_utils.py",
             "src/hotspot_settings.py",
+            "src/logging_config.py",
             "src/__version__",
         ],
     ),
