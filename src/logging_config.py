@@ -3,7 +3,7 @@
 
 """
 Pardus Hotspot Logging Configuration
-Log file path: ~/.local/share/pardus/pardus-hotspot/logs/app.log
+Log file path: ~/.cache/pardus/pardus-hotspot/pardus-hotspot.log
 """
 
 import logging
@@ -14,10 +14,10 @@ from pathlib import Path
 def setup_logging():
 
     # Create log directory
-    log_dir = Path.home() / ".local" / "share" / "pardus" / "pardus-hotspot" / "logs"
+    log_dir = Path.home() / ".cache" / "pardus" / "pardus-hotspot"
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    log_file = log_dir / "app.log"
+    log_file = log_dir / "pardus-hotspot.log"
 
     # Logger config
     logger = logging.getLogger('pardus-hotspot')
