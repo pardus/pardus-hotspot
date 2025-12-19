@@ -293,6 +293,7 @@ class MainWindow:
             self.hotspot_dialog.hide()
 
         hotspot.remove_hotspot()
+        hotspot.cleanup()
         self.window.get_application().quit()
 
     def on_startup_switch_state_set(self, switch, state):
