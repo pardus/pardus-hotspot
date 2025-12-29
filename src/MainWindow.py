@@ -9,6 +9,7 @@ import io
 import hotspot
 from network_utils import get_interface_names
 from hotspot_settings import HotspotSettings
+from connected_devices import ConnectedDevices
 
 try:
     gi.require_version('AppIndicator3', '0.1')
@@ -176,6 +177,21 @@ class MainWindow:
         self.encrypt_combo.set_active(1)    # Set default: SAE
 
         self.qr_image.set_visible(False)
+
+        # Connected Devices UI
+        self.devices_expander = self.builder.get_object("devices_expander")
+        self.devices_count_label = self.builder.get_object("devices_count_label")
+        self.devices_scrolled = self.builder.get_object("devices_scrolled")
+        self.no_devices_label = self.builder.get_object("no_devices_label")
+
+        # Create ListBox for devices and add to scrolled window
+        self.devices_listbox = Gtk.ListBox()
+        self.devices_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.devices_scrolled.add(self.devices_listbox)
+        self.devices_listbox.show()
+
+        # Device tracker
+        self.device_tracker = ConnectedDevices()
 
         get_interface_names(self.ifname_combo, self.window)
 
@@ -374,6 +390,11 @@ class MainWindow:
                 self.hotspot_settings.band = band_display
                 self.get_comboboxtext_value(self.band_combo, band_display)
             self.hotspot_settings.write_config()
+
+            # Set device tracker interface
+            ifname = self.ifname_combo.get_active_text()
+            if ifname:
+                self.device_tracker.set_interface(ifname)
         else:
             self.create_button.set_label(_("Create Hotspot"))
             self.item_enable.set_label(_("Enable"))
@@ -395,6 +416,8 @@ class MainWindow:
             self.security_entry.set_editable(True)
 
             self.connection_stack.set_visible_child_name("page_connect")
+            self.device_tracker.set_interface(None)
+            self.devices_expander.set_expanded(False)
 
             # Update connection icon
             if xfce_desktop:
@@ -415,11 +438,14 @@ class MainWindow:
                 "network-wireless-disabled-symbolic", Gtk.IconSize.BUTTON
             )
             self.qr_image.set_visible(False)
+            self.device_tracker.set_interface(None)
+            self.devices_expander.set_expanded(False)
         else:
             self.check_existing_hotspot()
 
             if self.create_button.get_label() == _("Disable Connection"):
                 self.qr_image.set_visible(True)
+                self.update_connected_devices()
             else:
                 self.qr_image.set_visible(False)
                 self.qr_image.clear()
@@ -532,6 +558,67 @@ class MainWindow:
         # Set the QR code image to the Gtk.Image widget
         self.qr_image.set_from_pixbuf(scaled_pixbuf)
 
+    def update_connected_devices(self):
+
+        devices = self.device_tracker.get_devices()
+        count = len(devices)
+
+        self.devices_count_label.set_text(f"({count})")
+
+        # Clear existing rows
+        for child in self.devices_listbox.get_children():
+            self.devices_listbox.remove(child)
+
+        # Show/hide "no devices" label
+        self.no_devices_label.set_visible(count == 0)
+        self.devices_scrolled.set_visible(count > 0)
+
+        # Add device rows
+        for device in devices:
+            row = self._create_device_row(device)
+            self.devices_listbox.add(row)
+
+        self.devices_listbox.show_all()
+
+    def _create_device_row(self, device):
+        """Create a single device row widget."""
+        row = Gtk.ListBoxRow()
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        box.set_margin_top(6)
+        box.set_margin_bottom(6)
+        box.set_margin_start(8)
+        box.set_margin_end(8)
+
+        # Device icon
+        icon = Gtk.Image.new_from_icon_name(
+            "computer-symbolic", Gtk.IconSize.LARGE_TOOLBAR
+        )
+        box.pack_start(icon, False, False, 0)
+
+        # Info box (MAC + IP)
+        info_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+
+        mac_label = Gtk.Label(label=device["mac"])
+        mac_label.set_xalign(0)
+        mac_label.get_style_context().add_class("heading")
+        info_box.pack_start(mac_label, False, False, 0)
+
+        if device["ip"]:
+            ip_label = Gtk.Label(label=device["ip"])
+            ip_label.set_xalign(0)
+            ip_label.get_style_context().add_class("dim-label")
+            info_box.pack_start(ip_label, False, False, 0)
+
+        box.pack_start(info_box, True, True, 0)
+
+        # Signal strength
+        if device["signal"] is not None:
+            signal_label = Gtk.Label(label=f"{device['signal']} dBm")
+            signal_label.get_style_context().add_class("dim-label")
+            box.pack_end(signal_label, False, False, 0)
+
+        row.add(box)
+        return row
 
     def on_create_button_clicked(self, button):
         """
@@ -555,6 +642,8 @@ class MainWindow:
             self.item_enable.set_label(_("Enable"))
             self.qr_image.set_visible(False)
             self.qr_image.clear()
+            self.device_tracker.set_interface(None)
+            self.devices_expander.set_expanded(False)
 
             style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
             style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
@@ -617,6 +706,7 @@ class MainWindow:
 
             hotspot.set_network_interface(ifname)
             hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band, forwarding_enabled)
+            self.device_tracker.set_interface(ifname)
 
             self.connection_stack.set_visible_child_name("page_connected")
             self.con_entry.set_text(ssid)
