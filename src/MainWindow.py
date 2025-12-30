@@ -173,9 +173,6 @@ class MainWindow:
         self.encrypt_combo.append_text("WPA-PSK")
         self.encrypt_combo.append_text("SAE")
 
-        self.band_combo.set_active(0)       # Set default: 2.4Ghz
-        self.encrypt_combo.set_active(1)    # Set default: SAE
-
         self.qr_image.set_visible(False)
 
         # Connected Devices UI
@@ -192,6 +189,9 @@ class MainWindow:
 
         # Device tracker
         self.device_tracker = ConnectedDevices()
+
+        self.band_combo.set_active(0)       # Set default: 2.4Ghz
+        self.encrypt_combo.set_active(1)    # Set default: SAE
 
         get_interface_names(self.ifname_combo, self.window)
 
@@ -748,6 +748,7 @@ class MainWindow:
         """
         # Remove current connection
         hotspot.remove_hotspot()
+        self.device_tracker.set_interface(None)
         enable_icon_name = "network-wireless-disabled-symbolic"
         self.settings_img.set_from_icon_name("preferences-other-symbolic",
                 Gtk.IconSize.BUTTON
