@@ -10,11 +10,11 @@ from MainWindow import MainWindow
 
 class Application(Gtk.Application):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, application_id="tr.org.pardus.pardus-hotspot",
+        super().__init__(*args, application_id="tr.org.pardus.hotspot",
                          flags=Gio.ApplicationFlags.FLAGS_NONE, **kwargs
         )
         self.window = None
-        GLib.set_prgname("tr.org.pardus.pardus-hotspot")
+        GLib.set_prgname("tr.org.pardus.hotspot")
 
         self.add_main_option(
             "tray",

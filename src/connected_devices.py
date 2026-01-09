@@ -9,7 +9,8 @@ import re
 class ConnectedDevices:
 
     STATION_RE = re.compile(r"Station\s+([0-9a-fA-F:]{17})")
-    SIGNAL_RE = re.compile(r"signal:\s*(-?\d+)\s*dBm")
+    SIGNAL_RE = re.compile(r"signal:\s*(-?\d+)")
+    CONNECTED_TIME_RE = re.compile(r"connected time:\s*(\d+)\s*seconds")
     IW_PATHS = ["/usr/sbin/iw", "/sbin/iw", "iw"]
 
     def __init__(self):
@@ -35,9 +36,10 @@ class ConnectedDevices:
             {
                 "mac": mac.upper(),
                 "ip": arp_table.get(mac.lower(), ""),
-                "signal": signal
+                "signal": info["signal"],
+                "time": info["time"]
             }
-            for mac, signal in stations.items()
+            for mac, info in stations.items()
         ]
 
     def _get_stations(self):
@@ -76,7 +78,11 @@ class ConnectedDevices:
                 continue
             mac = mac_match.group(1)
             sig_match = self.SIGNAL_RE.search(block)
-            stations[mac] = int(sig_match.group(1)) if sig_match else None
+            time_match = self.CONNECTED_TIME_RE.search(block)
+            stations[mac] = {
+                "signal": int(sig_match.group(1)) if sig_match else None,
+                "time": int(time_match.group(1)) if time_match else None
+            }
         return stations
 
     def _get_arp_table(self):

@@ -21,7 +21,13 @@ except:
 
 import locale
 from locale import gettext as _
-locale.bindtextdomain('pardus-hotspot', '/usr/share/locale')
+
+# Development: ../locale, Production: /usr/share/locale
+localedir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../locale')
+if not os.path.exists(localedir):
+    localedir = '/usr/share/locale'
+
+locale.bindtextdomain('pardus-hotspot', localedir)
 locale.textdomain('pardus-hotspot')
 _ = locale.gettext
 
@@ -189,6 +195,7 @@ class MainWindow:
 
         # Device tracker
         self.device_tracker = ConnectedDevices()
+        self.devices_expander.set_visible(False)
 
         self.band_combo.set_active(0)       # Set default: 2.4Ghz
         self.encrypt_combo.set_active(1)    # Set default: SAE
@@ -395,6 +402,7 @@ class MainWindow:
             ifname = self.ifname_combo.get_active_text()
             if ifname:
                 self.device_tracker.set_interface(ifname)
+            self.devices_expander.set_visible(True)
         else:
             self.create_button.set_label(_("Create Hotspot"))
             self.item_enable.set_label(_("Enable"))
@@ -418,6 +426,7 @@ class MainWindow:
             self.connection_stack.set_visible_child_name("page_connect")
             self.device_tracker.set_interface(None)
             self.devices_expander.set_expanded(False)
+            self.devices_expander.set_visible(False)
 
             # Update connection icon
             if xfce_desktop:
@@ -440,16 +449,15 @@ class MainWindow:
             self.qr_image.set_visible(False)
             self.device_tracker.set_interface(None)
             self.devices_expander.set_expanded(False)
+
+        self.check_existing_hotspot()
+
+        if self.create_button.get_label() == _("Disable Connection"):
+            self.qr_image.set_visible(True)
+            self.update_connected_devices()
         else:
-            self.check_existing_hotspot()
-
-            if self.create_button.get_label() == _("Disable Connection"):
-                self.qr_image.set_visible(True)
-                self.update_connected_devices()
-            else:
-                self.qr_image.set_visible(False)
-                self.qr_image.clear()
-
+            self.qr_image.set_visible(False)
+            self.qr_image.clear()
 
         return True
 
@@ -609,16 +617,48 @@ class MainWindow:
             ip_label.get_style_context().add_class("dim-label")
             info_box.pack_start(ip_label, False, False, 0)
 
+        if device["time"] is not None:
+            time_str = self.format_time(device["time"])
+            time_label = Gtk.Label(label=time_str)
+            time_label.set_xalign(0)
+            time_label.get_style_context().add_class("dim-label")
+            info_box.pack_start(time_label, False, False, 0)
+
         box.pack_start(info_box, True, True, 0)
 
-        # Signal strength
         if device["signal"] is not None:
-            signal_label = Gtk.Label(label=f"{device['signal']} dBm")
-            signal_label.get_style_context().add_class("dim-label")
-            box.pack_end(signal_label, False, False, 0)
+            icon_name = self.get_signal_icon(device["signal"])
+            signal_icon = Gtk.Image.new_from_icon_name(
+                icon_name, Gtk.IconSize.LARGE_TOOLBAR
+            )
+            box.pack_end(signal_icon, False, False, 0)
 
         row.add(box)
         return row
+
+    def get_signal_icon(self, signal):
+        """Get WiFi icon based on signal strength."""
+        if signal >= -50:
+            return "network-wireless-signal-excellent-symbolic"
+        elif signal >= -60:
+            return "network-wireless-signal-good-symbolic"
+        elif signal >= -70:
+            return "network-wireless-signal-ok-symbolic"
+        elif signal >= -80:
+            return "network-wireless-signal-weak-symbolic"
+        else:
+            return "network-wireless-signal-none-symbolic"
+
+    def format_time(self, seconds):
+        if seconds < 60:
+            return f"{seconds}s"
+        elif seconds < 3600:
+            m, s = divmod(seconds, 60)
+            return f"{m}m {s}s"
+        else:
+            h, rem = divmod(seconds, 3600)
+            m, s = divmod(rem, 60)
+            return f"{h}h {m}m"
 
     def on_create_button_clicked(self, button):
         """
@@ -644,6 +684,7 @@ class MainWindow:
             self.qr_image.clear()
             self.device_tracker.set_interface(None)
             self.devices_expander.set_expanded(False)
+            self.devices_expander.set_visible(False)
 
             style_context.remove_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
             style_context.add_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
@@ -707,6 +748,7 @@ class MainWindow:
             hotspot.set_network_interface(ifname)
             hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band, forwarding_enabled)
             self.device_tracker.set_interface(ifname)
+            self.devices_expander.set_visible(True)
 
             self.connection_stack.set_visible_child_name("page_connected")
             self.con_entry.set_text(ssid)
@@ -749,6 +791,8 @@ class MainWindow:
         # Remove current connection
         hotspot.remove_hotspot()
         self.device_tracker.set_interface(None)
+        self.devices_expander.set_expanded(False)
+        self.devices_expander.set_visible(False)
         enable_icon_name = "network-wireless-disabled-symbolic"
         self.settings_img.set_from_icon_name("preferences-other-symbolic",
                 Gtk.IconSize.BUTTON

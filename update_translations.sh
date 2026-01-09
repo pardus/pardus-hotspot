@@ -22,4 +22,9 @@ for lang in ${langs[@]}; do
 		echo "creating $lang.po"
 		cp po/pardus-hotspot.pot po/$lang.po
 	fi
+
+	# Generate .mo files for development
+	echo "generating $lang.mo for development"
+	mkdir -p locale/$lang/LC_MESSAGES
+	msgfmt po/$lang.po -o locale/$lang/LC_MESSAGES/pardus-hotspot.mo
 done
