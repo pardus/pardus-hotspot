@@ -21,7 +21,13 @@ except:
 
 import locale
 from locale import gettext as _
-locale.bindtextdomain('pardus-hotspot', '/usr/share/locale')
+
+# Development: ../locale, Production: /usr/share/locale
+localedir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../locale')
+if not os.path.exists(localedir):
+    localedir = '/usr/share/locale'
+
+locale.bindtextdomain('pardus-hotspot', localedir)
 locale.textdomain('pardus-hotspot')
 _ = locale.gettext
 
