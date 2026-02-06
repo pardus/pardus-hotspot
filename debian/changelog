@@ -1,3 +1,18 @@
+pardus-hotspot (2.0.0) unstable; urgency=medium
+
+  * Change log file path
+  * Handle Dbus disconnection after sleep/lock
+  * Add ui elements for connected devices
+  * Add connected devices part
+  * Integrate connected devices display
+  * Clear device tracker when settings change
+  * Add connection time and signal icons - Hide devices section when hotspot is inactive - Replace dBm text with signal strength icons - Display connected time for each device - Closes #PARDUS-1338
+  * Add mising data file - #PARDUS-1338
+  * Fix icon bug - #PARDUS-1338
+  * Add connected devices translations - Add local test suppport for translations - #PARDUS-1338
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Fri, 06 Feb 2026 09:48:47 +0300
+
 pardus-hotspot (1.1.9) unstable; urgency=medium
 
   * Change icon
