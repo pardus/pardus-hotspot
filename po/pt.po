@@ -1,14 +1,14 @@
 # Portuguese translation for pardus-hotspot.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024, 2025.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2024, 2025, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-09 11:27+0300\n"
-"PO-Revision-Date: 2025-02-09 17:58+0000\n"
+"PO-Revision-Date: 2026-02-07 17:53+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
 "Language: pt\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.5\n"
+"X-Generator: Poedit 3.8\n"
 
 #: ui/MainWindow.glade:13
 msgid "Simple hotspot application."
@@ -52,11 +52,11 @@ msgstr "Tipo de segurança:"
 
 #: ui/MainWindow.glade:462
 msgid "No devices connected"
-msgstr ""
+msgstr "Nenhum dispositivo conectado"
 
 #: ui/MainWindow.glade:498
 msgid "Connected Devices"
-msgstr ""
+msgstr "Dispositivos conectados"
 
 #: ui/MainWindow.glade:553 src/MainWindow.py:407 src/MainWindow.py:445
 #: src/MainWindow.py:681 src/MainWindow.py:800
