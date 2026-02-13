@@ -31,6 +31,7 @@ active_connection_path = None
 active_connection_proxy = None
 active_connection_props = None
 current_hotspot_uuid = None
+forwarding_configured = False
 
 
 def _is_recoverable_error(e):
@@ -288,14 +289,13 @@ def set_network_interface(iface):
 def check_ip_forwarding():
     """
     Check if system needs IP forwarding fix.
-    Returns True if Docker is installed or IP forwarding is disabled.
+    Returns True if IP forwarding is disabled (needs fix)
     """
-    docker_exists = os.path.exists('/var/run/docker.sock')
-
-    with open('/proc/sys/net/ipv4/ip_forward', 'r') as f:
-        forwarding_disabled = f.read().strip() != '1'
-
-    return docker_exists or forwarding_disabled
+    try:
+        with open('/proc/sys/net/ipv4/ip_forward', 'r') as f:
+            return f.read().strip() != '1'
+    except (OSError, IOError):
+        return True
 
 
 def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward=False):
@@ -309,7 +309,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
         band (str): Frequency band (bg = 2.4GHz, a = 5GHz)
         forward (bool): Force IP forwarding
     """
-    global current_hotspot_uuid
+    global current_hotspot_uuid, forwarding_configured
     global active_connection_path, active_connection_proxy, active_connection_props
 
     disconnect_wifi_connections()
@@ -386,12 +386,18 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
         )
 
         # For docker - ip forwarding control
-        if check_ip_forwarding() or forward:
+        # Use forwarding_configured flag to prevent repeated pkexec dialogs
+        # after sleep/wake, screen lock, or SAE-> WPA-PSK fallback
+        if (check_ip_forwarding() or forward) and not forwarding_configured:
             actions_path = os.path.dirname(os.path.abspath(__file__)) + "/Actions.py"
             try:
                 command = ["/usr/bin/pkexec", actions_path, "forward"]
-                subprocess.run(command, check=True)
-            except subprocess.CalledProcessError as e:
+                res = subprocess.run(command)
+                forwarding_configured = (res.returncode == 0)
+                if not forwarding_configured:
+                    logger.warning("User cancelled or forwarding config failed (pkexec rc=%d)", res.returncode)
+            except Exception as e:
+                forwarding_configured = False
                 logger.warning("Failed to configure IP forwarding")
                 logger.debug(f"Process error details: {e}")
 
@@ -476,6 +482,11 @@ def remove_hotspot():
     """Clean up and remove the active hotspot connection."""
     global device_path, device_proxy, device_iface
     global active_connection_path, active_connection_proxy, active_connection_props
+    global forwarding_configured
+
+    # Keep the flag in sync with the actual kernel state
+    # Only show polkit dialog when truly needed.
+    forwarding_configured = not check_ip_forwarding()
 
     # First disable any active connection
     disable_connection()
@@ -588,5 +599,7 @@ def cleanup():
     Clean up DBus connections when application exits
     Should be called before application quit.
     """
+    global forwarding_configured
+    forwarding_configured = False
     _reset_connection()
     logger.info("DBus connections cleaned up")
