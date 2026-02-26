@@ -1,3 +1,13 @@
+pardus-hotspot (2.0.1) unstable; urgency=medium
+
+  [ Hugo Carvalho ]
+  * Update Portuguese translations
+
+  [ Emel Öztürk ]
+  * Fix polkit dialog loop on sleep / wake or Sae fallback
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Thu, 26 Feb 2026 08:33:46 +0300
+
 pardus-hotspot (2.0.0) unstable; urgency=medium
 
   * Change log file path
