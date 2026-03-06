@@ -18,6 +18,7 @@ Pardus Hotspot, bilgisayarınızda kolayca bir Wi-Fi hotspot oluşturmanıza ve 
 - Otomatik yapılandırma kaydetme
 - Otomatik başlatma özelliği
 
+
 ## Kurulum
 
 ### Önkoşullar
