@@ -17,9 +17,6 @@ With its simple interface, you can quickly set up and share your internet connec
 - System tray integration
 - Automatic configuration saving
 - Autostart capability
-- View connected devices
-- Block connected devices
-- Unblock connected devices
 
 ## Installation
 
