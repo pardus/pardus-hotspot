@@ -62,6 +62,28 @@ def _reset_connection():
     active_connection_props = None
 
 
+def check_user_network_permissions():
+    """
+    Check whether current user can modify system connections in NetworkManager
+    """
+    try:
+        if os.geteuid() == 0:
+            return True, "yes"
+
+        nm_iface = _get_nm_iface()
+        permissions = nm_iface.GetPermissions()
+        permission_key = "org.freedesktop.NetworkManager.settings.modify.system"
+        state = str(permissions.get(permission_key, "unknown"))
+
+        if state == "no":
+            return False, state
+
+        return True, state
+    except Exception as e:
+        logger.debug(f"Permission pre-check failed, allowing attempt: {e}")
+        return True, "unknown"
+
+
 def _get_bus():
     """Get or create Dbus connection"""
     global _bus

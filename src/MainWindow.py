@@ -706,6 +706,19 @@ class MainWindow:
                     else "sae"
             )
 
+            has_permission, permission_state = hotspot.check_user_network_permissions()
+            if not has_permission:
+                message = "{}\n\n{}:\n\n{}\n\n{}".format(
+                    _("Network Permission Error"),
+                    _("You don't have permission to modify network settings"),
+                    "org.freedesktop.NetworkManager.settings.modify.system",
+                    _("User is not in netdev group.")
+                )
+                self.hotspot_stack.set_visible_child_name("page_errors")
+                self.warning_msgs_lbl.set_text(message)
+                self.menu_button.set_visible(False)
+                return
+
             # Check if Wi-Fi is enabled
             if not hotspot.is_wifi_enabled():
                 message = _("Please enable Wi-Fi to continue")
