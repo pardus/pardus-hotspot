@@ -13,7 +13,8 @@
     <property name="comments" translatable="yes">Simple hotspot application.</property>
     <property name="website">https://github.com/pardus/pardus-hotspot</property>
     <property name="authors">Emel Öztürk
-Ali Rıza Keskin</property>
+Ali Rıza Keskin 
+Emre KILIÇARSLAN</property>
     <property name="translator-credits">Emel Öztürk
 </property>
     <property name="logo-icon-name">pardus-hotspot</property>
@@ -70,7 +71,7 @@ Ali Rıza Keskin</property>
                 <property name="margin-top">10</property>
                 <property name="margin-bottom">2</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">3</property>
+                <property name="spacing">3</property>(senin kod)
                 <child>
                   <object class="GtkSeparator">
                     <property name="visible">True</property>
@@ -101,7 +102,7 @@ Ali Rıza Keskin</property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">False</property>(senin kod)
                 <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
@@ -495,7 +496,7 @@ Ali Rıza Keskin</property>
                               <object class="GtkLabel" id="devices_header_label">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="label" translatable="yes">Connected Devices</property>
+                                <property name="label" translatable="yes">Bağlı Cihazlar</property>
                                 <attributes>
                                   <attribute name="weight" value="bold"/>
                                 </attributes>
@@ -901,6 +902,113 @@ Ali Rıza Keskin</property>
           </packing>
         </child>
         <child>
+          <object class="GtkBox" id="blocked_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-top">16</property>
+            <property name="margin-start">16</property>
+            <property name="margin-end">16</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkButton" id="blocked_home_button">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="relief">none</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="icon-name">go-previous-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Engellenen Cihazlar</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                      <attribute name="size" value="14000"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="blocked_scrolled">
+                <property name="visible">True</property>
+                <property name="can-focus">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="min-content-height">80</property>
+                <property name="max-content-height">320</property>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="blocked_empty_label">
+                <property name="can-focus">False</property>
+                <property name="opacity">0.6</property>
+                <property name="margin-top">30</property>
+                <property name="margin-bottom">30</property>
+                <property name="label" translatable="yes">Engellenen cihaz yok.</property>
+                <attributes>
+                  <attribute name="style" value="italic"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="name">page_blocked</property>
+            <property name="title">page_blocked</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkBox" id="errors_box">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
@@ -1014,15 +1122,17 @@ Ali Rıza Keskin</property>
     <property name="can-focus">False</property>
     <property name="relative-to">menu_button</property>
     <property name="position">bottom</property>
+    <property name="width-request">300</property>
     <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="margin-start">5</property>
-        <property name="margin-end">5</property>
-        <property name="margin-top">5</property>
-        <property name="margin-bottom">5</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
         <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
         <child>
           <object class="GtkButton" id="menu_settings">
             <property name="visible">True</property>
@@ -1076,6 +1186,61 @@ Ali Rıza Keskin</property>
             <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="menu_blocked">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="relief">none</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">network-offline-symbolic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="label" translatable="yes">Engellenenler</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSeparator">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>

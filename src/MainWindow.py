@@ -156,6 +156,19 @@ class MainWindow:
 
         # Signals
         self.menu_about.connect("clicked", self.on_menu_about_clicked)
+        self.menu_blocked = self.builder.get_object("menu_blocked")
+        self.menu_blocked.connect("clicked", self.on_menu_blocked_clicked)
+
+        # Blocked page
+        self.blocked_scrolled = self.builder.get_object("blocked_scrolled")
+        self.blocked_empty_label = self.builder.get_object("blocked_empty_label")
+        self.blocked_home_button = self.builder.get_object("blocked_home_button")
+        self.blocked_home_button.connect("clicked", self.on_blocked_home_clicked)
+
+        self.blocked_listbox = Gtk.ListBox()
+        self.blocked_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.blocked_scrolled.add(self.blocked_listbox)
+        self.blocked_listbox.show()
         self.menu_settings.connect("clicked", self.on_menu_settings_clicked)
         self.create_button.connect("clicked", self.on_create_button_clicked)
         self.ok_button.connect("clicked", self.on_ok_button_clicked)
@@ -589,7 +602,7 @@ class MainWindow:
         self.devices_listbox.show_all()
 
     def _create_device_row(self, device):
-        """Create a single device row widget."""
+        """Create a single device row widget with a block button."""
         row = Gtk.ListBoxRow()
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         box.set_margin_top(6)
@@ -603,13 +616,14 @@ class MainWindow:
         )
         box.pack_start(icon, False, False, 0)
 
-        # Info box (MAC + IP)
+        # Info box (MAC + IP + time)
         info_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
 
-        mac_label = Gtk.Label(label=device["mac"])
-        mac_label.set_xalign(0)
-        mac_label.get_style_context().add_class("heading")
-        info_box.pack_start(mac_label, False, False, 0)
+        hostname = device.get("hostname", "") or device["mac"]
+        name_label = Gtk.Label(label=hostname)
+        name_label.set_xalign(0)
+        name_label.get_style_context().add_class("heading")
+        info_box.pack_start(name_label, False, False, 0)
 
         if device["ip"]:
             ip_label = Gtk.Label(label=device["ip"])
@@ -617,24 +631,60 @@ class MainWindow:
             ip_label.get_style_context().add_class("dim-label")
             info_box.pack_start(ip_label, False, False, 0)
 
+        mac_sub = Gtk.Label(label=device["mac"])
+        mac_sub.set_xalign(0)
+        mac_sub.get_style_context().add_class("dim-label")
+        info_box.pack_start(mac_sub, False, False, 0)
+
         if device["time"] is not None:
-            time_str = self.format_time(device["time"])
-            time_label = Gtk.Label(label=time_str)
+            time_label = Gtk.Label(label=self.format_time(device["time"]))
             time_label.set_xalign(0)
             time_label.get_style_context().add_class("dim-label")
             info_box.pack_start(time_label, False, False, 0)
 
         box.pack_start(info_box, True, True, 0)
 
+        # Signal icon
         if device["signal"] is not None:
-            icon_name = self.get_signal_icon(device["signal"])
             signal_icon = Gtk.Image.new_from_icon_name(
-                icon_name, Gtk.IconSize.LARGE_TOOLBAR
+                self.get_signal_icon(device["signal"]), Gtk.IconSize.LARGE_TOOLBAR
             )
             box.pack_end(signal_icon, False, False, 0)
 
+        # Block button
+        block_btn = Gtk.Button()
+        block_btn.set_tooltip_text(_("Block device"))
+        block_btn.get_style_context().add_class("destructive-action")
+        block_btn.set_relief(Gtk.ReliefStyle.NONE)
+
+        btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        btn_icon = Gtk.Image.new_from_icon_name("network-offline-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
+        btn_label = Gtk.Label(label=_("Block"))
+        btn_box.pack_start(btn_icon, False, False, 0)
+        btn_box.pack_start(btn_label, False, False, 0)
+        block_btn.add(btn_box)
+
+        mac = device["mac"]
+        block_btn.connect(
+            "clicked",
+            lambda btn, m=mac, r=row: self._on_block_device_clicked(btn, m, r)
+        )
+
+        box.pack_end(block_btn, False, False, 0)
+
         row.add(box)
         return row
+
+    def _on_block_device_clicked(self, button, mac, row):
+        button.set_sensitive(False)
+        GLib.idle_add(self._do_block_device, mac, row)
+
+    def _do_block_device(self, mac, row):
+        self.device_tracker.block_device(mac)
+        if row.get_parent():
+            self.devices_listbox.remove(row)
+        self.update_connected_devices()
+        return False
 
     def get_signal_icon(self, signal):
         """Get WiFi icon based on signal strength."""
@@ -844,3 +894,102 @@ class MainWindow:
         )
         self.settings_lbl.set_text(_("Settings"))
         self.item_settings.set_label(_("Settings"))
+
+    # ------------------------------------------------------------------ #
+    #  Engellenenler Paneli                                               #
+    # ------------------------------------------------------------------ #
+
+    def on_menu_blocked_clicked(self, button):
+        self.menu_popover.popdown()
+        self.hotspot_stack.set_visible_child_name("page_blocked")
+        self.header_bar.set_title(_("Engellenen Cihazlar"))
+        self.menu_button.set_visible(False)
+        self._refresh_blocked_page()
+
+    def on_blocked_home_clicked(self, button):
+        self.hotspot_stack.set_visible_child_name("page_main")
+        self.header_bar.set_title(_("Pardus Hotspot"))
+        self.menu_button.set_visible(True)
+
+    def _refresh_blocked_page(self):
+        for child in self.blocked_listbox.get_children():
+            self.blocked_listbox.remove(child)
+
+        blocked = self.device_tracker._get_blocked_macs()
+
+        # ARP tablosu interface gerektiriyor, güvenli şekilde al
+        try:
+            arp = self.device_tracker._get_arp_table() if self.device_tracker._interface else {}
+        except Exception:
+            arp = {}
+
+        self.blocked_empty_label.set_visible(len(blocked) == 0)
+        self.blocked_scrolled.set_visible(len(blocked) > 0)
+
+        for mac in blocked:
+            row = self._create_blocked_row(mac, arp)
+            self.blocked_listbox.add(row)
+
+        self.blocked_listbox.show_all()
+
+    def _create_blocked_row(self, mac, arp_table):
+        row = Gtk.ListBoxRow()
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+        box.set_margin_top(8)
+        box.set_margin_bottom(8)
+        box.set_margin_start(12)
+        box.set_margin_end(12)
+
+        icon = Gtk.Image.new_from_icon_name("network-offline-symbolic", Gtk.IconSize.LARGE_TOOLBAR)
+        box.pack_start(icon, False, False, 0)
+
+        info_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+
+        ip = arp_table.get(mac.lower(), "")
+        hostname = self.device_tracker._resolve_hostname(ip) if ip else ""
+        display_name = hostname or mac.upper()
+
+        name_lbl = Gtk.Label(label=display_name)
+        name_lbl.set_xalign(0)
+        name_lbl.get_style_context().add_class("heading")
+        info_box.pack_start(name_lbl, False, False, 0)
+
+        mac_lbl = Gtk.Label(label=mac.upper())
+        mac_lbl.set_xalign(0)
+        mac_lbl.get_style_context().add_class("dim-label")
+        info_box.pack_start(mac_lbl, False, False, 0)
+
+        if ip:
+            ip_lbl = Gtk.Label(label=ip)
+            ip_lbl.set_xalign(0)
+            ip_lbl.get_style_context().add_class("dim-label")
+            info_box.pack_start(ip_lbl, False, False, 0)
+
+        box.pack_start(info_box, True, True, 0)
+
+        unblock_btn = Gtk.Button()
+        unblock_btn.set_tooltip_text(_("Engeli Kaldır"))
+        unblock_btn.set_relief(Gtk.ReliefStyle.NONE)
+        unblock_btn.get_style_context().add_class("suggested-action")
+
+        btn_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        btn_icon = Gtk.Image.new_from_icon_name("network-transmit-receive-symbolic", Gtk.IconSize.SMALL_TOOLBAR)
+        btn_lbl = Gtk.Label(label=_("Engeli Kaldır"))
+        btn_box.pack_start(btn_icon, False, False, 0)
+        btn_box.pack_start(btn_lbl, False, False, 0)
+        unblock_btn.add(btn_box)
+
+        unblock_btn.connect(
+            "clicked",
+            lambda btn, m=mac, r=row: self._on_unblock_clicked(btn, m, r)
+        )
+        box.pack_end(unblock_btn, False, False, 0)
+        row.add(box)
+        return row
+
+    def _on_unblock_clicked(self, button, mac, row):
+        button.set_sensitive(False)
+        self.device_tracker.unblock_device(mac)
+        if row.get_parent():
+            self.blocked_listbox.remove(row)
+        GLib.idle_add(self._refresh_blocked_page)
