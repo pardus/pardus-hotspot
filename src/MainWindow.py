@@ -714,11 +714,9 @@ class MainWindow:
 
             has_permission, permission_state = hotspot.check_user_network_permissions()
             if not has_permission:
-                message = "{}\n\n{}:\n\n{} = {}\n\n{}".format(
+                message = "{}\n\n{}\n\n{}".format(
                     _("Network Permission Error"),
-                    _("You don't have permission to modify network settings"),
-                    "org.freedesktop.NetworkManager.settings.modify.system",
-                    permission_state,
+                    _("You don't have permission to modify network settings."),
                     _("User is not in netdev group.")
                 )
                 self.hotspot_stack.set_visible_child_name("page_errors")

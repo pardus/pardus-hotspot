@@ -3,6 +3,8 @@ import dbus.exceptions
 import uuid
 import time
 import os
+import grp
+import pwd
 import subprocess
 from logging_config import get_logger
 
@@ -64,21 +66,23 @@ def _reset_connection():
 
 def check_user_network_permissions():
     """
-    Check whether current user can modify system connections in NetworkManager
+    Check whether current user is in netdev group
     """
     try:
         if os.geteuid() == 0:
             return True, "yes"
 
-        nm_iface = _get_nm_iface()
-        permissions = nm_iface.GetPermissions()
-        permission_key = "org.freedesktop.NetworkManager.settings.modify.system"
-        state = str(permissions.get(permission_key, "unknown"))
+        username = pwd.getpwuid(os.getuid()).pw_name
+        netdev_group = grp.getgrnam("netdev")
 
-        if state == "no":
-            return False, state
+        if username in netdev_group.gr_mem:
+            return True, "yes"
 
-        return True, state
+        logger.info("User is not in netdev group")
+        return False, "no"
+    except KeyError:
+        # netdev group doesn't exist
+        return True, "unknown"
     except Exception as e:
         logger.debug(f"Permission pre-check failed, allowing attempt: {e}")
         return True, "unknown"
