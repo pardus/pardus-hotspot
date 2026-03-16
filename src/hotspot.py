@@ -72,17 +72,16 @@ def check_user_network_permissions():
         if os.geteuid() == 0:
             return True, "yes"
 
-        username = pwd.getpwuid(os.getuid()).pw_name
-        netdev_group = grp.getgrnam("netdev")
+        group_ids = set(os.getgroups())
+        group_ids.add(os.getgid())
+        group_ids.add(os.getegid())
+        group_names = {grp.getgrgid(gid).gr_name for gid in group_ids}
 
-        if username in netdev_group.gr_mem:
-            return True, "yes"
+        if "netdev" not in group_names:
+            logger.info("User is not in netdev group")
+            return False, "no"
 
-        logger.info("User is not in netdev group")
-        return False, "no"
-    except KeyError:
-        # netdev group doesn't exist
-        return True, "unknown"
+        return True, "yes"
     except Exception as e:
         logger.debug(f"Permission pre-check failed, allowing attempt: {e}")
         return True, "unknown"
