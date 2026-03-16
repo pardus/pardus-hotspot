@@ -946,6 +946,31 @@ Ali Rıza Keskin</property>
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkButton" id="grant_netdev_button">
+                    <property name="label" translatable="yes">Add to Group</property>
+                    <property name="width-request">150</property>
+                    <property name="visible">False</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">True</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="margin-left">50</property>
+                    <property name="margin-right">50</property>
+                    <property name="margin-start">50</property>
+                    <property name="margin-end">50</property>
+                    <property name="margin-top">20</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">5</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkButton" id="ok_button">
                     <property name="label" translatable="yes">OK</property>
                     <property name="width-request">100</property>

@@ -91,6 +91,7 @@ class MainWindow:
         self.menu_button = self.builder.get_object("menu_button")
         self.create_button = self.builder.get_object("create_button")
         self.ok_button = self.builder.get_object("ok_button")
+        self.grant_netdev_button = self.builder.get_object("grant_netdev_button")
         self.menu_about = self.builder.get_object("menu_about")
         self.menu_settings = self.builder.get_object("menu_settings")
         self.home_button = self.builder.get_object("home_button")
@@ -159,6 +160,7 @@ class MainWindow:
         self.menu_settings.connect("clicked", self.on_menu_settings_clicked)
         self.create_button.connect("clicked", self.on_create_button_clicked)
         self.ok_button.connect("clicked", self.on_ok_button_clicked)
+        self.grant_netdev_button.connect("clicked", self.on_grant_netdev_button_clicked)
         self.password_entry.connect("changed", self.on_password_entry_changed)
         self.password_entry.connect("icon-press", self.password_entry_icon_press)
         self.password_entry.connect("icon-release", self.password_entry_icon_release)
@@ -196,6 +198,10 @@ class MainWindow:
         # Device tracker
         self.device_tracker = ConnectedDevices()
         self.devices_expander.set_visible(False)
+
+        # Group add process state
+        self.group_add_error_message = ""
+        self.group_add_in_progress = False
 
         self.band_combo.set_active(0)       # Set default: 2.4Ghz
         self.encrypt_combo.set_active(1)    # Set default: SAE
@@ -717,6 +723,7 @@ class MainWindow:
                 )
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
+                self.grant_netdev_button.set_visible(True)
                 self.menu_button.set_visible(False)
                 return
 
@@ -725,6 +732,7 @@ class MainWindow:
                 message = _("Please enable Wi-Fi to continue")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
+                self.grant_netdev_button.set_visible(False)
                 self.menu_button.set_visible(False)
                 return
 
@@ -733,6 +741,7 @@ class MainWindow:
                 message = _("Please select a network interface for the hotspot")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
+                self.grant_netdev_button.set_visible(False)
                 self.menu_button.set_visible(False)
                 return
 
@@ -741,6 +750,7 @@ class MainWindow:
                 message = _("Please enter a name for your hotspot connection")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
+                self.grant_netdev_button.set_visible(False)
                 self.menu_button.set_visible(False)
                 return
 
@@ -749,6 +759,7 @@ class MainWindow:
                 message = _("Password must be at least 8 characters long")
                 self.hotspot_stack.set_visible_child_name("page_errors")
                 self.warning_msgs_lbl.set_text(message)
+                self.grant_netdev_button.set_visible(False)
                 self.menu_button.set_visible(False)
                 return
 
@@ -792,9 +803,84 @@ class MainWindow:
 
 
     def on_ok_button_clicked(self, button):
-        # Send a speacial flag if you want to exit !
         self.hotspot_stack.set_visible_child_name("page_main")
         self.menu_button.set_visible(True)
+        self.grant_netdev_button.set_visible(False)
+
+
+    def on_grant_netdev_button_clicked(self, button):
+        """
+        Run pkexec to add the current user to the netdev group
+        """
+        if self.group_add_in_progress:
+            return
+
+        self.group_add_in_progress = True
+        self.group_add_error_message = ""
+        self.grant_netdev_button.set_sensitive(False)
+
+        user_name = GLib.get_user_name()
+        group_add_script = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            "group_add.py"
+        )
+        command = ["/usr/bin/pkexec", group_add_script, user_name, "netdev"]
+
+        try:
+            pid, stdin, stdout, stderr = GLib.spawn_async(
+                command,
+                flags=GLib.SpawnFlags.DO_NOT_REAP_CHILD,
+                standard_output=True,
+                standard_error=True
+            )
+            GLib.io_add_watch(
+                GLib.IOChannel(stderr), GLib.IO_IN | GLib.IO_HUP,
+                self.on_group_add_stderr
+            )
+            GLib.child_watch_add(
+                GLib.PRIORITY_DEFAULT, pid, self.on_group_add_exit
+            )
+        except Exception as e:
+            self.group_add_in_progress = False
+            self.grant_netdev_button.set_sensitive(True)
+            self.warning_msgs_lbl.set_text(
+                _("Failed to add user to the netdev group.")
+            )
+
+
+    def on_group_add_stderr(self, source, condition):
+        if condition == GLib.IO_HUP:
+            return False
+        line = source.readline()
+        self.group_add_error_message = line
+        return True
+
+
+    def on_group_add_exit(self, pid, status):
+        self.group_add_in_progress = False
+        self.grant_netdev_button.set_sensitive(True)
+
+        if status == 0:
+            self.grant_netdev_button.set_visible(False)
+            self.warning_msgs_lbl.set_text(
+                _("User has been added to the netdev group.") + "\n\n" +
+                _("You need to reboot your system for group permissions to take effect.")
+            )
+        elif status == 32256:
+            # pkexec: operation cancelled / Request dismissed
+            pass
+        else:
+            if self.group_add_error_message:
+                self.warning_msgs_lbl.set_text(
+                    "{}\n\n{}".format(
+                        _("Failed to add user to the netdev group."),
+                        self.group_add_error_message
+                    )
+                )
+            else:
+                self.warning_msgs_lbl.set_text(
+                    _("Failed to add user to the netdev group.")
+                )
 
 
     def on_settings_changed(self):

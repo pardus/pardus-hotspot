@@ -5,7 +5,6 @@
 <policyconfig>
     <vendor>Pardus</vendor>
     <vendor_url>https://www.pardus.org.tr/</vendor_url>
-
     <action id="tr.org.pardus.pkexec.hotspot">
         <description>Run Hotspot Commands</description>
         <message>Authentication is required to modify network settings</message>
@@ -16,6 +15,18 @@
             <allow_active>auth_admin_keep</allow_active>
         </defaults>
         <annotate key="org.freedesktop.policykit.exec.path">/usr/share/pardus/pardus-hotspot/src/Actions.py</annotate>
+        <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+    </action>
+    <action id="tr.org.pardus.pkexec.hotspot-groupadd">
+        <description>Add User to Network Group</description>
+        <message>Authentication is required to add user to network group</message>
+        <message xml:lang="tr">Kullanıcıyı ağ grubuna eklemek için yetkilendirme gerekiyor</message>
+        <defaults>
+            <allow_any>auth_admin</allow_any>
+            <allow_inactive>auth_admin</allow_inactive>
+            <allow_active>auth_admin_keep</allow_active>
+        </defaults>
+        <annotate key="org.freedesktop.policykit.exec.path">/usr/share/pardus/pardus-hotspot/src/group_add.py</annotate>
         <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
     </action>
 </policyconfig>
