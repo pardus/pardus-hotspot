@@ -1,3 +1,17 @@
+pardus-hotspot (2.0.2) unstable; urgency=medium
+
+  * Fix infinite polkit dialog for unauthorized users
+  * Edit error msg
+  * Add pkexec based netdev group permission flow
+  * Use grp/pwd for netdev group check
+  * Add new file for deb pack
+  * Edit permission check
+  * Fix group addition & reboot check
+  * Edit err page padding
+  * Add translations
+
+ -- Emel Öztürk <emel.ozturk@pardus.org.tr>  Fri, 27 Mar 2026 12:43:09 +0300
+
 pardus-hotspot (2.0.1) unstable; urgency=medium
 
   [ Hugo Carvalho ]
