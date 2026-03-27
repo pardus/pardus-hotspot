@@ -730,7 +730,7 @@ class MainWindow:
                     )
                     self.grant_netdev_button.set_visible(False)
                 else:
-                    self.warning_msgs_lbl.set_text("{}\n\n{}\n\n{}".format(
+                    self.warning_msgs_lbl.set_text("{}\n{}\n{}".format(
                         _("Network Permission Error"),
                         _("You don't have permission to modify network settings."),
                         _("User is not in netdev group.")

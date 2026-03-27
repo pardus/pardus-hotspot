@@ -909,8 +909,6 @@ Ali Rıza Keskin</property>
               <object class="GtkImage" id="warning_img">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="margin-left">50</property>
-                <property name="margin-right">50</property>
                 <property name="margin-start">50</property>
                 <property name="margin-end">50</property>
                 <property name="margin-top">30</property>
@@ -930,7 +928,7 @@ Ali Rıza Keskin</property>
                 <property name="can-focus">False</property>
                 <property name="margin-start">50</property>
                 <property name="margin-end">50</property>
-                <property name="margin-top">30</property>
+                <property name="margin-top">10</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="warning_msgs_lbl">
@@ -979,16 +977,14 @@ Ali Rıza Keskin</property>
                     <property name="receives-default">True</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
-                    <property name="margin-left">50</property>
-                    <property name="margin-right">50</property>
                     <property name="margin-start">50</property>
                     <property name="margin-end">50</property>
-                    <property name="margin-top">20</property>
+                    <property name="margin-top">10</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="padding">20</property>
+                    <property name="padding">5</property>
                     <property name="position">3</property>
                   </packing>
                 </child>
