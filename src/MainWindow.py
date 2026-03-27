@@ -2,6 +2,7 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gtk, GLib, GdkPixbuf
+import grp
 import os
 import qrcode
 import io
@@ -714,15 +715,27 @@ class MainWindow:
 
             has_permission, permission_state = hotspot.check_user_network_permissions()
             if not has_permission:
-                message = "{}\n\n{}\n\n{}".format(
-                    _("Network Permission Error"),
-                    _("You don't have permission to modify network settings."),
-                    _("User is not in netdev group.")
-                )
+                user_in_netdev = False
+                try:
+                    user_in_netdev = GLib.get_user_name() in grp.getgrnam("netdev").gr_mem
+                except KeyError:
+                    pass
+
                 self.hotspot_stack.set_visible_child_name("page_errors")
-                self.warning_msgs_lbl.set_text(message)
-                self.grant_netdev_button.set_visible(True)
                 self.menu_button.set_visible(False)
+
+                if user_in_netdev:
+                    self.warning_msgs_lbl.set_text(
+                        _("You need to reboot your system for group permissions to take effect.")
+                    )
+                    self.grant_netdev_button.set_visible(False)
+                else:
+                    self.warning_msgs_lbl.set_text("{}\n\n{}\n\n{}".format(
+                        _("Network Permission Error"),
+                        _("You don't have permission to modify network settings."),
+                        _("User is not in netdev group.")
+                    ))
+                    self.grant_netdev_button.set_visible(True)
                 return
 
             # Check if Wi-Fi is enabled

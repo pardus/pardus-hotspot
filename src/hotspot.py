@@ -4,7 +4,6 @@ import uuid
 import time
 import os
 import grp
-import pwd
 import subprocess
 from logging_config import get_logger
 
