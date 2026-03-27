@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-09 11:27+0300\n"
+"POT-Creation-Date: 2026-03-27 11:49+0300\n"
 "PO-Revision-Date: 2026-02-07 17:53+0000\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
@@ -58,13 +58,13 @@ msgstr "Nenhum dispositivo conectado"
 msgid "Connected Devices"
 msgstr "Dispositivos conectados"
 
-#: ui/MainWindow.glade:553 src/MainWindow.py:407 src/MainWindow.py:445
-#: src/MainWindow.py:681 src/MainWindow.py:800
+#: ui/MainWindow.glade:553 src/MainWindow.py:414 src/MainWindow.py:452
+#: src/MainWindow.py:688 src/MainWindow.py:911
 msgid "Create Hotspot"
 msgstr "Criar hotspot"
 
-#: ui/MainWindow.glade:571 ui/MainWindow.glade:991 src/MainWindow.py:253
-#: src/MainWindow.py:518 src/MainWindow.py:827
+#: ui/MainWindow.glade:571 ui/MainWindow.glade:1012 src/MainWindow.py:260
+#: src/MainWindow.py:525 src/MainWindow.py:938
 msgid "Pardus Hotspot"
 msgstr "Hotspot Pardus"
 
@@ -100,7 +100,7 @@ msgstr "Ativar o reencaminhamento de IP:"
 msgid "IP forwarding requires root privileges"
 msgstr "O reencaminhamento de IP requer privilégios root"
 
-#: ui/MainWindow.glade:824 src/MainWindow.py:506 src/MainWindow.py:507
+#: ui/MainWindow.glade:824 src/MainWindow.py:513 src/MainWindow.py:514
 msgid "Home Page"
 msgstr "Página inicial"
 
@@ -108,69 +108,97 @@ msgstr "Página inicial"
 msgid "Restore Defaults"
 msgstr "Repor predefinições"
 
-#: ui/MainWindow.glade:899 ui/MainWindow.glade:1053 src/MainWindow.py:262
-#: src/MainWindow.py:516 src/MainWindow.py:517 src/MainWindow.py:831
-#: src/MainWindow.py:832
+#: ui/MainWindow.glade:899 ui/MainWindow.glade:1074 src/MainWindow.py:269
+#: src/MainWindow.py:523 src/MainWindow.py:524 src/MainWindow.py:942
+#: src/MainWindow.py:943
 msgid "Settings"
 msgstr "Definições"
 
-#: ui/MainWindow.glade:950
+#: ui/MainWindow.glade:948
+msgid "Add to Group"
+msgstr ""
+
+#: ui/MainWindow.glade:973
 msgid "OK"
 msgstr "OK"
 
-#: ui/MainWindow.glade:981
+#: ui/MainWindow.glade:1002
 msgid "Error"
 msgstr "Erro"
 
-#: ui/MainWindow.glade:1108
+#: ui/MainWindow.glade:1129
 msgid "About"
 msgstr "Acerca"
 
-#: src/MainWindow.py:259 src/MainWindow.py:286 src/MainWindow.py:295
-#: src/MainWindow.py:303
+#: src/MainWindow.py:266 src/MainWindow.py:293 src/MainWindow.py:302
+#: src/MainWindow.py:310
 msgid "Show App"
 msgstr "Mostrar aplicação"
 
-#: src/MainWindow.py:265 src/MainWindow.py:408 src/MainWindow.py:682
+#: src/MainWindow.py:272 src/MainWindow.py:415 src/MainWindow.py:689
 msgid "Enable"
 msgstr "Ativar"
 
-#: src/MainWindow.py:271
+#: src/MainWindow.py:278
 msgid "Quit"
 msgstr "Sair"
 
-#: src/MainWindow.py:288 src/MainWindow.py:298 src/MainWindow.py:524
+#: src/MainWindow.py:295 src/MainWindow.py:305 src/MainWindow.py:531
 msgid "Hide App"
 msgstr "Ocultar aplicação"
 
-#: src/MainWindow.py:375 src/MainWindow.py:455 src/MainWindow.py:489
-#: src/MainWindow.py:677 src/MainWindow.py:767
+#: src/MainWindow.py:382 src/MainWindow.py:462 src/MainWindow.py:496
+#: src/MainWindow.py:684 src/MainWindow.py:803
 msgid "Disable Connection"
 msgstr "Desativar ligação"
 
-#: src/MainWindow.py:376 src/MainWindow.py:768
+#: src/MainWindow.py:383 src/MainWindow.py:804
 msgid "Disable"
 msgstr "Desativar"
 
-#: src/MainWindow.py:521
+#: src/MainWindow.py:528
 msgid "Hotspot Settings"
 msgstr "Definições do Hotspot"
 
-#: src/MainWindow.py:711
+#: src/MainWindow.py:729 src/MainWindow.py:878
+msgid "You need to reboot your system for group permissions to take effect."
+msgstr ""
+
+#: src/MainWindow.py:734
+msgid "Network Permission Error"
+msgstr ""
+
+#: src/MainWindow.py:735
+msgid "You don't have permission to modify network settings."
+msgstr ""
+
+#: src/MainWindow.py:736
+msgid "User is not in netdev group."
+msgstr ""
+
+#: src/MainWindow.py:743
 msgid "Please enable Wi-Fi to continue"
 msgstr "Ativar o Wi-Fi para continuar"
 
-#: src/MainWindow.py:719
+#: src/MainWindow.py:752
 msgid "Please select a network interface for the hotspot"
 msgstr "Selecionar uma interface de rede para o hotspot"
 
-#: src/MainWindow.py:727
+#: src/MainWindow.py:761
 msgid "Please enter a name for your hotspot connection"
 msgstr "Introduzir um nome para a sua ligação hotspot"
 
-#: src/MainWindow.py:735
+#: src/MainWindow.py:770
 msgid "Password must be at least 8 characters long"
 msgstr "A palavra-passe deve ter pelo menos 8 caracteres"
+
+#: src/MainWindow.py:858 src/MainWindow.py:887 src/MainWindow.py:893
+msgid "Failed to add user to the netdev group."
+msgstr ""
+
+#: src/MainWindow.py:877
+msgid "User has been added to the netdev group."
+msgstr ""
 
 #: src/network_utils.py:36
 msgid "No wireless interfaces available"

@@ -2,14 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# Emel Öztürk <emel.ozturk@pardus.org.tr>, 2024-2025.
+# Emel Öztürk <emel.ozturk@pardus.org.tr>, 2024-2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-09 11:27+0300\n"
-"PO-Revision-Date: 2025-01-16 10:50+0300\n"
+"POT-Creation-Date: 2026-03-27 11:49+0300\n"
+"PO-Revision-Date: 2026-03-27 12:42+0300\n"
 "Last-Translator: Emel Öztürk <emel.ozturk@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 42.0\n"
+"X-Generator: Gtranslator 48.0\n"
 
 #: ui/MainWindow.glade:13
 msgid "Simple hotspot application."
@@ -59,13 +59,13 @@ msgstr "Bağlı cihaz yok"
 msgid "Connected Devices"
 msgstr "Bağlı Cihazlar"
 
-#: ui/MainWindow.glade:553 src/MainWindow.py:407 src/MainWindow.py:445
-#: src/MainWindow.py:681 src/MainWindow.py:800
+#: ui/MainWindow.glade:553 src/MainWindow.py:414 src/MainWindow.py:452
+#: src/MainWindow.py:688 src/MainWindow.py:911
 msgid "Create Hotspot"
 msgstr "Kablosuz Erişim Noktası Oluştur"
 
-#: ui/MainWindow.glade:571 ui/MainWindow.glade:991 src/MainWindow.py:253
-#: src/MainWindow.py:518 src/MainWindow.py:827
+#: ui/MainWindow.glade:571 ui/MainWindow.glade:1012 src/MainWindow.py:260
+#: src/MainWindow.py:525 src/MainWindow.py:938
 msgid "Pardus Hotspot"
 msgstr "Pardus Kablosuz Erişim Noktası"
 
@@ -101,7 +101,7 @@ msgstr "IP Yönlendirmesini Etkinleştir:"
 msgid "IP forwarding requires root privileges"
 msgstr "IP yönlendirmesi yönetici yetkileri gerektirir"
 
-#: ui/MainWindow.glade:824 src/MainWindow.py:506 src/MainWindow.py:507
+#: ui/MainWindow.glade:824 src/MainWindow.py:513 src/MainWindow.py:514
 msgid "Home Page"
 msgstr "Ana Sayfa"
 
@@ -109,69 +109,99 @@ msgstr "Ana Sayfa"
 msgid "Restore Defaults"
 msgstr "Varsayılanlara Dön"
 
-#: ui/MainWindow.glade:899 ui/MainWindow.glade:1053 src/MainWindow.py:262
-#: src/MainWindow.py:516 src/MainWindow.py:517 src/MainWindow.py:831
-#: src/MainWindow.py:832
+#: ui/MainWindow.glade:899 ui/MainWindow.glade:1074 src/MainWindow.py:269
+#: src/MainWindow.py:523 src/MainWindow.py:524 src/MainWindow.py:942
+#: src/MainWindow.py:943
 msgid "Settings"
 msgstr "Ayarlar"
 
-#: ui/MainWindow.glade:950
+#: ui/MainWindow.glade:948
+msgid "Add to Group"
+msgstr "Gruba Ekle"
+
+#: ui/MainWindow.glade:973
 msgid "OK"
 msgstr "Tamam"
 
-#: ui/MainWindow.glade:981
+#: ui/MainWindow.glade:1002
 msgid "Error"
 msgstr "Hata"
 
-#: ui/MainWindow.glade:1108
+#: ui/MainWindow.glade:1129
 msgid "About"
 msgstr "Hakkında"
 
-#: src/MainWindow.py:259 src/MainWindow.py:286 src/MainWindow.py:295
-#: src/MainWindow.py:303
+#: src/MainWindow.py:266 src/MainWindow.py:293 src/MainWindow.py:302
+#: src/MainWindow.py:310
 msgid "Show App"
 msgstr "Göster"
 
-#: src/MainWindow.py:265 src/MainWindow.py:408 src/MainWindow.py:682
+#: src/MainWindow.py:272 src/MainWindow.py:415 src/MainWindow.py:689
 msgid "Enable"
 msgstr "Etkinleştir"
 
-#: src/MainWindow.py:271
+#: src/MainWindow.py:278
 msgid "Quit"
 msgstr "Çıkış"
 
-#: src/MainWindow.py:288 src/MainWindow.py:298 src/MainWindow.py:524
+#: src/MainWindow.py:295 src/MainWindow.py:305 src/MainWindow.py:531
 msgid "Hide App"
 msgstr "Gizle"
 
-#: src/MainWindow.py:375 src/MainWindow.py:455 src/MainWindow.py:489
-#: src/MainWindow.py:677 src/MainWindow.py:767
+#: src/MainWindow.py:382 src/MainWindow.py:462 src/MainWindow.py:496
+#: src/MainWindow.py:684 src/MainWindow.py:803
 msgid "Disable Connection"
 msgstr "Bağlantıyı Kapat"
 
-#: src/MainWindow.py:376 src/MainWindow.py:768
+#: src/MainWindow.py:383 src/MainWindow.py:804
 msgid "Disable"
 msgstr "Devre Dışı Bırak"
 
-#: src/MainWindow.py:521
+#: src/MainWindow.py:528
 msgid "Hotspot Settings"
 msgstr "Kablosuz Erişim Noktası Ayarları"
 
-#: src/MainWindow.py:711
+#: src/MainWindow.py:729 src/MainWindow.py:878
+msgid "You need to reboot your system for group permissions to take effect."
+msgstr ""
+"Grup izinlerinin geçerli olması için sisteminizi yeniden başlatmanız "
+"gerekiyor."
+
+#: src/MainWindow.py:734
+msgid "Network Permission Error"
+msgstr "Ağ İzin Hatası"
+
+#: src/MainWindow.py:735
+msgid "You don't have permission to modify network settings."
+msgstr "Ağ ayarlarını değiştirmek için izniniz yok."
+
+#: src/MainWindow.py:736
+msgid "User is not in netdev group."
+msgstr "Kullanıcı netdev grubunda değil."
+
+#: src/MainWindow.py:743
 msgid "Please enable Wi-Fi to continue"
 msgstr "Devam etmek için Wi-Fi açın"
 
-#: src/MainWindow.py:719
+#: src/MainWindow.py:752
 msgid "Please select a network interface for the hotspot"
 msgstr "Lütfen kablosuz erişim noktası için bir ağ arayüzü seçin"
 
-#: src/MainWindow.py:727
+#: src/MainWindow.py:761
 msgid "Please enter a name for your hotspot connection"
 msgstr "Lütfen kablosuz erişim noktanız için bir isim girin"
 
-#: src/MainWindow.py:735
+#: src/MainWindow.py:770
 msgid "Password must be at least 8 characters long"
 msgstr "Parola en az 8 karakter uzunluğunda olmalı"
+
+#: src/MainWindow.py:858 src/MainWindow.py:887 src/MainWindow.py:893
+msgid "Failed to add user to the netdev group."
+msgstr "Kullanıcı netdev grubuna eklenemedi."
+
+#: src/MainWindow.py:877
+msgid "User has been added to the netdev group."
+msgstr "Kullanıcı netdev grubuna eklendi."
 
 #: src/network_utils.py:36
 msgid "No wireless interfaces available"
