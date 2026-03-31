@@ -313,11 +313,15 @@ def set_network_interface(iface):
 def check_ip_forwarding():
     """
     Check if system needs IP forwarding fix.
-    Returns True if IP forwarding is disabled (needs fix)
     """
     try:
+        docker_exists = (os.path.exists('/var/run/docker.sock')
+                         or os.path.exists('/run/docker.sock'))
+
         with open('/proc/sys/net/ipv4/ip_forward', 'r') as f:
-            return f.read().strip() != '1'
+            forwarding_disabled = f.read().strip() != '1'
+
+        return docker_exists or forwarding_disabled
     except (OSError, IOError):
         return True
 
@@ -506,11 +510,6 @@ def remove_hotspot():
     """Clean up and remove the active hotspot connection."""
     global device_path, device_proxy, device_iface
     global active_connection_path, active_connection_proxy, active_connection_props
-    global forwarding_configured
-
-    # Keep the flag in sync with the actual kernel state
-    # Only show polkit dialog when truly needed.
-    forwarding_configured = not check_ip_forwarding()
 
     # First disable any active connection
     disable_connection()
