@@ -582,7 +582,7 @@ class MainWindow:
 
         # Clear existing rows
         for child in self.devices_listbox.get_children():
-            self.devices_listbox.remove(child)
+            child.destroy()
 
         # Show/hide "no devices" label
         self.no_devices_label.set_visible(count == 0)
@@ -640,8 +640,70 @@ class MainWindow:
             )
             box.pack_end(signal_icon, False, False, 0)
 
+        # Disconnect button
+        disconnect_btn = Gtk.Button()
+        disconnect_btn.set_image(
+            Gtk.Image.new_from_icon_name(
+                "user-trash-symbolic", Gtk.IconSize.BUTTON
+            )
+        )
+        disconnect_btn.set_tooltip_text(_("Disconnect device"))
+        disconnect_btn.set_relief(Gtk.ReliefStyle.NONE)
+        disconnect_btn.connect(
+            "clicked",
+            lambda btn, mac=device["mac"], ip=device.get("ip", ""):
+                self._on_disconnect_device(mac, ip)
+        )
+        box.pack_end(disconnect_btn, False, False, 0)
+
         row.add(box)
         return row
+
+    def _on_disconnect_device(self, mac, ip):
+        """
+        Disconnect a device from the current connection
+        """
+        display_name = f"{ip} ({mac})" if ip else mac
+
+        dialog = Gtk.MessageDialog(
+            transient_for=self.window,
+            flags=Gtk.DialogFlags.MODAL,
+            message_type=Gtk.MessageType.QUESTION,
+            buttons=Gtk.ButtonsType.NONE,
+            text=_("Disconnect device"),
+        )
+        dialog.format_secondary_text(
+            _("%s will be disconnected. Continue?") % display_name
+        )
+        dialog.add_button(_("Cancel"), Gtk.ResponseType.CANCEL)
+        dialog.add_button(_("Disconnect"), Gtk.ResponseType.OK)
+
+        # Style the disconnect button as destructive
+        disconnect_btn = dialog.get_widget_for_response(Gtk.ResponseType.OK)
+        disconnect_btn.get_style_context().add_class(
+            Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION
+        )
+
+        response = dialog.run()
+        dialog.destroy()
+
+        if response == Gtk.ResponseType.OK:
+            interface = self.ifname_combo.get_active_text()
+            success = hotspot.disconnect_station(interface, mac)
+            if not success:
+                error_dialog = Gtk.MessageDialog(
+                    transient_for=self.window,
+                    flags=Gtk.DialogFlags.MODAL,
+                    message_type=Gtk.MessageType.ERROR,
+                    buttons=Gtk.ButtonsType.OK,
+                    text=_("Failed to disconnect device"),
+                )
+                error_dialog.format_secondary_text(
+                    _("Could not disconnect %s.") % display_name
+                )
+                error_dialog.run()
+                error_dialog.destroy()
+            self.update_connected_devices()
 
     def get_signal_icon(self, signal):
         """Get WiFi icon based on signal strength."""

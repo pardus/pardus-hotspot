@@ -617,6 +617,27 @@ def is_wifi_enabled():
         return False
 
 
+def disconnect_station(interface, mac):
+    if not interface or not mac:
+        return False
+
+    actions_path = os.path.dirname(os.path.abspath(__file__)) + "/Actions.py"
+    try:
+        result = subprocess.run(
+            ["/usr/bin/pkexec", actions_path, "disconnect", interface, mac],
+            capture_output=True, text=True, timeout=10, check=False
+        )
+        if result.returncode == 0:
+            logger.info(f"Station {mac} disconnected from {interface}")
+            return True
+        logger.error(f"Failed to disconnect station {mac}: {result.stderr.strip()}")
+        return False
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError) as e:
+        logger.error(f"Failed to disconnect station {mac}")
+        logger.debug(f"Error details: {e}")
+        return False
+
+
 def cleanup():
     """
     Clean up DBus connections when application exits
