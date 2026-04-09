@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 11:49+0300\n"
-"PO-Revision-Date: 2026-03-27 12:42+0300\n"
+"POT-Creation-Date: 2026-04-09 15:32+0300\n"
+"PO-Revision-Date: 2026-04-09 15:37+0300\n"
 "Last-Translator: Emel Öztürk <emel.ozturk@pardus.org.tr>\n"
 "Language-Team: Turkish <dev@pardus.org.tr>\n"
 "Language: tr\n"
@@ -60,12 +60,12 @@ msgid "Connected Devices"
 msgstr "Bağlı Cihazlar"
 
 #: ui/MainWindow.glade:553 src/MainWindow.py:414 src/MainWindow.py:452
-#: src/MainWindow.py:688 src/MainWindow.py:911
+#: src/MainWindow.py:750 src/MainWindow.py:973
 msgid "Create Hotspot"
 msgstr "Kablosuz Erişim Noktası Oluştur"
 
 #: ui/MainWindow.glade:571 ui/MainWindow.glade:1012 src/MainWindow.py:260
-#: src/MainWindow.py:525 src/MainWindow.py:938
+#: src/MainWindow.py:525 src/MainWindow.py:1000
 msgid "Pardus Hotspot"
 msgstr "Pardus Kablosuz Erişim Noktası"
 
@@ -110,8 +110,8 @@ msgid "Restore Defaults"
 msgstr "Varsayılanlara Dön"
 
 #: ui/MainWindow.glade:899 ui/MainWindow.glade:1074 src/MainWindow.py:269
-#: src/MainWindow.py:523 src/MainWindow.py:524 src/MainWindow.py:942
-#: src/MainWindow.py:943
+#: src/MainWindow.py:523 src/MainWindow.py:524 src/MainWindow.py:1004
+#: src/MainWindow.py:1005
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -136,7 +136,7 @@ msgstr "Hakkında"
 msgid "Show App"
 msgstr "Göster"
 
-#: src/MainWindow.py:272 src/MainWindow.py:415 src/MainWindow.py:689
+#: src/MainWindow.py:272 src/MainWindow.py:415 src/MainWindow.py:751
 msgid "Enable"
 msgstr "Etkinleştir"
 
@@ -149,11 +149,11 @@ msgid "Hide App"
 msgstr "Gizle"
 
 #: src/MainWindow.py:382 src/MainWindow.py:462 src/MainWindow.py:496
-#: src/MainWindow.py:684 src/MainWindow.py:803
+#: src/MainWindow.py:746 src/MainWindow.py:865
 msgid "Disable Connection"
 msgstr "Bağlantıyı Kapat"
 
-#: src/MainWindow.py:383 src/MainWindow.py:804
+#: src/MainWindow.py:383 src/MainWindow.py:866
 msgid "Disable"
 msgstr "Devre Dışı Bırak"
 
@@ -161,45 +161,70 @@ msgstr "Devre Dışı Bırak"
 msgid "Hotspot Settings"
 msgstr "Kablosuz Erişim Noktası Ayarları"
 
-#: src/MainWindow.py:729 src/MainWindow.py:878
+#: src/MainWindow.py:650 src/MainWindow.py:673
+msgid "Disconnect device"
+msgstr "Cihaz bağlantısını kes"
+
+#: src/MainWindow.py:676
+#, python-format
+msgid "%s will be disconnected. Continue?"
+msgstr "%s bağlantısı kesilecek. Devam edilsin mi?"
+
+#: src/MainWindow.py:678
+msgid "Cancel"
+msgstr "İptal"
+
+#: src/MainWindow.py:679
+msgid "Disconnect"
+msgstr "Bağlantıyı Kes"
+
+#: src/MainWindow.py:699
+msgid "Failed to disconnect device"
+msgstr "Cihaz bağlantısı kesilemedi."
+
+#: src/MainWindow.py:702
+msgid "Could not disconnect {}."
+msgstr "%s bağlantısı kesilemedi."
+
+#: src/MainWindow.py:791 src/MainWindow.py:940
 msgid "You need to reboot your system for group permissions to take effect."
 msgstr ""
 "Grup izinlerinin geçerli olması için sisteminizi yeniden başlatmanız "
 "gerekiyor."
 
-#: src/MainWindow.py:734
+#: src/MainWindow.py:796
 msgid "Network Permission Error"
 msgstr "Ağ İzin Hatası"
 
-#: src/MainWindow.py:735
+#: src/MainWindow.py:797
 msgid "You don't have permission to modify network settings."
 msgstr "Ağ ayarlarını değiştirmek için izniniz yok."
 
-#: src/MainWindow.py:736
+#: src/MainWindow.py:798
 msgid "User is not in netdev group."
 msgstr "Kullanıcı netdev grubunda değil."
 
-#: src/MainWindow.py:743
+#: src/MainWindow.py:805
 msgid "Please enable Wi-Fi to continue"
 msgstr "Devam etmek için Wi-Fi açın"
 
-#: src/MainWindow.py:752
+#: src/MainWindow.py:814
 msgid "Please select a network interface for the hotspot"
 msgstr "Lütfen kablosuz erişim noktası için bir ağ arayüzü seçin"
 
-#: src/MainWindow.py:761
+#: src/MainWindow.py:823
 msgid "Please enter a name for your hotspot connection"
 msgstr "Lütfen kablosuz erişim noktanız için bir isim girin"
 
-#: src/MainWindow.py:770
+#: src/MainWindow.py:832
 msgid "Password must be at least 8 characters long"
 msgstr "Parola en az 8 karakter uzunluğunda olmalı"
 
-#: src/MainWindow.py:858 src/MainWindow.py:887 src/MainWindow.py:893
+#: src/MainWindow.py:920 src/MainWindow.py:949 src/MainWindow.py:955
 msgid "Failed to add user to the netdev group."
 msgstr "Kullanıcı netdev grubuna eklenemedi."
 
-#: src/MainWindow.py:877
+#: src/MainWindow.py:939
 msgid "User has been added to the netdev group."
 msgstr "Kullanıcı netdev grubuna eklendi."
 
