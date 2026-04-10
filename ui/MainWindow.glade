@@ -478,12 +478,13 @@ Ali Rıza Keskin</property>
                           <object class="GtkBox">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
+                            <property name="margin-start">5</property>
                             <property name="spacing">6</property>
                             <child>
                               <object class="GtkImage" id="devices_icon">
                                 <property name="visible">True</property>
                                 <property name="can-focus">False</property>
-                                <property name="icon-name">nm-device-wired</property>
+                                <property name="icon-name">preferences-system-network-symbolic</property>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -809,7 +810,7 @@ Ali Rıza Keskin</property>
                           <object class="GtkImage">
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
-                            <property name="stock">gtk-home</property>
+                            <property name="icon-name">go-home-symbolic</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -947,7 +948,6 @@ Ali Rıza Keskin</property>
                   <object class="GtkButton" id="grant_netdev_button">
                     <property name="label" translatable="yes">Add to Group</property>
                     <property name="width-request">150</property>
-                    <property name="visible">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
                     <property name="halign">center</property>
