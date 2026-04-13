@@ -149,10 +149,11 @@ class MainWindow:
         # Set version if it cannot be retrieved from __version__ file,
         # then use MainWindow.glade file
         try:
-            version = open(
+            version_path = (
                 os.path.dirname(os.path.abspath(__file__)) + "/__version__"
-                ).readline()
-            self.hotspot_dialog.set_version(version)
+            )
+            with open(version_path, encoding="utf-8") as vf:
+                self.hotspot_dialog.set_version(vf.readline().strip())
         except:
             pass
 
@@ -305,7 +306,7 @@ class MainWindow:
             self.item_show_app.set_label(_("Hide App"))
 
 
-    def on_window_delete_event(self, widget=None, event=None):
+    def on_window_delete_event(self, widget=None, event=None) -> bool:
         self.window.hide()
         self.item_show_app.set_label(_("Show App"))
         return True
@@ -330,7 +331,7 @@ class MainWindow:
         self.hotspot_settings.autostart = state
         self.hotspot_settings.set_autostart(state)
 
-    def on_forwarding_switch_state_set(self, switch, state):
+    def on_forwarding_switch_state_set(self, switch, state) -> bool:
         self.hotspot_settings.forwarding = state
         self.hotspot_settings.write_config()
         return False
@@ -442,7 +443,7 @@ class MainWindow:
                 self.indicator.set_icon("pardus-hotspot-status-off-symbolic")
 
 
-    def check_wifi_and_update_hotspot(self):
+    def check_wifi_and_update_hotspot(self) -> bool:
         """
         Regularly checks Wi-Fi status and updates the hotspot state and UI
         elements accordingly.
@@ -595,7 +596,7 @@ class MainWindow:
 
         self.devices_listbox.show_all()
 
-    def _create_device_row(self, device):
+    def _create_device_row(self, device) -> Gtk.ListBoxRow:
         """Create a single device row widget."""
         row = Gtk.ListBoxRow()
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
@@ -705,7 +706,7 @@ class MainWindow:
                 error_dialog.destroy()
             self.update_connected_devices()
 
-    def get_signal_icon(self, signal):
+    def get_signal_icon(self, signal) -> str:
         """Get WiFi icon based on signal strength."""
         if signal >= -50:
             return "network-wireless-signal-excellent-symbolic"
@@ -718,7 +719,7 @@ class MainWindow:
         else:
             return "network-wireless-signal-none-symbolic"
 
-    def format_time(self, seconds):
+    def format_time(self, seconds) -> str:
         if seconds < 60:
             return f"{seconds}s"
         elif seconds < 3600:
@@ -881,7 +882,7 @@ class MainWindow:
         self.grant_netdev_button.set_visible(False)
 
 
-    def on_grant_netdev_button_clicked(self, button):
+    def on_grant_netdev_button_clicked(self, button) -> bool:
         """
         Run pkexec to add the current user to the netdev group
         """
@@ -921,7 +922,7 @@ class MainWindow:
             )
 
 
-    def on_group_add_stderr(self, source, condition):
+    def on_group_add_stderr(self, source, condition) -> bool:
         if condition == GLib.IO_HUP:
             return False
         line = source.readline()
