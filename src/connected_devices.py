@@ -42,7 +42,7 @@ class ConnectedDevices:
             for mac, info in stations.items()
         ]
 
-    def _get_stations(self) -> dict:
+    def _get_stations(self) -> dict | None:
         iw_cmd = self._find_iw()
         if not iw_cmd:
             return {}
@@ -61,7 +61,7 @@ class ConnectedDevices:
         except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
             return {}
 
-    def _find_iw(self) -> str:
+    def _find_iw(self) -> str | None:
         for path in self.IW_PATHS:
             if path == "iw" or os.path.exists(path):
                 return path

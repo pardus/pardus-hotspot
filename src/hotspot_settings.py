@@ -110,7 +110,7 @@ class HotspotSettings:
         return False
 
 
-    def create_dir(self, dir_path):
+    def create_dir(self, dir_path) -> bool:
         try:
             Path(dir_path).mkdir(parents=True, exist_ok=True)
             return True
