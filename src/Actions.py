@@ -9,7 +9,7 @@ from logging_config import get_logger
 logger = get_logger()
 
 
-def run_forwarding_fix():
+def run_forwarding_fix() -> bool:
     """
     Enable IP forwarding and add iptables FORWARD rule.
     - sysctl net.ipv4.ip_forward=1  (kernel forwarding)
@@ -41,7 +41,7 @@ def run_forwarding_fix():
         return False
 
 
-def disconnect_station(interface, mac):
+def disconnect_station(interface, mac) -> bool:
     iw_paths = ["/usr/sbin/iw", "/sbin/iw"]
     iw_cmd = None
     for path in iw_paths:

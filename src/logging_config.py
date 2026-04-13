@@ -11,7 +11,7 @@ import logging.handlers
 from pathlib import Path
 
 
-def setup_logging():
+def setup_logging() -> logging.Logger:
 
     # Create log directory
     log_dir = Path.home() / ".cache" / "pardus" / "pardus-hotspot"
@@ -62,7 +62,7 @@ def setup_logging():
     return logger
 
 
-def get_logger():
+def get_logger() -> logging.Logger:
 
     return logging.getLogger('pardus-hotspot')
 
