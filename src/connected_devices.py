@@ -19,7 +19,7 @@ class ConnectedDevices:
     def set_interface(self, interface):
         self._interface = interface
 
-    def get_devices(self):
+    def get_devices(self) -> list[dict]:
         """
         Returns list of dicts with keys: 'mac', 'ip', 'signal'
         """
@@ -42,7 +42,7 @@ class ConnectedDevices:
             for mac, info in stations.items()
         ]
 
-    def _get_stations(self):
+    def _get_stations(self) -> dict:
         iw_cmd = self._find_iw()
         if not iw_cmd:
             return {}
@@ -61,13 +61,13 @@ class ConnectedDevices:
         except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
             return {}
 
-    def _find_iw(self):
+    def _find_iw(self) -> str:
         for path in self.IW_PATHS:
             if path == "iw" or os.path.exists(path):
                 return path
         return None
 
-    def _parse_stations(self, output):
+    def _parse_stations(self, output) -> dict:
         """
         Parse iw station dump output
         """
@@ -85,7 +85,7 @@ class ConnectedDevices:
             }
         return stations
 
-    def _get_arp_table(self):
+    def _get_arp_table(self) -> dict:
         """
         Read ARP table from /proc/net/arp for our interface
         """
