@@ -204,40 +204,45 @@ def get_hotspot_connection():
             settings = connection_iface.GetSettings()
 
             if settings["connection"]["type"] == "802-11-wireless" and settings["802-11-wireless"]["mode"] == "ap":
-                return active_conn_path, connection_path, connection_iface, settings
+                return {
+                    "active_conn_path": active_conn_path,
+                    "connection_path": connection_path,
+                    "connection_iface": connection_iface,
+                    "settings": settings
+                }
 
-        return None, None, None, None
+        return None
     except dbus.exceptions.DBusException as e:
         if _is_recoverable_error(e):
             logger.info("DBus connection lost, will reconnect on next call")
             _reset_connection()
         logger.error("Failed to get active hotspot information")
         logger.debug(f"Error details: {e}")
-        return None, None, None, None
+        return None
     except Exception as e:
         logger.error("Failed to get active hotspot information")
         logger.debug(f"Error details: {e}")
-        return None, None, None, None
+        return None
 
 
-def get_active_hotspot_info():
+def get_active_hotspot_info() -> dict | None:
     """Return SSID, password, and encryption type of the active hotspot"""
-    _, _, connection_iface, settings = get_hotspot_connection()
-
-    if not settings:
+    hotspot_info = get_hotspot_connection()
+    
+    if not hotspot_info:
         return None
 
     try:
-        ssid_bytes = settings["802-11-wireless"]["ssid"]
+        ssid_bytes = hotspot_info["settings"]["802-11-wireless"]["ssid"]    
         ssid = "".join([chr(b) for b in ssid_bytes])
         password = ""
         encryption = ""
 
-        if "802-11-wireless-security" in settings:
-            wireless_security = settings.get("802-11-wireless-security", {})
+        if "802-11-wireless-security" in hotspot_info["settings"]:
+            wireless_security = hotspot_info["settings"].get("802-11-wireless-security", {})
 
             try:
-                secrets = connection_iface.GetSecrets("802-11-wireless-security")
+                secrets = hotspot_info["connection_iface"].GetSecrets("802-11-wireless-security")
                 if "802-11-wireless-security" in secrets:
                     wireless_security.update(secrets["802-11-wireless-security"])
             except dbus.exceptions.DBusException as e:
@@ -266,12 +271,17 @@ def get_active_hotspot_info():
         return None
 
 
-def disable_connection():
+def disable_connection() -> bool:
     """
     Disable active hotspot connection if exists.
     Returns True if successfully disabled.
     """
-    active_conn_path, _, _, _ = get_hotspot_connection()
+    
+    hotspot_info = get_hotspot_connection()
+    if not hotspot_info:
+        return False
+
+    active_conn_path = hotspot_info["active_conn_path"]
     if active_conn_path:
         try:
             nm_iface = _get_nm_iface()
@@ -310,7 +320,7 @@ def set_network_interface(iface):
         raise
 
 
-def check_ip_forwarding():
+def check_ip_forwarding() -> bool:
     """
     Check if system needs IP forwarding fix.
     """
@@ -324,6 +334,11 @@ def check_ip_forwarding():
         return docker_exists or forwarding_disabled
     except (OSError, IOError):
         return True
+
+
+def ap_channel_for_band(band: str) -> int:
+    """Return NM 802.11 AP channel: 2.4 GHz (bg) -> 1, 5 GHz (a) -> 36."""
+    return 1 if band == "bg" else 36
 
 
 def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward=False):
@@ -352,9 +367,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
     # Default to 2.4GHz band if not specified or invalid
     band = band if band in ["bg", "a"] else "bg"
 
-    # For 2.4GHz (bg), use channel 1
-    # For 5GHz (a), use channel 36
-    channel = dbus.UInt32(1 if band == "bg" else 36)
+    channel = dbus.UInt32(ap_channel_for_band(band))
 
     current_hotspot_uuid = str(uuid.uuid4())
 
@@ -492,7 +505,7 @@ def update_hotspot_settings(band, encrypt, ssid="Hotspot", passwd=None):
         "ssid": ssid_bytes,
         "mode": "ap",
         "band": wifi_band,
-        "channel": dbus.UInt32(1),
+        "channel": dbus.UInt32(ap_channel_for_band(wifi_band)),
     }
 
     # Security settings
@@ -506,7 +519,7 @@ def update_hotspot_settings(band, encrypt, ssid="Hotspot", passwd=None):
         security_settings["psk"] = passwd_bytes
 
 
-def remove_hotspot():
+def remove_hotspot() -> bool:
     """Clean up and remove the active hotspot connection."""
     global device_path, device_proxy, device_iface
     global active_connection_path, active_connection_proxy, active_connection_props
@@ -598,12 +611,12 @@ def get_connection_state():
         return 0
 
 
-def is_connection_activated():
+def is_connection_activated() -> bool:
     """Check if hotspot is successfully activated."""
     return get_connection_state() == 2  # NM_ACTIVE_CONNECTION_STATE_ACTIVATED
 
 
-def is_wifi_enabled():
+def is_wifi_enabled() -> bool:
     """Check if WiFi hardware is enabled and available."""
     try:
         nm_props = _get_nm_props()
@@ -617,7 +630,7 @@ def is_wifi_enabled():
         return False
 
 
-def disconnect_station(interface, mac):
+def disconnect_station(interface, mac) -> bool:
     if not interface or not mac:
         return False
 
