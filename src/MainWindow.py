@@ -6,11 +6,14 @@ import grp
 import os
 import qrcode
 import io
+from logging_config import get_logger
+logger = get_logger()
 
 import hotspot
 from network_utils import get_interface_names
 from hotspot_settings import HotspotSettings
 from connected_devices import ConnectedDevices
+
 
 try:
     gi.require_version('AppIndicator3', '0.1')
@@ -837,15 +840,24 @@ class MainWindow:
                 self.menu_button.set_visible(False)
                 return
 
-            # After successful connection setup, change the button to red
-            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
-            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
-
             # Check if forwarding is enabled
             forwarding_enabled = self.forwarding_switch.get_active()
 
             hotspot.set_network_interface(ifname)
-            hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band, forwarding_enabled)
+            try:
+                success = hotspot.create_hotspot(ssid, password, selected_encrypt, selected_band, forwarding_enabled)
+                if not success:
+                    logger.info("Hotspot creation cancelled/authorization failed")
+                    return
+
+            except Exception as e:
+                logger.error(f"Hotspot creation failed unexpectedly: {e}")
+                self.hotspot_stack.set_visible_child_name("page_errors")
+                self.warning_msgs_lbl.set_text(
+                    _("An unexpected error occurred while creating hotspot.")
+                )
+                return
+
             self.device_tracker.set_interface(ifname)
             self.devices_expander.set_visible(True)
 
@@ -863,6 +875,9 @@ class MainWindow:
             self.hotspot_settings.encryption = encrypt
             self.hotspot_settings.write_config()
 
+            # Apply connected-state button style only after successful creation.
+            style_context.add_class(Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION)
+            style_context.remove_class(Gtk.STYLE_CLASS_SUGGESTED_ACTION)
             self.create_button.set_label(_("Disable Connection"))
             self.item_enable.set_label(_("Disable"))
             self.qr_image.set_visible(True)

@@ -341,7 +341,7 @@ def ap_channel_for_band(band: str) -> int:
     return 1 if band == "bg" else 36
 
 
-def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward=False):
+def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward=False) -> bool:
     """
     Create a Wi-Fi hotspot with parameters.
 
@@ -355,7 +355,6 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
     global current_hotspot_uuid, forwarding_configured
     global active_connection_path, active_connection_proxy, active_connection_props
 
-    disconnect_wifi_connections()
 
     # Default to SAE (WPA3) if password exists, otherwise no encryption
     if passwd:
@@ -410,22 +409,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
         "ipv6": ip6_settings,
     })
 
-    # Remove any existing hotspot before creating new one
-    remove_hotspot()
-
     try:
-        bus = _get_bus()
-        settings_iface = _get_settings_iface()
-        nm_iface = _get_nm_iface()
-
-        # Create new connection
-        connection_path = settings_iface.AddConnection(connection)
-
-        # Activate the connection
-        active_connection_path = nm_iface.ActivateConnection(
-            connection_path, device_path, "/"
-        )
-
         # For docker - ip forwarding control
         # Use forwarding_configured flag to prevent repeated pkexec dialogs
         # after sleep/wake, screen lock, or SAE-> WPA-PSK fallback
@@ -437,10 +421,27 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
                 forwarding_configured = (res.returncode == 0)
                 if not forwarding_configured:
                     logger.warning("User cancelled or forwarding config failed (pkexec rc=%d)", res.returncode)
+                    return False
             except Exception as e:
                 forwarding_configured = False
                 logger.warning("Failed to configure IP forwarding")
                 logger.debug(f"Process error details: {e}")
+                return False
+
+        disconnect_wifi_connections() # only if authentication success
+        remove_hotspot()
+
+        bus = _get_bus()
+        settings_iface = _get_settings_iface()
+        nm_iface = _get_nm_iface()
+
+        # Create new connection
+        connection_path = settings_iface.AddConnection(connection)
+
+        # Activate the connection
+        active_connection_path = nm_iface.ActivateConnection(
+            connection_path, device_path, "/"
+        )
 
         active_connection_proxy = bus.get_object(
             "org.freedesktop.NetworkManager", active_connection_path
@@ -467,6 +468,7 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
         logger.error("Failed to create hotspot")
         logger.debug(f"Error details: {e}")
         raise
+    return True
 
 
 def update_hotspot_settings(band, encrypt, ssid="Hotspot", passwd=None):
