@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 11:49+0300\n"
-"PO-Revision-Date: 2026-03-29 23:45+0100\n"
+"POT-Creation-Date: 2026-04-09 15:37+0300\n"
+"PO-Revision-Date: 2026-04-20 14:42+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <hugokarvalho@hotmail.com>\n"
 "Language: pt\n"
@@ -59,12 +59,12 @@ msgid "Connected Devices"
 msgstr "Dispositivos ligados"
 
 #: ui/MainWindow.glade:553 src/MainWindow.py:414 src/MainWindow.py:452
-#: src/MainWindow.py:688 src/MainWindow.py:911
+#: src/MainWindow.py:750 src/MainWindow.py:973
 msgid "Create Hotspot"
 msgstr "Criar hotspot"
 
 #: ui/MainWindow.glade:571 ui/MainWindow.glade:1012 src/MainWindow.py:260
-#: src/MainWindow.py:525 src/MainWindow.py:938
+#: src/MainWindow.py:525 src/MainWindow.py:1000
 msgid "Pardus Hotspot"
 msgstr "Hotspot Pardus"
 
@@ -109,8 +109,8 @@ msgid "Restore Defaults"
 msgstr "Repor predefinições"
 
 #: ui/MainWindow.glade:899 ui/MainWindow.glade:1074 src/MainWindow.py:269
-#: src/MainWindow.py:523 src/MainWindow.py:524 src/MainWindow.py:942
-#: src/MainWindow.py:943
+#: src/MainWindow.py:523 src/MainWindow.py:524 src/MainWindow.py:1004
+#: src/MainWindow.py:1005
 msgid "Settings"
 msgstr "Definições"
 
@@ -135,7 +135,7 @@ msgstr "Acerca"
 msgid "Show App"
 msgstr "Mostrar aplicação"
 
-#: src/MainWindow.py:272 src/MainWindow.py:415 src/MainWindow.py:689
+#: src/MainWindow.py:272 src/MainWindow.py:415 src/MainWindow.py:751
 msgid "Enable"
 msgstr "Ativar"
 
@@ -148,11 +148,11 @@ msgid "Hide App"
 msgstr "Ocultar aplicação"
 
 #: src/MainWindow.py:382 src/MainWindow.py:462 src/MainWindow.py:496
-#: src/MainWindow.py:684 src/MainWindow.py:803
+#: src/MainWindow.py:746 src/MainWindow.py:865
 msgid "Disable Connection"
 msgstr "Desativar ligação"
 
-#: src/MainWindow.py:383 src/MainWindow.py:804
+#: src/MainWindow.py:383 src/MainWindow.py:866
 msgid "Disable"
 msgstr "Desativar"
 
@@ -160,45 +160,71 @@ msgstr "Desativar"
 msgid "Hotspot Settings"
 msgstr "Definições do Hotspot"
 
-#: src/MainWindow.py:729 src/MainWindow.py:878
+#: src/MainWindow.py:650 src/MainWindow.py:673
+msgid "Disconnect device"
+msgstr "Desligar dispositivo"
+
+#: src/MainWindow.py:676
+#, python-format
+msgid "%s will be disconnected. Continue?"
+msgstr "%s vai ser desligado. Continuar?"
+
+#: src/MainWindow.py:678
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: src/MainWindow.py:679
+msgid "Disconnect"
+msgstr "Desligar"
+
+#: src/MainWindow.py:699
+msgid "Failed to disconnect device"
+msgstr "Falha ao desligar dispositivo"
+
+#: src/MainWindow.py:702
+#, python-format
+msgid "Could not disconnect %s."
+msgstr "Não foi possível desligar %s."
+
+#: src/MainWindow.py:791 src/MainWindow.py:940
 msgid "You need to reboot your system for group permissions to take effect."
 msgstr ""
 "É necessário reiniciar o sistema para que as permissões de grupo entrem em "
 "vigor."
 
-#: src/MainWindow.py:734
+#: src/MainWindow.py:796
 msgid "Network Permission Error"
 msgstr "Erro de permissão de rede"
 
-#: src/MainWindow.py:735
+#: src/MainWindow.py:797
 msgid "You don't have permission to modify network settings."
 msgstr "Não tem permissão para alterar as definições de rede."
 
-#: src/MainWindow.py:736
+#: src/MainWindow.py:798
 msgid "User is not in netdev group."
 msgstr "O utilizador não pertence ao grupo netdev."
 
-#: src/MainWindow.py:743
+#: src/MainWindow.py:805
 msgid "Please enable Wi-Fi to continue"
 msgstr "Ativar o Wi-Fi para continuar"
 
-#: src/MainWindow.py:752
+#: src/MainWindow.py:814
 msgid "Please select a network interface for the hotspot"
 msgstr "Selecionar uma interface de rede para o hotspot"
 
-#: src/MainWindow.py:761
+#: src/MainWindow.py:823
 msgid "Please enter a name for your hotspot connection"
 msgstr "Introduzir um nome para a sua ligação hotspot"
 
-#: src/MainWindow.py:770
+#: src/MainWindow.py:832
 msgid "Password must be at least 8 characters long"
 msgstr "A palavra-passe deve ter pelo menos 8 caracteres"
 
-#: src/MainWindow.py:858 src/MainWindow.py:887 src/MainWindow.py:893
+#: src/MainWindow.py:920 src/MainWindow.py:949 src/MainWindow.py:955
 msgid "Failed to add user to the netdev group."
 msgstr "Não foi possível adicionar o utilizador ao grupo netdev."
 
-#: src/MainWindow.py:877
+#: src/MainWindow.py:939
 msgid "User has been added to the netdev group."
 msgstr "O utilizador foi adicionado ao grupo netdev."
 
