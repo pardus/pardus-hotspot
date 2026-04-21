@@ -98,7 +98,7 @@ class HotspotSettings:
             self.create_default_config(force=True)
 
 
-    def write_config(self):
+    def write_config(self) -> bool:
         self.config['Hotspot'] = self._prepare_config_dict()
 
         if self.create_dir(self.config_dir):
@@ -110,7 +110,7 @@ class HotspotSettings:
         return False
 
 
-    def create_dir(self, dir_path):
+    def create_dir(self, dir_path) -> bool:
         try:
             Path(dir_path).mkdir(parents=True, exist_ok=True)
             return True
