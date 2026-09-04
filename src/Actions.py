@@ -2,11 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import subprocess
 import sys
 from logging_config import get_logger
 
 logger = get_logger()
+
+INTERFACE_REGEX = re.compile(r"^[a-zA-Z0-9_.-]+$")
+MAC_REGEX = re.compile(r"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$")
+
 
 
 def run_forwarding_fix():
@@ -42,6 +47,13 @@ def run_forwarding_fix():
 
 
 def disconnect_station(interface, mac):
+    if not interface or not mac:
+        return False
+
+    if not INTERFACE_REGEX.match(interface) or not MAC_REGEX.match(mac):
+        logger.error(f"Invalid interface or MAC format: {interface}, {mac}")
+        return False
+
     iw_paths = ["/usr/sbin/iw", "/sbin/iw"]
     iw_cmd = None
     for path in iw_paths:
