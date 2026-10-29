@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import subprocess
 import sys
 from logging_config import get_logger
@@ -9,12 +10,23 @@ from logging_config import get_logger
 logger = get_logger()
 
 
-def run_forwarding_fix():
+def run_forwarding_fix(interface):
     """
-    Enable IP forwarding and add iptables FORWARD rule.
+    Enable IP forwarding and add iptables FORWARD rules for the hotspot.
     - sysctl net.ipv4.ip_forward=1  (kernel forwarding)
     - iptables FORWARD ACCEPT        (idempotent: -C check before -I)
+      only for traffic from the hotspot interface and replies to it, so
+      the other FORWARD rules (docker etc.) still apply to everything else
     """
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,15}", interface):
+        logger.error("Invalid interface name")
+        return False
+
+    rules = [
+        ["-i", interface, "-j", "ACCEPT"],
+        ["-o", interface, "-m", "conntrack", "--ctstate", "RELATED,ESTABLISHED", "-j", "ACCEPT"],
+    ]
+
     try:
         # Kernel IPv4 forwarding on
         subprocess.run(
@@ -22,16 +34,17 @@ def run_forwarding_fix():
             check=True, capture_output=True, text=True
         )
 
-        # FORWARD ACCEPT rule
-        chk = subprocess.run(
-            ["iptables", "-C", "FORWARD", "-j", "ACCEPT"],
-            check=False, capture_output=True, text=True
-        )
-        if chk.returncode != 0:
-            subprocess.run(
-                ["iptables", "-I", "FORWARD", "1", "-j", "ACCEPT"],
-                check=True
+        # FORWARD ACCEPT rules
+        for rule in rules:
+            chk = subprocess.run(
+                ["iptables", "-C", "FORWARD"] + rule,
+                check=False, capture_output=True, text=True
             )
+            if chk.returncode != 0:
+                subprocess.run(
+                    ["iptables", "-I", "FORWARD", "1"] + rule,
+                    check=True
+                )
 
         logger.info("Forwarding configured (sysctl + iptables)")
         return True
@@ -75,8 +88,8 @@ if __name__ == "__main__":
 
     action = sys.argv[1]
 
-    if action == "forward":
-        sys.exit(0 if run_forwarding_fix() else 1)
+    if action == "forward" and len(sys.argv) == 3:
+        sys.exit(0 if run_forwarding_fix(sys.argv[2]) else 1)
     elif action == "disconnect" and len(sys.argv) == 4:
         sys.exit(0 if disconnect_station(sys.argv[2], sys.argv[3]) else 1)
     else:
