@@ -32,7 +32,9 @@ active_connection_path = None
 active_connection_proxy = None
 active_connection_props = None
 current_hotspot_uuid = None
-forwarding_configured = False
+device_ifname = None
+# Interface the FORWARD rules were added for, None if not configured
+forwarding_configured = None
 
 
 def _is_recoverable_error(e):
@@ -292,12 +294,13 @@ def disable_connection():
 
 def set_network_interface(iface):
     """Initialize network interface for hotspot creation."""
-    global device_path, device_proxy, device_iface
+    global device_path, device_proxy, device_iface, device_ifname
 
     try:
         bus = _get_bus()
         nm_iface = _get_nm_iface()
 
+        device_ifname = iface
         device_path = nm_iface.GetDeviceByIpIface(iface)
         device_proxy = bus.get_object("org.freedesktop.NetworkManager", device_path)
         device_iface = dbus.Interface(device_proxy, "org.freedesktop.NetworkManager.Device")
@@ -416,16 +419,16 @@ def create_hotspot(ssid="Hotspot", passwd=None, encrypt=None, band=None, forward
         # For docker - ip forwarding control
         # Use forwarding_configured flag to prevent repeated pkexec dialogs
         # after sleep/wake, screen lock, or SAE-> WPA-PSK fallback
-        if (check_ip_forwarding() or forward) and not forwarding_configured:
+        if (check_ip_forwarding() or forward) and forwarding_configured != device_ifname:
             actions_path = os.path.dirname(os.path.abspath(__file__)) + "/Actions.py"
             try:
-                command = ["/usr/bin/pkexec", actions_path, "forward"]
+                command = ["/usr/bin/pkexec", actions_path, "forward", device_ifname]
                 res = subprocess.run(command)
-                forwarding_configured = (res.returncode == 0)
+                forwarding_configured = device_ifname if res.returncode == 0 else None
                 if not forwarding_configured:
                     logger.warning("User cancelled or forwarding config failed (pkexec rc=%d)", res.returncode)
             except Exception as e:
-                forwarding_configured = False
+                forwarding_configured = None
                 logger.warning("Failed to configure IP forwarding")
                 logger.debug(f"Process error details: {e}")
 
@@ -644,6 +647,6 @@ def cleanup():
     Should be called before application quit.
     """
     global forwarding_configured
-    forwarding_configured = False
+    forwarding_configured = None
     _reset_connection()
     logger.info("DBus connections cleaned up")
